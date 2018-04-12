@@ -48,3 +48,4 @@ Temporary Items
 
 #project idea files
 .idea
+__pycache__

@@ -13,4 +13,6 @@ class bottomReplacer(Replacer):
         :param pop:
         :return: updated pop
         """
-        pass
+        pop.extend(newInds)
+        pop.sort(key=lambda x:x.getFitness())
+        return pop[len(newInds)::]
