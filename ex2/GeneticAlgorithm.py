@@ -27,6 +27,7 @@ class GeneticAlgorithm:
             #check termination condition
             if itCnt == maxIt:
                 done = True
+        return self.getBestSol()
 
 
     def generateOffspring(self, nrOff):
@@ -39,3 +40,5 @@ class GeneticAlgorithm:
 
         self.pop = self.replacer.replace(newInds,self.pop)
 
+    def getBestSol(self):
+        pass
