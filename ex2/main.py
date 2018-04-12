@@ -1,0 +1,25 @@
+import numpy as np
+import Initializer,Mutator,Recombiner,Selector,Replacer
+from GeneticAlgorithm import GeneticAlgorithm
+from ProblemDefinition import ProblemDefinition as PD
+
+#choose your modules
+initializer = Initializer.RandomInitializer()
+mutator = Mutator.RandomMutator()
+recombiner = Recombiner.CrossoverRecombiner()
+selector = Selector.RouletteSelector()
+replacer = Replacer.bottomReplacer()
+
+#set up an example problem
+probDef = [10,100,np.arange(100)]
+popSize = 100
+
+#create Genetic Algorithm instance
+GA = GeneticAlgorithm(initializer,mutator,recombiner,selector,replacer,probDef,popSize)
+GA.run()
+
+
+
+
+
+
