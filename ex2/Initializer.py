@@ -15,10 +15,9 @@ class RandomInitializer(Initializer):
         :param popSize:
         :return: pop
         """
-        population = []
+        population = np.empty(popSize,dtype=Individual)
         for i in range(popSize):
-            population.append(Individual(np.random.randint(0,PD.nrMachines-1,PD.nrJobs)))
-        population.sort(key=lambda x: x.getFitness())
+            population[i] = Individual(np.random.randint(0,PD.nrMachines-1,PD.nrJobs))
         return population
 
 #example for another module

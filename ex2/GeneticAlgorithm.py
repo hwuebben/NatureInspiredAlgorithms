@@ -8,7 +8,6 @@ class GeneticAlgorithm:
         self.selector = selector
         self.replacer = replacer
         PD.setPD(problemDef[0],problemDef[1],problemDef[2])
-        #pop should always be sorted, makes selection easier
         self.pop = initializer.initialize(popSize)
 
     def run(self):
@@ -28,16 +27,16 @@ class GeneticAlgorithm:
             #check termination condition
             if itCnt == maxIt:
                 done = True
-        #return best solution (last entry of sorted pop)
-        return self.pop[-1]
+        #return best solution
+        return np.max(self.pop)
 
 
     def generateOffspring(self, nrOff):
-        newInds = []
-        for _ in range(nrOff):
+        newInds = np.empty(nrOff,dtype=Individual)
+        for i in range(nrOff):
             ind0 = self.selector.select(self.pop)
             ind1 = self.selector.select(self.pop)
             indNew = self.recombiner.recombine(ind0,ind1)
-            newInds.append(self.mutator.mutate(indNew))
+            newInds[i] = self.mutator.mutate(indNew)
 
         self.pop = self.replacer.replace(newInds,self.pop)

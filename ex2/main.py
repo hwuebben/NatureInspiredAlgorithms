@@ -2,6 +2,7 @@ import numpy as np
 import Initializer,Mutator,Recombiner,Selector,Replacer
 from GeneticAlgorithm import GeneticAlgorithm
 from ProblemDefinition import ProblemDefinition as PD
+from Individual import Individual
 
 #choose your modules
 initializer = Initializer.RandomInitializer()
@@ -16,7 +17,8 @@ popSize = 100
 
 #create Genetic Algorithm instance
 GA = GeneticAlgorithm(initializer,mutator,recombiner,selector,replacer,probDef,popSize)
-GA.run()
+bestIndividual = GA.run()
+print("best Individuals fitness: ",bestIndividual.getFitness())
 
 
 

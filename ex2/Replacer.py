@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import numpy as np
 class Replacer(ABC):
     @abstractmethod
     def replace(self,newInds,pop):
@@ -13,6 +14,6 @@ class bottomReplacer(Replacer):
         :param pop:
         :return: updated pop
         """
-        pop.extend(newInds)
-        pop.sort(key=lambda x:x.getFitness())
-        return pop[len(newInds)::]
+        pop = pop[np.argpartition(pop,newInds.size)]
+        pop[0:newInds.size] = newInds
+        return pop
