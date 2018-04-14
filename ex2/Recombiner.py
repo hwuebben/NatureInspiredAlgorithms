@@ -22,3 +22,18 @@ class CrossoverRecombiner(Recombiner):
         else:
             newJobAssignment = np.hstack((ind1.jobAssignments[0:breakPoint],ind0.jobAssignments[breakPoint::]))
         return Individual(newJobAssignment)
+
+class UniformCrossoverRecombiner(Recombiner):
+    def recombine(self,ind0,ind1):
+        """
+        perform UniformCrossover recombination operation
+        :param ind0:
+        :param ind1:
+        :return: recombiated child
+        """
+        mask = np.random.randint(0, 2,PD.nrJobs)
+        newJobAssignment = np.zeros(PD.nrJobs)
+        newJobAssignment[mask == 0] = ind0.jobAssignments[mask == 0]
+        newJobAssignment[mask == 1] = ind1.jobAssignments[mask == 1]
+
+        return Individual(newJobAssignment.astype(np.int32))

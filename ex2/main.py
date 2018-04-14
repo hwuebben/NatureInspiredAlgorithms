@@ -6,7 +6,7 @@ from Individual import Individual
 
 #choose your modules
 initializer = Initializer.RandomInitializer()
-mutator = Mutator.RandomMutator()
+mutator = Mutator.BoundaryMutator()
 recombiner = Recombiner.CrossoverRecombiner()
 selector = Selector.RouletteSelector()
 replacer = Replacer.bottomReplacer()

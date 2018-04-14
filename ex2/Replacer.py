@@ -17,3 +17,14 @@ class bottomReplacer(Replacer):
         pop = pop[np.argpartition(pop,newInds.size)]
         pop[0:newInds.size] = newInds
         return pop
+
+class deleteAllReplacer(Replacer):
+
+    def replace(self,newInds,pop):
+        """
+        replace the all individuums in pop with newInds
+        :param newInds:
+        :param pop:
+        :return: updated pop
+        """
+        return newInds
