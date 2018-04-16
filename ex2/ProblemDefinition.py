@@ -10,7 +10,7 @@ class ProblemDefinition:
     nrJobs = None
 
     @staticmethod
-    def setPD(nrMachines,nrJobs,jobRuntimes):
+    def setPD(nrMachines,jobRuntimes):
         """
         set the Problem Instance
         :param nrMachines:
@@ -19,5 +19,5 @@ class ProblemDefinition:
         :return:
         """
         ProblemDefinition.nrMachines = nrMachines
-        ProblemDefinition.nrJobs = nrJobs
+        ProblemDefinition.nrJobs = jobRuntimes.size
         ProblemDefinition.jobRuntimes = jobRuntimes

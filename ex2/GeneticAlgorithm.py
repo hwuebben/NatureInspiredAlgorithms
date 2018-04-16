@@ -2,31 +2,27 @@ from ProblemDefinition import ProblemDefinition as PD
 import numpy as np
 from Individual import Individual
 class GeneticAlgorithm:
-    def __init__(self,initializer,mutator,recombiner,selector, replacer, problemDef, popSize):
-        self.mutator = mutator
-        self.recombiner = recombiner
-        self.selector = selector
-        self.replacer = replacer
-        PD.setPD(problemDef[0],problemDef[1],problemDef[2])
-        self.pop = initializer.initialize(popSize)
+    def __init__(self,moduleSet, problemDef, popSize, nrOffspring):
+        PD.setPD(problemDef[0], problemDef[1])
+
+        self.initializer = moduleSet[0]
+        self.mutator = moduleSet[1]
+        self.recombiner = moduleSet[2]
+        self.selector = moduleSet[3]
+        self.replacer = moduleSet[4]
+        self.terminator = moduleSet[5]
+
+        self.pop = self.initializer.initialize(popSize)
+        self.nrIt = 0
+        self.popSize = popSize
+        self.nrOffspring = nrOffspring
 
     def run(self):
-        #some more Parameters:
-        #max number of Iterations
-        maxIt = 100
-        #nr offspring per generation
-        nrOff = 10
-
-        done = False
-        itCnt = 0
         #main loop
-        while not done:
-            self.generateOffspring(nrOff)
-
-            itCnt += 1
-            #check termination condition
-            if itCnt == maxIt:
-                done = True
+        while not self.terminator.checkTermination(self):
+            newInds = self.generateOffspring(self.nrOffspring)
+            self.pop = self.replacer.replace(newInds, self.pop)
+            self.nrIt += 1
         #return best solution
         return np.max(self.pop)
 
@@ -38,5 +34,5 @@ class GeneticAlgorithm:
             ind1 = self.selector.select(self.pop)
             indNew = self.recombiner.recombine(ind0,ind1)
             newInds[i] = self.mutator.mutate(indNew)
+        return newInds
 
-        self.pop = self.replacer.replace(newInds,self.pop)

@@ -14,7 +14,7 @@ class bottomReplacer(Replacer):
         :param pop:
         :return: updated pop
         """
-        pop = pop[np.argpartition(pop,newInds.size)]
+        pop = pop[np.argpartition(pop,newInds.size-1)]
         pop[0:newInds.size] = newInds
         return pop
 
