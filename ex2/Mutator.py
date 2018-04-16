@@ -7,15 +7,17 @@ class Mutator(ABC):
         pass
 
 class RandomMutator(Mutator):
+    def __init__(self,mutationRate=0.5):
+        self.mutationRate = mutationRate
 
     def mutate(self, toMutate):
         """
-        rnadomly shuffles the elements
-
+        randomly mutate alleles
         :param toMutate:
         :return: mutated individual
         """
-        toMutate.jobAssignments[np.random.randint(0,PD.nrJobs)] = np.random.randint(0,PD.nrMachines)
+        mutPos = np.random.choice([True,False],size =toMutate.jobAssignments.size,p=[self.mutationRate,1-self.mutationRate])
+        toMutate.jobAssignments[mutPos] = np.random.randint(0,PD.nrMachines,toMutate.jobAssignments[mutPos].size)
         return toMutate
 
 class BoundaryMutator(Mutator):
