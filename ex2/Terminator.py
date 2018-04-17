@@ -1,3 +1,4 @@
+from __future__ import division
 from abc import ABC, abstractmethod
 import numpy as np
 import time
@@ -6,6 +7,14 @@ class Terminator(ABC):
     @abstractmethod
     def checkTermination(self,GA):
         pass
+    def estimateProgress(self):
+        """
+        return the progress (from 0-1) of the GA
+        this method CAN be overwritten to enable modules to change
+        behavior based on GAs progress
+        :return:
+        """
+        return 0
 
 
 class maxItTerminator(Terminator):
@@ -15,10 +24,15 @@ class maxItTerminator(Terminator):
         :param maxIt:
         """
         self.maxIt = maxIt
+        self.nrIt = 0
     def checkTermination(self,GA):
-        if GA.nrIt >= self.maxIt:
+        self.nrIt = GA.nrIt
+        if self.nrIt >= self.maxIt:
             return True
         return False
+    def estimateProgress(self):
+        return self.nrIt/self.maxIt
+
 class maxRuntimeTerminator(Terminator):
     def __init__(self,maxRuntime):
         """
@@ -33,5 +47,7 @@ class maxRuntimeTerminator(Terminator):
             return False
         else:
             return ((self.startTime+self.maxRuntime) <= time.time())
+    def estimateProgress(self):
+        return (time.time()-self.startTime) / self.maxRuntime
 
 
