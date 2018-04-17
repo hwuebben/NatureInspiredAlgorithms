@@ -14,7 +14,6 @@ class ProblemDefinition:
         """
         set the Problem Instance
         :param nrMachines:
-        :param nrJobs:
         :param jobRuntimes:
         :return:
         """
