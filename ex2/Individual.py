@@ -26,7 +26,7 @@ class Individual:
             #swap with right neighbor
             solCop[i] = solCop[(i+1)%solCop.size]
             solCop[(i + 1) % solCop.size] = s
-            nh.append(solCop)
+            nh.append(Individual(solCop))
         return nh
 
     def transpNH(self):
@@ -37,7 +37,7 @@ class Individual:
                 solCop = np.copy(self.jobAssignments)
                 solCop[i] = solCop[j]
                 solCop[j] = s
-                nh.append(solCop)
+                nh.append(Individual(solCop))
         return nh
     """
     overwrite compare methods for sorting purposes
