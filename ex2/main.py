@@ -27,8 +27,3 @@ GA = GeneticAlgorithm(moduleSet,probDef,popSize,nrOffspring)
 bestIndividual = GA.run()
 print("best Individuals fitness: ",bestIndividual.getFitness())
 
-
-
-
-
-

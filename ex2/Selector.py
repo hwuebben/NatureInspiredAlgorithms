@@ -4,6 +4,8 @@ class Selector(ABC):
     @abstractmethod
     def select(self,pop):
         pass
+    def simAnnealing(self,progress):
+        pass
 
 
 class RouletteSelector(Selector):
