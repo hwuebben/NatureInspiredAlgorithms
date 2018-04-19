@@ -5,6 +5,8 @@ class Mutator(ABC):
     @abstractmethod
     def mutate(self,toMutate):
         pass
+    def simAnnealing(self,progress):
+        pass
 
 class RandomMutator(Mutator):
     def __init__(self,mutationRate=0.5):

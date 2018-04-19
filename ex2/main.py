@@ -3,6 +3,7 @@ import Initializer,Mutator,Recombiner,Selector,Replacer, Terminator
 from GeneticAlgorithm import GeneticAlgorithm
 from ProblemDefinition import ProblemDefinition as PD
 from Individual import Individual
+from Benchmark import Benchmark
 
 #choose your modules
 initializer = Initializer.RandomInitializer()
@@ -16,7 +17,7 @@ terminator = Terminator.maxRuntimeTerminator(10)
 moduleSet = [initializer,mutator,recombiner,selector,replacer,terminator]
 
 #set up an example problem
-probDef = [10,np.arange(100)]
+probDef = Benchmark.benchmark1()
 
 #set up GA parameters
 popSize = 100
@@ -26,9 +27,4 @@ nrOffspring = int(popSize/10)
 GA = GeneticAlgorithm(moduleSet,probDef,popSize,nrOffspring)
 bestIndividual = GA.run()
 print("best Individuals fitness: ",bestIndividual.getFitness())
-
-
-
-
-
 

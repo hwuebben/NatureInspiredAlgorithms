@@ -6,11 +6,11 @@ class LocalSearcher(ABC):
         pass
 
 class HillClimber(LocalSearcher):
-    def search(self,ind, firstChoice):
+    def climb(self,ind, firstChoice, nh):
         # currently best solution
         bq = ind.getFitness()
         bSol = ind
-        for n in ind.swapNH():
+        for n in self.getNeighborhood(ind):
             cq = n.getFitness()
             if cq > bq:
                 bq = cq
@@ -18,3 +18,19 @@ class HillClimber(LocalSearcher):
                 if firstChoice:
                     return bSol
         return bSol
+
+    def search(self,ind,firstChoice,nh="swap"):
+        done = False
+        sol = nh
+        while not done:
+            sol0 = self.climb(sol,firstChoice,nh)
+            if sol0 == sol:
+                done = True
+            sol = sol0
+        return sol
+
+    def getNeighborhood(self,ind,nh):
+        if nh == "swap":
+            return ind.swapNH()
+        elif nh == "transpose":
+            return ind.transposeNH()
