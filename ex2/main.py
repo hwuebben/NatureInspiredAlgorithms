@@ -1,7 +1,7 @@
 import numpy as np
 import Initializer,Mutator,Recombiner,Selector,Replacer, Terminator, LocalSearcher
 from GeneticAlgorithm import GeneticAlgorithm
-from ProblemDefinition import ProblemDefinition as PD
+#from ProblemDefinition import ProblemDefinition as PD
 from Individual import Individual
 from Benchmark import Benchmark
 
