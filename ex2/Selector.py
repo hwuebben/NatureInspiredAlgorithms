@@ -4,7 +4,7 @@ class Selector(ABC):
     @abstractmethod
     def select(self,pop):
         pass
-    def simAnnealing(self,progress):
+    def dynamicAdaptation(self,progress):
         pass
 
 
@@ -23,18 +23,26 @@ class RouletteSelector(Selector):
 
 
 class TournamentSelector(Selector):
+    def __init__(self,s=2,dynAdapt=False,maxS=12):
+        self.s = s
+        self.originalS = s
+        self.dynAdapt=dynAdapt
+        self.maxS=maxS
 
     def select(self,pop):
         """
-        perform tournament selection on pop with s = 2
+        perform tournament selection on pop with s individuals
         :param pop:
         :return: selected individual
         """
-
-        candidates =  np.random.choice(pop,2,replace=False)
+        self.s = min(self.s, pop.size)
+        candidates =  np.random.choice(pop,self.s,replace=False)
         if candidates[0] > candidates[1]:
             return candidates[0]
         else:
             return candidates[1]
+
+    def dynamicAdaptation(self,progress):
+        self.s = int(self.originalS + progress*self.maxS)
 
 

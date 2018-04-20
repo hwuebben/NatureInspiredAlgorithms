@@ -19,7 +19,7 @@ class HillClimber(LocalSearcher):
                     return bSol
         return bSol
 
-    def search(self,ind,firstChoice,nh="swap"):
+    def search(self,ind,firstChoice=false,nh="swap"):
         done = False
         sol = nh
         while not done:

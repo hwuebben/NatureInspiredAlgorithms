@@ -5,12 +5,14 @@ class Mutator(ABC):
     @abstractmethod
     def mutate(self,toMutate):
         pass
-    def simAnnealing(self,progress):
+    def dynamicAdaptation(self,progress):
         pass
 
 class RandomMutator(Mutator):
-    def __init__(self,mutationRate=0.5):
+    def __init__(self,mutationRate=0.5,dynAdapt=False):
         self.mutationRate = mutationRate
+        self.origMutationRate = mutationRate
+        self.dynAdapt = dynAdapt
 
     def mutate(self, toMutate):
         """
@@ -21,6 +23,10 @@ class RandomMutator(Mutator):
         mutPos = np.random.choice([True,False],size =toMutate.jobAssignments.size,p=[self.mutationRate,1-self.mutationRate])
         toMutate.jobAssignments[mutPos] = np.random.randint(0,PD.nrMachines,toMutate.jobAssignments[mutPos].size)
         return toMutate
+    def dynamicAdaptation(self,progress):
+        if self.dynAdapt:
+            self.mutationRate = self.origMutationRate*(1.2-progress)
+
 
 class BoundaryMutator(Mutator):
 

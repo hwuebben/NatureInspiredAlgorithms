@@ -7,9 +7,9 @@ from Benchmark import Benchmark
 
 #choose your modules
 initializer = Initializer.RandomInitializer()
-mutator = Mutator.RandomMutator()
+mutator = Mutator.RandomMutator(0.5)
 recombiner = Recombiner.CrossoverRecombiner()
-selector = Selector.RouletteSelector()
+selector = Selector.TournamentSelector(2)
 replacer = Replacer.bottomReplacer()
 terminator = Terminator.maxRuntimeTerminator(10)
 

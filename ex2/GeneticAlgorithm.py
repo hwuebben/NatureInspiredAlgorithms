@@ -24,8 +24,8 @@ class GeneticAlgorithm:
             self.pop = self.replacer.replace(newInds, self.pop)
             self.nrIt += 1
             #pass the progress to the mutator and selector module to enable simulated annealing
-            self.mutator.simAnnealing(self.terminator.estimateProgress())
-            self.selector.simAnnealing(self.terminator.estimateProgress())
+            self.mutator.dynamicAdaptation(self.terminator.estimateProgress())
+            self.selector.dynamicAdaptation(self.terminator.estimateProgress())
         #return best solution
         return np.max(self.pop)
 
