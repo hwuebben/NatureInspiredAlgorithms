@@ -1,8 +1,9 @@
 from ProblemDefinition import ProblemDefinition as PD
 import numpy as np
 from Individual import Individual
+import LocalSearcher
 class GeneticAlgorithm:
-    def __init__(self,moduleSet, problemDef, popSize, nrOffspring):
+    def __init__(self,moduleSet, problemDef, popSize, nrOffspring, localSearcher = LocalSearcher.Idle()):
         PD.setPD(problemDef[0], problemDef[1])
 
         self.initializer = moduleSet[0]
@@ -11,6 +12,7 @@ class GeneticAlgorithm:
         self.selector = moduleSet[3]
         self.replacer = moduleSet[4]
         self.terminator = moduleSet[5]
+        self.localSearcher = localSearcher
 
         self.pop = self.initializer.initialize(popSize)
         self.nrIt = 0
@@ -36,6 +38,7 @@ class GeneticAlgorithm:
             ind0 = self.selector.select(self.pop)
             ind1 = self.selector.select(self.pop)
             indNew = self.recombiner.recombine(ind0,ind1)
+            indNew = self.localSearcher.search(indNew)
             newInds[i] = self.mutator.mutate(indNew)
         return newInds
 

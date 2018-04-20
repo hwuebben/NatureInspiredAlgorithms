@@ -10,7 +10,7 @@ class HillClimber(LocalSearcher):
         # currently best solution
         bq = ind.getFitness()
         bSol = ind
-        for n in self.getNeighborhood(ind):
+        for n in self.getNeighborhood(ind,nh):
             cq = n.getFitness()
             if cq > bq:
                 bq = cq
@@ -19,9 +19,9 @@ class HillClimber(LocalSearcher):
                     return bSol
         return bSol
 
-    def search(self,ind,firstChoice=false,nh="swap"):
+    def search(self,ind,firstChoice=False,nh="swap"):
         done = False
-        sol = nh
+        sol = ind
         while not done:
             sol0 = self.climb(sol,firstChoice,nh)
             if sol0 == sol:
@@ -34,3 +34,7 @@ class HillClimber(LocalSearcher):
             return ind.swapNH()
         elif nh == "transpose":
             return ind.transposeNH()
+
+class Idle():
+    def search(self,ind):
+        return ind
