@@ -21,7 +21,7 @@ class RandomMutator(Mutator):
         :return: mutated individual
         """
         mutPos = np.random.choice([True,False],size =toMutate.jobAssignments.size,p=[self.mutationRate,1-self.mutationRate])
-        toMutate.jobAssignments[mutPos] = np.random.randint(0,toMutate.jobAssignments.max().nrMachines,toMutate.jobAssignments[mutPos].size)
+        toMutate.jobAssignments[mutPos] = np.random.randint(0,toMutate.jobAssignments.max(),toMutate.jobAssignments[mutPos].size)
         return toMutate
     def dynamicAdaptation(self,progress):
         if self.dynAdapt:
