@@ -1,32 +1,31 @@
-import numpy as np
-import Initializer,Mutator,Recombiner,Selector,Replacer, Terminator, LocalSearcher
+import Initializer, Mutator, Recombiner,Selector, Replacer, Terminator, LocalSearcher
 from GeneticAlgorithm import GeneticAlgorithm
-#from ProblemDefinition import ProblemDefinition as PD
-from Individual import Individual
+from ProblemDefinition import ProblemDefinition
 from Benchmark import Benchmark
 
-#choose your modules
+# Choose your operators
 initializer = Initializer.RandomInitializer()
-mutator = Mutator.RandomMutator(0.5)
+mutator = Mutator.RandomMutator(0.2, dynAdapt=True)
 recombiner = Recombiner.CrossoverRecombiner()
-selector = Selector.TournamentSelector(2)
+selector = Selector.TournamentSelector(s=20, dynAdapt=True)
 replacer = Replacer.bottomReplacer()
 terminator = Terminator.maxRuntimeTerminator(10)
-#add a local searcher if you want LocalSearcher.Idle() does nothing
-localSearcher = LocalSearcher.HillClimber()
+# Add a local searcher if you want LocalSearcher.Idle() does nothing
+localSearcher = LocalSearcher.Idle()
 
-#set up the module set
-moduleSet = [initializer,mutator,recombiner,selector,replacer,terminator]
+# Set up the module set
+moduleSet = [initializer, mutator, recombiner, selector, replacer, terminator]
 
-#set up an example problem
-probDef = Benchmark.benchmark1()
+# Set up an example problem
+nrMachines, jobRuntimes = Benchmark.benchmark1()
+probDef = ProblemDefinition(nrMachines, jobRuntimes)
 
-#set up GA parameters
+# Set up GA parameters
 popSize = 100
 nrOffspring = int(popSize/10)
 
-#create Genetic Algorithm instance
-GA = GeneticAlgorithm(moduleSet,probDef,popSize,nrOffspring,localSearcher)
+# Create Genetic Algorithm instance
+GA = GeneticAlgorithm(moduleSet, probDef, popSize, nrOffspring, localSearcher)
 bestIndividual = GA.run()
-print("best Individuals fitness: ",bestIndividual.getFitness())
+print("best Individuals fitness: ", bestIndividual.fitness)
 

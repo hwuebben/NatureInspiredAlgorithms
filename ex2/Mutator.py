@@ -1,15 +1,21 @@
 from abc import ABC, abstractmethod
 import numpy as np
-#from ProblemDefinition import ProblemDefinition as PD
+
+
 class Mutator(ABC):
+
     @abstractmethod
     def mutate(self,toMutate):
         pass
+
+    @abstractmethod
     def dynamicAdaptation(self,progress):
         pass
 
+
 class RandomMutator(Mutator):
-    def __init__(self,mutationRate=0.5,dynAdapt=False):
+
+    def __init__(self, mutationRate=0.5, dynAdapt=False):
         self.mutationRate = mutationRate
         self.origMutationRate = mutationRate
         self.dynAdapt = dynAdapt
@@ -20,10 +26,11 @@ class RandomMutator(Mutator):
         :param toMutate:
         :return: mutated individual
         """
-        mutPos = np.random.choice([True,False],size =toMutate.jobAssignments.size,p=[self.mutationRate,1-self.mutationRate])
-        toMutate.jobAssignments[mutPos] = np.random.randint(0,toMutate.jobAssignments.max(),toMutate.jobAssignments[mutPos].size)
+        mutPos = np.random.choice([True, False], size=toMutate.jobAssignments.size, p=[self.mutationRate, 1-self.mutationRate])
+        toMutate.jobAssignments[mutPos] = np.random.randint(0, toMutate.jobAssignments.max(), toMutate.jobAssignments[mutPos].size)
         return toMutate
-    def dynamicAdaptation(self,progress):
+
+    def dynamicAdaptation(self, progress):
         if self.dynAdapt:
             self.mutationRate = self.origMutationRate*(1.2-progress)
 

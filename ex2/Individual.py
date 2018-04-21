@@ -1,21 +1,20 @@
 from __future__ import division
 import numpy as np
 from ProblemDefinition import ProblemDefinition
+
+
 class Individual:
 
-
-    def __init__(self,jobAssignments):
+    def __init__(self, probDef, jobAssignments):
+        self.probDef = probDef
         self.jobAssignments = jobAssignments
-        self.fitness = self.calcFitness()
+        self.fitness = self.__calcFitness()
 
-    def calcFitness(self):
-        counts = np.zeros(ProblemDefinition.jobRuntimes.size)
+    def __calcFitness(self):
+        total_time = np.zeros(self.probDef.nrMachines)
         for ja in self.jobAssignments:
-            counts[ja] += ProblemDefinition.jobRuntimes[ja]
-        return (1/np.max(counts))
-
-    def getFitness(self):
-        return self.fitness
+            total_time[ja] += self.probDef.jobRuntimes[ja]
+        return (1/np.max(total_time))
 
     """definitions of neighborhoods"""
     def swapNH(self):
@@ -26,7 +25,7 @@ class Individual:
             #swap with right neighbor
             solCop[i] = solCop[(i+1)%solCop.size]
             solCop[(i + 1) % solCop.size] = s
-            nh.append(Individual(solCop))
+            nh.append(Individual(self.probDef, solCop))
         return nh
 
     def transpNH(self):
@@ -39,19 +38,24 @@ class Individual:
                 solCop[j] = s
                 nh.append(Individual(solCop))
         return nh
+
     """
     overwrite compare methods for sorting purposes
     """
     def __eq__(self, other):
-        return self.getFitness() == other.getFitness()
+        return self.fitness == other.fitness
+
     def __lt__(self, other):
-        return self.getFitness() < other.getFitness()
+        return self.fitness < other.fitness
+
     def __le__(self, other):
-        return self.getFitness() <= other.getFitness()
+        return self.fitness <= other.fitness
+
     def __gt__(self, other):
-        return self.getFitness() > other.getFitness()
+        return self.fitness > other.fitness
+
     def __ge__(self, other):
-        return self.getFitness() >= other.getFitness()
+        return self.fitness >= other.fitness
 
 
 
