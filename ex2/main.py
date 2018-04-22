@@ -13,9 +13,6 @@ terminator = Terminator.maxRuntimeTerminator(10)
 # Add a local searcher if you want LocalSearcher.Idle() does nothing
 localSearcher = LocalSearcher.Idle()
 
-# Set up the module set
-moduleSet = [initializer, mutator, recombiner, selector, replacer, terminator]
-
 # Set up an example problem
 nrMachines, jobRuntimes = Benchmark.benchmark1()
 probDef = ProblemDefinition(nrMachines, jobRuntimes)
@@ -25,7 +22,8 @@ popSize = 100
 nrOffspring = int(popSize/10)
 
 # Create Genetic Algorithm instance
-GA = GeneticAlgorithm(moduleSet, probDef, popSize, nrOffspring, localSearcher)
-bestIndividual = GA.run()
+GA = GeneticAlgorithm(initializer, selector, recombiner, mutator, replacer, terminator,
+                      probDef, popSize, nrOffspring, localSearcher)
+bestIndividual, results = GA.run()
 print("best Individuals fitness: ", bestIndividual.fitness)
 

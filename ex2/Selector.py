@@ -30,7 +30,7 @@ class RouletteSelector(Selector):
         :param pop:
         :return: selected individual
         """
-        probs = [x.getFitness() for x in pop]
+        probs = [x.fitness for x in pop]
         probs /= sum(probs)
         result = np.random.choice(pop, p=probs)
         return result

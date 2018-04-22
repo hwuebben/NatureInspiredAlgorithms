@@ -9,7 +9,7 @@ class Mutator(ABC):
         pass
 
     @abstractmethod
-    def dynamicAdaptation(self,progress):
+    def dynamicAdaptation(self, progress):
         pass
 
 
@@ -39,7 +39,7 @@ class BoundaryMutator(Mutator):
 
     def mutate(self, toMutate):
         """
-        Randomly sets indivuals to the upper and lower boundary values of the array
+        Randomly sets individuals to the upper and lower boundary values of the array
 
         :param toMutate:
         :return: mutated individual
@@ -51,4 +51,24 @@ class BoundaryMutator(Mutator):
         toMutate.jobAssignments[mask == 2] = max
         return toMutate
 
+    def dynamicAdaptation(self, progress):
+        pass
 
+
+class SwapMutator(Mutator):
+
+    def mutate(self, toMutate):
+        """
+        randomly swaps two adjacent alleles
+
+        :param toMutate:
+        :return: mutated individual
+        """
+        size = toMutate.jobAssignments.size
+        mutPos = np.random.randint(size)
+        toMutate.jobAssignments[mutPos], toMutate.jobAssignments[(mutPos+1) % size]\
+            = toMutate.jobAssignments[(mutPos+1) % size], toMutate.jobAssignments[mutPos]
+        return toMutate
+
+    def dynamicAdaptation(self, progress):
+        pass

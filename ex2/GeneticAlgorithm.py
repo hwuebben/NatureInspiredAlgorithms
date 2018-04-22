@@ -6,13 +6,14 @@ import LocalSearcher
 
 class GeneticAlgorithm:
 
-    def __init__(self, moduleSet, probDef, popSize, nrOffspring, localSearcher = LocalSearcher.Idle()):
-        self.initializer = moduleSet[0]
-        self.mutator = moduleSet[1]
-        self.recombiner = moduleSet[2]
-        self.selector = moduleSet[3]
-        self.replacer = moduleSet[4]
-        self.terminator = moduleSet[5]
+    def __init__(self, initializer, selector, recombiner, mutator, replacer, terminator,
+                 probDef, popSize, nrOffspring, localSearcher = LocalSearcher.Idle()):
+        self.initializer = initializer
+        self.selector = selector
+        self.recombiner = recombiner
+        self.mutator = mutator
+        self.replacer = replacer
+        self.terminator = terminator
         self.localSearcher = localSearcher
 
         self.probDef = probDef

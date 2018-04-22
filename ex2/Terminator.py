@@ -5,9 +5,11 @@ import time
 
 
 class Terminator(ABC):
+
     @abstractmethod
-    def checkTermination(self,GA):
+    def checkTermination(self, GA):
         pass
+
     def estimateProgress(self):
         """
         return the progress (from 0-1) of the GA
@@ -19,6 +21,7 @@ class Terminator(ABC):
 
 
 class maxItTerminator(Terminator):
+
     def __init__(self, maxIt):
         """
         create terminator that terminates after maxIt iterations
@@ -26,33 +29,40 @@ class maxItTerminator(Terminator):
         """
         self.maxIt = maxIt
         self.nrIt = 0
-    def checkTermination(self,GA):
+
+    def checkTermination(self, GA):
         self.nrIt = GA.nrIt
         if self.nrIt >= self.maxIt:
             return True
         return False
+
     def estimateProgress(self):
         return self.nrIt/self.maxIt
 
 class maxRuntimeTerminator(Terminator):
-    def __init__(self,maxRuntime):
+
+    def __init__(self, maxRuntime):
         """
         create terminator that terminates after maxRuntime seconds
         :param maxRuntime:
         """
         self.maxRuntime = maxRuntime
         self.startTime = None
-    def checkTermination(self,GA):
+
+    def checkTermination(self, GA):
         if self.startTime is None:
             self.startTime = time.time()
             return False
         else:
             return ((self.startTime+self.maxRuntime) <= time.time())
+
     def estimateProgress(self):
         return (time.time()-self.startTime) / self.maxRuntime
 
+
 class convergenceTerminator(Terminator):
-    def __init__(self,maxIter,rtol = 1e-05):
+
+    def __init__(self, maxIter, rtol=1e-05):
         """
         if performance of best individual doesn't change more than
         rtol (relative change) for maxIter iteration, then terminate
@@ -63,9 +73,10 @@ class convergenceTerminator(Terminator):
         self.counter = 0
         self.maxIter = maxIter
         self.rtol = rtol
+
     def checkTermination(self,GA):
         perf = np.max(GA.pop).getFitness()
-        if np.isclose(perf,self.lastPerf,rtol=self.rtol,atol=0):
+        if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
             self.counter += 1
         if self.counter >= self.maxIter:
             return True
