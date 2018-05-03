@@ -8,6 +8,13 @@ class AbstractSolutionGenerator(ABC):
 
     @abstractmethod
     def create_single_solution(self, pheromone_matrix: np.array, distance_matrix: np.array) -> np.array:
+        """
+        Creates a single solution based on the pheromone matrix.
+
+        :param pheromone_matrix:
+        :param distance_matrix:
+        :return: A solution is a binary NxN matrix with entry (i,j) == 1 meaning that the ant traveled from i to j.
+        """
         pass
 
     def get_score(self, solution: np.array, distance_matrix: np.array) -> float:
@@ -51,3 +58,16 @@ class SolutionGenerator(AbstractSolutionGenerator):
         super().__init__(number_of_ants)
         self.alpha = alpha
         self.beta = beta
+
+    def create_single_solution(self, pheromone_matrix: np.array, distance_matrix: np.array):
+        """
+        create a solution based on euclidean distance heuristics
+        :param pheromone_matrix:
+        :param distance_matrix:
+        :return:
+        """
+        solution = np.zeros(distance_matrix.shape)
+
+        #add solution generation here
+
+        return solution
