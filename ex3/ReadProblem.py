@@ -42,4 +42,7 @@ class TSP_Problem:
             row[i] = int(row[i])
         return row
 
+    def get_distance_matrix(self) -> np.array:
+        return self.distance_matrix
+
 
