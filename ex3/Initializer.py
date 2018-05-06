@@ -13,12 +13,13 @@ class AbstractInitializer(ABC):
         """
         pass
 
-class ZeroInitializer(ABC):
+class TSP_Initializer(ABC):
 
-    def initialize(self, num_cities : int) -> np.array:
+    def initialize(self, problem) -> np.array:
         """
-        generate pheromone matrix
+        generate pheromone matrix for TSP
         :param popSize:
         :return: pop
         """
-        return np.zeros((num_cities, num_cities))
+        size = problem.get_size()
+        return np.ones((size, size))

@@ -3,11 +3,10 @@ from abc import ABC, abstractmethod
 import numpy as np
 import time
 
-
 class Terminator(ABC):
 
     @abstractmethod
-    def checkTermination(self, GA):
+    def checkTermination(self, aco):
         pass
 
     def estimateProgress(self):
@@ -28,11 +27,9 @@ class maxItTerminator(Terminator):
         :param maxIt:
         """
         self.maxIt = maxIt
-        self.nrIt = 0
 
-    def checkTermination(self, GA):
-        self.nrIt = GA.nrIt
-        if self.nrIt >= self.maxIt:
+    def checkTermination(self, aco):
+        if aco.nrIt >= self.maxIt:
             return True
         return False
 
@@ -49,7 +46,7 @@ class maxRuntimeTerminator(Terminator):
         self.maxRuntime = maxRuntime
         self.startTime = None
 
-    def checkTermination(self, GA):
+    def checkTermination(self, aco):
         if self.startTime is None:
             self.startTime = time.time()
             return False
@@ -64,7 +61,7 @@ class convergenceTerminator(Terminator):
 
     def __init__(self, maxIter, rtol=1e-05):
         """
-        if performance of best individual doesn't change more than
+        if performance of best solution doesn't change more than
         rtol (relative change) for maxIter iteration, then terminate
         :param maxIter:
         :param rtol:
@@ -74,10 +71,11 @@ class convergenceTerminator(Terminator):
         self.maxIter = maxIter
         self.rtol = rtol
 
-    def checkTermination(self,GA):
-        perf = np.max(GA.pop).getFitness()
+    def checkTermination(self, aco):
+        perf = aco.best_score
         if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
             self.counter += 1
+        self.lastPerf = perf
         if self.counter >= self.maxIter:
             return True
         return False
