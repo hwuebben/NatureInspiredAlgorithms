@@ -14,5 +14,5 @@ def plot_evolution(results, nrBoxplots):
     max_scores = np.max(results,axis=1)
     plt.fill_between(x, min_scores, max_scores, alpha=0.1, color='g', label='min/max')
     plt.plot(x, mean_scores, color='g', alpha=1, label='mean')
-    plt.legend(loc=4)
+    plt.legend(loc=1)
     plt.show()
