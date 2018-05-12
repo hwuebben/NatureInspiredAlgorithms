@@ -52,10 +52,13 @@ class PermutationSolutionGenerator(AbstractSolutionGenerator):
         super().__init__(number_of_ants, problem)
         self.alpha = alpha
         self.beta = beta
-        if heuristic is not None:
-            self.heuristic = lambda x: heuristic.calculate_etas(x)
+        if (heuristic is not None) and (beta != 0):
+            etas = heuristic.calculate_etas(problem)
+            self.nominator = lambda x, y, z: np.power(x[y, z], self.alpha) * np.power(etas[y, z], self.beta)
+            self.denominator = lambda x, y, z: np.sum(np.power(x[y, z], self.alpha) * np.power(etas[y, z], self.beta))
         else:
-            self.heuristic = lambda x: np.ones(shape=(x.get_size(), x.get_size()))
+            self.nominator = lambda x, y, z: np.power(x[y, z], self.alpha)
+            self.denominator = lambda x, y, z: np.sum(np.power(x[y, z], self.alpha))
 
     def construct_single_solution(self, pheromone_matrix: np.array):
         """
@@ -67,16 +70,12 @@ class PermutationSolutionGenerator(AbstractSolutionGenerator):
         steps = self.problem.get_size()
         selectable_items = np.arange(1, steps, 1)
         solution = np.array([0])
-        etas = self.heuristic(self.problem)
 
         for step in range(steps-1):
             # Determine probabilities for next item
             last_item = solution[-1]
-            nominator = np.power(pheromone_matrix[last_item, selectable_items], self.alpha) *\
-                        np.power(etas[last_item, selectable_items], self.beta)
-            denominator = np.sum(np.power(pheromone_matrix[last_item, selectable_items], self.alpha) *\
-                          np.power(etas[last_item, selectable_items], self.beta))
-            p_items = nominator / denominator
+            p_items = self.nominator(pheromone_matrix, last_item, selectable_items) \
+                      / self.denominator(pheromone_matrix, last_item, selectable_items)
             # Choose next item based on probabilities
             next_item = np.random.choice(np.arange(0, selectable_items.shape[0], 1), 1, False, p_items)
             # Add next chosen item to solution and remove it from selectable solutions

@@ -52,7 +52,7 @@ class Ant_Colony_Optimizer:
             self.pheromone_matrix = self.evaporator.evaporate(self.pheromone_matrix)
             for i in range(self.num_solutions):
                 if self.quality_dependence:
-                    ratio = iteration_scores[i] / np.max(iteration_scores) # Quality-dependent update ratio
+                    ratio = np.min(iteration_scores) / iteration_scores[i] # Quality-dependent update ratio
                 else:
                     ratio = 1
                 self.pheromone_matrix\
