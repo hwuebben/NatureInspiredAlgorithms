@@ -7,12 +7,12 @@ import time
 class Terminator(ABC):
 
     @abstractmethod
-    def checkTermination(self, GA):
+    def checkTermination(self, DE):
         pass
 
     def estimateProgress(self):
         """
-        return the progress (from 0-1) of the GA
+        return the progress (from 0-1) of the DE
         this method CAN be overwritten to enable modules to change
         behavior based on GAs progress
         :return:
@@ -30,8 +30,8 @@ class maxItTerminator(Terminator):
         self.maxIt = maxIt
         self.nrIt = 0
 
-    def checkTermination(self, GA):
-        self.nrIt = GA.nrIt
+    def checkTermination(self, DE):
+        self.nrIt = DE.nrIt
         if self.nrIt >= self.maxIt:
             return True
         return False
@@ -49,7 +49,7 @@ class maxRuntimeTerminator(Terminator):
         self.maxRuntime = maxRuntime
         self.startTime = None
 
-    def checkTermination(self, GA):
+    def checkTermination(self, DE):
         if self.startTime is None:
             self.startTime = time.time()
             return False
@@ -58,29 +58,6 @@ class maxRuntimeTerminator(Terminator):
 
     def estimateProgress(self):
         return (time.time()-self.startTime) / self.maxRuntime
-
-
-class convergenceTerminator(Terminator):
-
-    def __init__(self, maxIter, rtol=1e-05):
-        """
-        if performance of best individual doesn't change more than
-        rtol (relative change) for maxIter iteration, then terminate
-        :param maxIter:
-        :param rtol:
-        """
-        self.lastPerf = 0
-        self.counter = 0
-        self.maxIter = maxIter
-        self.rtol = rtol
-
-    def checkTermination(self,GA):
-        perf = np.max(GA.pop).getFitness()
-        if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
-            self.counter += 1
-        if self.counter >= self.maxIter:
-            return True
-        return False
 
 
 
