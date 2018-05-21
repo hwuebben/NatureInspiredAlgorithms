@@ -16,4 +16,6 @@ class Mutator(ABC):
 
 
 class DEmutator(Mutator):
-    pass
+
+    def mutate(self,toMutate):
+        pass

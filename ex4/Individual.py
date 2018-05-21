@@ -56,6 +56,7 @@ class Individual:
         prodCost = 0
         for i in range(0,3):
             prodCost += Individual.cost(x[i],k[i],c[i],m[i])
+        return prodCost
 
     @staticmethod
     def purchCost(x):
@@ -75,7 +76,8 @@ class Individual:
     def revenue(x):
         revenue = 0
         for i in range(1,4):
-            revenue += np.min(Individual.demand(x[-i],p[i-1],d[i-1]), x[-(i+3)]) * x[-i]
+            demand = Individual.demand(x[-i],p[i-1],d[i-1])
+            revenue += np.minimum(demand, x[-(i+3)]) * x[-i]
         return revenue
 
 
