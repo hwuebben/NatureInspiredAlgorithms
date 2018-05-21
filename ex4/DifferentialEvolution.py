@@ -1,7 +1,6 @@
 import numpy as np
 
 from Individual import Individual
-import LocalSearcher
 
 
 class DifferentialEvolution:

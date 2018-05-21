@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from ProblemDefinition import ProblemDefinition as PD
 from Individual import Individual
 
 
