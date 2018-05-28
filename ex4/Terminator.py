@@ -60,4 +60,45 @@ class maxRuntimeTerminator(Terminator):
         return (time.time()-self.startTime) / self.maxRuntime
 
 
+class minFitness(Terminator):
+
+    def __init__(self, minFitness):
+        """
+        create terminator that terminates after achieving a minimum fitness
+        :param minFitness:
+        """
+        self.minFitness = minFitness
+
+    def checkTermination(self, DE):
+        self.fitness = np.max(DE.pop).targFuncVal
+        return self.fitness > self.minFitness
+
+    def estimateProgress(self):
+        return self.fitness / self.minFitness
+
+
+class convergenceTerminator(Terminator):
+
+    def __init__(self, maxIter, rtol=1e-05):
+        """
+        if performance of best solution doesn't change more than
+        rtol (relative change) for maxIter iteration, then terminate
+        :param maxIter:
+        :param rtol:
+        """
+        self.lastPerf = 0
+        self.counter = 0
+        self.maxIter = maxIter
+        self.rtol = rtol
+
+    def checkTermination(self, DE):
+        perf = DE.best_score
+        if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
+            self.counter += 1
+        else:
+            self.counter = 0
+        self.lastPerf = perf
+        if self.counter >= self.maxIter:
+            return True
+        return False
 

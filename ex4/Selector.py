@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
-import numpy as np
+from Problem import *
 
 
 class Selector(ABC):
-
     @abstractmethod
     def select(self,population: list, trials: list) -> list:
         """
@@ -13,7 +12,6 @@ class Selector(ABC):
         :return:
         """
         pass
-
 
 
 class DEselector(Selector):
@@ -28,7 +26,7 @@ class DEselector(Selector):
         """
         next_gen = []
         for i in range(len(population)):
-            if population[i] >= trials[i]:
+            if (population[i] >= trials[i]) or (not Problem.validate(trials[i])):
                 next_gen.append(population[i])
             else:
                 next_gen.append(trials[i])

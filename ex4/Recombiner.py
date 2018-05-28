@@ -1,15 +1,16 @@
 from abc import ABC, abstractmethod
 import numpy as np
 from Individual import Individual
-from copy import deepcopy
 
 
 class Recombiner(ABC):
-    def __init__(self, Cr):
+    def __init__(self, Cr: float, problem):
         """
         :param Cr: Crossover rate
+        :param problem:
         """
         self.Cr = Cr
+        self.problem = problem
 
     @abstractmethod
     def recombine(self,targetVector: Individual, donorVector: Individual) -> Individual:
@@ -24,20 +25,19 @@ class Recombiner(ABC):
         """
         result = []
         for i in range(len(population)):
-            result.append(self.recombine(population[i],donors[i]))
+            result.append(self.recombine(population[i], donors[i]))
         return result
-
 
 
 class ExponentialCrossover(Recombiner):
 
-    def get_L(self, max_length):
+    def __get_L(self, max_length):
         L = 1
         while L <= max_length and np.random.uniform(0,1.0) <= self.Cr:
             L += 1
         return L
 
-    def recombine(self,targetVector: Individual, donorVector: Individual) -> Individual:
+    def recombine(self, targetVector: Individual, donorVector: Individual) -> Individual:
         """
         Exponential recombination
         :param targetVector:
@@ -45,26 +45,20 @@ class ExponentialCrossover(Recombiner):
         :return:
         """
 
-        # deepcopy the target Vector
-        trial = targetVector.x[:]
+        trial = np.copy(targetVector.x)
         donor = donorVector.x
 
-        n = np.random.randint(0, len(trial), 1)
-        D = len(trial)
-        L = self.get_L(D)
+        D = len(trial) # dimensionality of individual genome
+        n = np.random.randint(0, D, 1)[0] # random starting point
+        L = self.__get_L(D) # number of contributing donor components
 
         # if crossoveer exceeds bounds
         if n+L > D:
-            trial[n:D] = donor[n:D]
-            trial[0:(n+L) % D] = trial[0:(n+L) % D]
+            trial[n-D:n+L-D] = donor[n-D:n+L-D]
         else:
             trial[n:L] = donor[n:L]
 
-        trialVector = deepcopy(targetVector)
-        trialVector.x = trial
-        trialVector.targFuncVal = Individual.targetFunc(trial)
-
-        return trial
+        return Individual(trial, self.problem)
 
 class BinomialCrossover(Recombiner):
 
@@ -75,7 +69,7 @@ class BinomialCrossover(Recombiner):
         :param donorVector:
         :return:
         """
-        trial = targetVector.x[:]
+        trial = np.copy(targetVector.x)
         donor = donorVector.x
 
         D = len(trial)
@@ -87,5 +81,5 @@ class BinomialCrossover(Recombiner):
         trial[bin_vals <= self.Cr] = donor[bin_vals <= self.Cr]
         trial[j_rand] = donor[j_rand]
 
-        return trial
+        return Individual(trial, self.problem)
 
