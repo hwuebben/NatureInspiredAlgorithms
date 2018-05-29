@@ -16,3 +16,23 @@ def plot_evolution(results, nrBoxplots):
     plt.plot(x, mean_scores, color='g', alpha=1, label='mean')
     plt.legend(loc=1)
     plt.show()
+
+def plot3D_parameters(generations, gs):
+    extract_genes = lambda gens, i, j: np.array([[ind.x[i:j] for ind in gen] for gen in gens])
+    es = extract_genes(generations[gs], 0, 3)
+    ss = extract_genes(generations[gs], 3, 6)
+    ps = extract_genes(generations[gs], 6, 9)
+    scores = np.array([[ind.targFuncVal for ind in gen] for gen in generations[gs]])
+
+    for (g, e, s, p, score) in zip(gs, es, ss, ps, scores):
+        fig = plt.figure(figsize=(16, 4))
+        for i, (xs, x) in enumerate(((es, e), (ss, s), (ps, p))):
+            ax = fig.add_subplot(131 + i, projection='3d')
+            ax.scatter3D(x[:, 0], x[:, 1], x[:, 2], depthshade=False, c=score, cmap='Greens')
+            ax.set_title(('e', 's', 'p')[i] + ' - generation: ' + str(g))
+            ax.set_xlim(np.amin(xs[:, :, 0]), np.amax(xs[:, :, 0]))
+            ax.set_ylim(np.amin(xs[:, :, 1]), np.amax(xs[:, :, 1]))
+            ax.set_zlim(np.amin(xs[:, :, 2]), np.amax(xs[:, :, 2]))
+
+        fig.tight_layout()
+        plt.show()

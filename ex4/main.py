@@ -9,17 +9,17 @@ from DifferentialEvolution import DifferentialEvolution
 #pop size
 NP = 90
 #scale Factor
-F = 0.2
+F = 0.6
 #crossover rate
-Cr = 0.2
+Cr = 0.5
 
 # choose problem
-problem = Problem(3)
+problem = Problem(1)
 #set xMin
 xMin = np.zeros(9)
 #set xMax (what are good values here?)
 xMax = np.concatenate((np.array(problem.k) * np.array(problem.m), problem.md, problem.mp))
-xMax *= [1, 1, 1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1]
+xMax *= [1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1, 1.1]
 
 # Choose your operators
 initializer = RandomInitializer(NP, xMin, xMax, problem)
@@ -32,7 +32,7 @@ terminator = [maxItTerminator(2000), convergenceTerminator(200)]
 
 # Create Genetic Algorithm instance
 DE = DifferentialEvolution(initializer, selector, recombiner, mutator, terminator, True)
-bestIndividual, results = DE.run()
+bestIndividual, results, generations = DE.run()
 print("best Individuals fitness: ", problem.targetFunc(bestIndividual.x))
 print("best individual: ", bestIndividual.x.reshape(3,3))
 print(np.sum(bestIndividual.x.reshape(3,3), axis=1))

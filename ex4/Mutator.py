@@ -32,7 +32,7 @@ class randMutator(Mutator):
 
     def mutate(self, toMutate: Individual, population: list) -> Individual:
         """
-        mutate a single individual and return a donor vector
+        create and return a mutated donor vector related to the individual to be mutated
         :param toMutate: an individual to mutate
         :param population: a list of individuals, forming the current population (including the Individual to mutate)
         :return: donor individual
@@ -50,7 +50,7 @@ class bestMutator(Mutator):
 
     def mutate(self, toMutate: Individual, population: list) -> Individual:
         """
-        mutate a single individual and return a donor vector
+        create and return a mutated donor vector based on the best individual related to the individual to be mutated
         :param toMutate: an individual to mutate
         :param population: a list of individuals, forming the current population (including the Individual to mutate)
         :return: donor individual

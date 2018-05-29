@@ -37,11 +37,15 @@ class Problem:
         else:
             raise ValueError("Problem number not valid.")
 
-    def targetFunc(self, x):
+    def targetFunc(self, x) -> float:
+        """
+        :param x: genome vector
+        :return: profit
+        """
         e, s, p = x[0:3], x[3:6], x[6:]
         return self.__revenue(s, p) - (self.__prodCost(e) + self.__purchCost(e, s))
 
-    def __prodCost(self, e):
+    def __prodCost(self, e) -> float:
         """
         :param e: energy produced
         :return: production cost
@@ -52,10 +56,21 @@ class Problem:
 
         return np.dot(plantsNeeded, self.c)
 
-    def __purchCost(self, e, s):
+    def __purchCost(self, e, s) -> float:
+        """
+        :param e: energy produced
+        :param s: energy sold
+        :return: purchase cost
+        """
         return max(np.sum(s) - np.sum(e), 0) * self.costPrice
 
-    def __demand(self, price, maxPrice, maxDemand):
+    def __demand(self, price, maxPrice, maxDemand) -> float:
+        """
+        :param price: actual sales prices
+        :param maxPrice: maximum price of market type accepted by customers
+        :param maxDemand: maximum demand of market type
+        :return: resulting demand
+        """
         if price > maxPrice:
             return 0
         if price <= 0:
@@ -63,7 +78,12 @@ class Problem:
         demand = maxDemand - price**2 * maxDemand / maxPrice**2
         return demand
 
-    def __revenue(self, s, p):
+    def __revenue(self, s, p) -> float:
+        """
+        :param s: energy sold
+        :param p: actual prices
+        :return: purchase cost
+        """
         revenue = 0
         for i in range(len(self.mp)):
             demand = self.__demand(p[i], self.mp[i], self.md[i])
@@ -71,6 +91,10 @@ class Problem:
         return revenue
 
     @staticmethod
-    def validate(individual: Individual):
+    def validate(individual: Individual) -> bool:
+        """
+        :param individual: individual solution
+        :return: validation result
+        """
         e =  individual.x[0:3]
         return (np.min(individual.x) >= 0)
