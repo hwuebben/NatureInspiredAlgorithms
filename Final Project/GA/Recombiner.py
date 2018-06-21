@@ -1,11 +1,11 @@
+from __future__ import division
 from abc import ABC, abstractmethod
 import numpy as np
-from ProblemDefinition import ProblemDefinition as PD
+from ProblemDefinition import ProblemDefinition
 from Individual import Individual
 
 
 class Recombiner(ABC):
-
     @abstractmethod
     def recombine(self, probDef, ind0, ind1):
         """
@@ -18,37 +18,13 @@ class Recombiner(ABC):
         pass
 
 
-class CrossoverRecombiner(Recombiner):
+class MeanRecombiner(Recombiner):
+    def recombine(self, probDef: ProblemDefinition, ind0: Individual, ind1: Individual):
+        newAssign = (ind0.assign + ind1.assign) / 2
+        # change all fraction assignments to even ones
+        fracInds = np.argwhere(newAssign % 1 != 0)
+        decFracInds = fracInds[np.random.choice(np.arange(fracInds.shape[0]), fracInds.shape[0] / 2, False)]
+        newAssign[decFracInds] -= 0.5
+        newAssign = np.ceil(newAssign)
 
-    def recombine(self, probDef, ind0, ind1):
-        """
-        perform Crossover recombination operation on two individuals constrained by problem definition
-        :param probDef:
-        :param ind0:
-        :param ind1:
-        :return: recombinated child
-        """
-        breakPoint = np.random.randint(0, probDef.nrJobs+1)
-        if(np.random.rand() >= 0.5):
-            newJobAssignment = np.hstack((ind0.jobAssignments[0:breakPoint], ind1.jobAssignments[breakPoint::]))
-        else:
-            newJobAssignment = np.hstack((ind1.jobAssignments[0:breakPoint], ind0.jobAssignments[breakPoint::]))
-        return Individual(probDef, newJobAssignment)
-
-
-class UniformCrossoverRecombiner(Recombiner):
-
-    def recombine(self, probDef, ind0, ind1):
-        """
-        perform UniformCrossover recombination operation on two individuals constrained by problem definition
-        :param probDef:
-        :param ind0:
-        :param ind1:
-        :return: recombinated child
-        """
-        mask = np.random.randint(0, 2, probDef.nrJobs)
-        newJobAssignment = np.zeros(probDef.nrJobs)
-        newJobAssignment[mask == 0] = ind0.jobAssignments[mask == 0]
-        newJobAssignment[mask == 1] = ind1.jobAssignments[mask == 1]
-
-        return Individual(probDef, newJobAssignment.astype(np.int32))
+        return Individual(newAssign)

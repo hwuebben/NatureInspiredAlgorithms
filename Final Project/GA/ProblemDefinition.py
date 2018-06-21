@@ -1,13 +1,27 @@
+import numpy as np
 class ProblemDefinition:
 
-    def __init__(self, nrMachines, jobRuntimes):
-        """
-        Set the Problem Instance
-        :param nrMachines: Number of machines
-        :param jobRuntimes: Runtimes per job
-        :return:
+    def __init__(self, capacity,demand,distance,transCost):
         """
 
-        self.nrMachines = nrMachines
-        self.nrJobs = jobRuntimes.size  # Number of jobs
-        self.jobRuntimes = jobRuntimes
+        :param capacity:
+        :param demand:
+        :param distance:
+        :param transCost:
+        """
+
+        self.capacity = capacity
+        self.demand = demand
+        self.distance = distance
+        self.transCost = transCost
+
+        self.nrNodes = self.demand.size
+        self.nrVehicles = self.capacity.size
+
+        #enumCapacity contains entries for each vehicle (in the number of their capacities)
+        # self.enumCapacity = []
+        # for vehicle,cap in enumerate(capacity):
+        #     self.enumCapacity.extend([vehicle]*cap)
+        # self.enumCapacity = np.array(self.enumCapacity)
+
+

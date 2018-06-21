@@ -2,21 +2,22 @@ import numpy as np
 
 class Parser:
 
-    def readVRP(self, folderName):
+    @staticmethod
+    def readVRP(folderName):
         """
         read VRP, hast to be in VRP_Examples
         :param path:
         :return:
         """
-        capacity = np.loadtxt("VRP_Examples\\"+folderName+"\\capacity.txt")
-        demand = np.loadtxt("VRP_Examples\\"+folderName+"\\demand.txt")
-        distance = np.loadtxt("VRP_Examples\\"+folderName+"\\distance.txt")
-        transCost = np.loadtxt("VRP_Examples\\"+folderName+"\\transportation_cost.txt")
+        capacity = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\capacity.txt",dtype=int)
+        demand = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\demand.txt",dtype=int)
+        distance = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\distance.txt",dtype=float)
+        transCost = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\transportation_cost.txt",dtype=float)
 
         return capacity,demand,distance,transCost
 
-
-    def readTSP(self,file):
+    @staticmethod
+    def readTSP(file):
         """
         read TSP
         :param file:

@@ -22,9 +22,10 @@ class RandomInitializer(Initializer):
         """
         randomly generate individuals
         :param popSize:
+        :param probDef:
         :return: pop
         """
         population = np.empty(popSize, dtype=Individual)
         for i in range(popSize):
-            population[i] = Individual(probDef, np.random.randint(0, probDef.nrMachines-1, probDef.nrJobs))
+            population[i] = Individual.initIndividual(probDef, "random")
         return population

@@ -2,20 +2,25 @@ import Initializer, Mutator, Recombiner,Selector, Replacer, Terminator, LocalSea
 from GeneticAlgorithm import GeneticAlgorithm
 from ProblemDefinition import ProblemDefinition
 from Benchmark import Benchmark
+from Parser import Parser
+
+nameOfVRP = "VRP1"
+
+# Set up an example problem
+capacity,demand,distance,transCost = Parser.readVRP(nameOfVRP)
+probDef = ProblemDefinition(capacity,demand,distance,transCost)
 
 # Choose your operators
 initializer = Initializer.RandomInitializer()
-mutator = Mutator.RandomMutator(0.2, dynAdapt=True)
-recombiner = Recombiner.CrossoverRecombiner()
+mutator = Mutator.SwapMutator()
+recombiner = Recombiner.MeanRecombiner()
 selector = Selector.TournamentSelector(s=20, dynAdapt=True)
 replacer = Replacer.bottomReplacer()
 terminator = Terminator.maxRuntimeTerminator(10)
 # Add a local searcher if you want LocalSearcher.Idle() does nothing
 localSearcher = LocalSearcher.Idle()
 
-# Set up an example problem
-nrMachines, jobRuntimes = Benchmark.benchmark1()
-probDef = ProblemDefinition(nrMachines, jobRuntimes)
+
 
 # Set up GA parameters
 popSize = 100

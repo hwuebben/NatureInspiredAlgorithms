@@ -1,43 +1,74 @@
 from __future__ import division
 import numpy as np
 from ProblemDefinition import ProblemDefinition
+from abc import ABC, abstractmethod
 
+class IndividualProto(ABC):
 
-class Individual:
+    @staticmethod
+    @abstractmethod
+    def initIndividual(probDef: ProblemDefinition, initType: str):
+        """
+        this function is called by the initializer with a respective initType
+        :param probDef:
+        :param initType:
+        :return:
+        Individual created by respective initType choice
+        """
+        pass
 
-    def __init__(self, probDef, jobAssignments):
-        self.probDef = probDef
-        self.jobAssignments = jobAssignments
+class Individual(IndividualProto):
+
+    def __init__(self, assign : np.array):
+        """
+
+        :param assign:
+        """
+        self.assign = assign
         self.fitness = self.__calcFitness()
 
     def __calcFitness(self):
-        total_time = np.zeros(self.probDef.nrMachines)
-        for ja in self.jobAssignments:
-            total_time[ja] += self.probDef.jobRuntimes[ja]
-        return (1/np.max(total_time))
+        return 0
 
-    """definitions of neighborhoods"""
-    def swapNH(self):
-        """the swap neighborhood"""
-        nh = []
-        for i,s in enumerate(self.jobAssignments):
-            solCop = np.copy(self.jobAssignments)
-            #swap with right neighbor
-            solCop[i] = solCop[(i+1)%solCop.size]
-            solCop[(i + 1) % solCop.size] = s
-            nh.append(Individual(self.probDef, solCop))
-        return nh
+    def __calcGraphs(self):
+        pass
 
-    def transpNH(self):
-        """the transposition neighborhood"""
-        nh = []
-        for i,s in enumerate(self.jobAssignments):
-            for j in range(i,self.jobAssignments.size):
-                solCop = np.copy(self.jobAssignments)
-                solCop[i] = solCop[j]
-                solCop[j] = s
-                nh.append(Individual(solCop))
-        return nh
+    def repairInd(self):
+        pass
+
+    @staticmethod
+    def initIndividual(probDef: ProblemDefinition, initType: str):
+        if initType == "random":
+            return Individual.calcRandomIndividual(probDef)
+
+    @staticmethod
+    def calcRandomIndividual(probDef:ProblemDefinition):
+        assign = np.zeros((probDef.nrNodes, probDef.nrVehicles))
+        for i, nodeAssign in enumerate(assign):
+            capLeft = probDef.capacity - assign[i]
+            capLeftInd = np.argwhere(capLeft > 0).flatten()
+            for _ in range(probDef.demand[i]):
+
+                randInd = np.random.choice(capLeftInd)
+                assign[i,randInd] += 1
+                capLeft[randInd] -= 1
+                if capLeft[randInd] == 0:
+                    capLeftInd = np.delete(capLeftInd,np.argwhere(capLeftInd == randInd))
+        return Individual(assign)
+
+
+
+    #@staticmethod
+    #deprecated, old representation
+    # def calcRandomIndividual(probDef:ProblemDefinition):
+    #
+    #     assign = []
+    #     for demand in probDef.demand:
+    #         assign.append(np.random.choice(probDef.enumCapacity,demand,False))
+    #     randInd = Individual(assign)
+    #     return randInd
+
+
 
     """
     overwrite compare methods for sorting purposes
