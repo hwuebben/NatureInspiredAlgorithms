@@ -5,7 +5,7 @@ class Intensifier:
     def __init__(self, delta=0.1):
         """
 
-        :param evaporation: quickness of the evaporation in percent
+        :param delta: absolute value of intensification
         :return:
         """
         self.delta = delta
