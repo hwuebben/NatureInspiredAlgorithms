@@ -16,7 +16,7 @@ mutator = Mutator.SwapMutator()
 recombiner = Recombiner.MeanRecombiner()
 selector = Selector.TournamentSelector(s=20, dynAdapt=True)
 replacer = Replacer.bottomReplacer()
-terminator = Terminator.maxRuntimeTerminator(10)
+terminator = Terminator.maxRuntimeTerminator(100)
 # Add a local searcher if you want LocalSearcher.Idle() does nothing
 localSearcher = LocalSearcher.Idle()
 

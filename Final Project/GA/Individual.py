@@ -44,19 +44,26 @@ class Individual(IndividualProto):
     @staticmethod
     def calcRandomIndividual(probDef:ProblemDefinition):
         assign = np.zeros((probDef.nrNodes, probDef.nrVehicles))
-        for i, nodeAssign in enumerate(assign):
-            capLeft = probDef.capacity - assign[i]
-            capLeftInd = np.argwhere(capLeft > 0).flatten()
+        for i in range(assign.shape[0]):
+            loads = np.sum(assign, 0)
+            capLeft = probDef.capacity - loads
+            capLeftInds = np.argwhere(capLeft > 0).flatten()
             for _ in range(probDef.demand[i]):
 
-                randInd = np.random.choice(capLeftInd)
+                randInd = np.random.choice(capLeftInds)
                 assign[i,randInd] += 1
                 capLeft[randInd] -= 1
                 if capLeft[randInd] == 0:
-                    capLeftInd = np.delete(capLeftInd,np.argwhere(capLeftInd == randInd))
+                    capLeftInds = np.delete(capLeftInds,np.argwhere(capLeftInds == randInd))
         return Individual(assign)
 
-
+    def checkConsistency(self,probDef:ProblemDefinition):
+        """
+        function for debug purposes, checks whether the individual is a valid solution
+        :return:
+        """
+        assert( ((np.sum(self.assign, 0) - probDef.capacity) <= 0).all() )
+        assert( ((np.sum(self.assign, 1) - probDef.demand) >= 0).all() )
 
     #@staticmethod
     #deprecated, old representation
