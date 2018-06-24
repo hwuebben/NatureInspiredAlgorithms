@@ -1,6 +1,8 @@
 import numpy as np
 class ProblemDefinition:
-
+    #static reference to self so not ever individual need ProblemDefinition instance
+    #maybe a Singleton would be better
+    probDef = None
     def __init__(self, capacity,demand,distance,transCost):
         """
 
@@ -23,5 +25,7 @@ class ProblemDefinition:
         # for vehicle,cap in enumerate(capacity):
         #     self.enumCapacity.extend([vehicle]*cap)
         # self.enumCapacity = np.array(self.enumCapacity)
+
+        ProblemDefinition.probDef = self
 
 

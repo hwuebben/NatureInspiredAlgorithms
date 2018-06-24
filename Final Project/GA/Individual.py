@@ -1,13 +1,13 @@
 from __future__ import division
 import numpy as np
-from ProblemDefinition import ProblemDefinition
+from ProblemDefinition import ProblemDefinition as PD
 from abc import ABC, abstractmethod
 
 class IndividualProto(ABC):
 
     @staticmethod
     @abstractmethod
-    def initIndividual(probDef: ProblemDefinition, initType: str):
+    def initIndividual(probDef: PD, initType: str):
         """
         this function is called by the initializer with a respective initType
         :param probDef:
@@ -18,7 +18,6 @@ class IndividualProto(ABC):
         pass
 
 class Individual(IndividualProto):
-
     def __init__(self, assign : np.array):
         """
 
@@ -28,7 +27,20 @@ class Individual(IndividualProto):
         self.fitness = self.__calcFitness()
 
     def __calcFitness(self):
-        return 0
+        tspEstimates = np.empty(PD.probDef.nrVehicles)
+        #get nodes for each vehicle (graph)
+        for i in range(PD.probDef.nrVehicles):
+            graph = np.nonzero(self.assign[:,i] > 0)[0]
+            #all node indices in graph need to be incremented because the 0 node is not in the representation
+            np.add(graph,1,graph)
+            #the 0 node must then be added, creates copy :(
+            graph = np.append(graph,0)
+            #get respective slice of distance matrix
+            #TODO: this slicing returns a copy, is it possible to do it so it returns a view?
+            distSlice = PD.probDef.distance[graph][:,graph]
+            tspEstimates[i] = np.sum(distSlice)
+
+        return -np.sum(tspEstimates*PD.probDef.transCost)
 
     def __calcGraphs(self):
         pass
@@ -37,12 +49,12 @@ class Individual(IndividualProto):
         pass
 
     @staticmethod
-    def initIndividual(probDef: ProblemDefinition, initType: str):
+    def initIndividual(probDef: PD, initType: str):
         if initType == "random":
             return Individual.calcRandomIndividual(probDef)
 
     @staticmethod
-    def calcRandomIndividual(probDef:ProblemDefinition):
+    def calcRandomIndividual(probDef:PD):
         assign = np.zeros((probDef.nrNodes, probDef.nrVehicles))
         for i in range(assign.shape[0]):
             loads = np.sum(assign, 0)
@@ -57,7 +69,7 @@ class Individual(IndividualProto):
                     capLeftInds = np.delete(capLeftInds,np.argwhere(capLeftInds == randInd))
         return Individual(assign)
 
-    def checkConsistency(self,probDef:ProblemDefinition):
+    def checkConsistency(self,probDef:PD):
         """
         function for debug purposes, checks whether the individual is a valid solution
         :return:

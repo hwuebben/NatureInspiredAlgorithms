@@ -40,8 +40,10 @@ class MeanRecombiner(Recombiner):
         brokenCapInds = np.argwhere(brokenCaps > 0)
         #iterate over broken caps
         for brokenCapInd in brokenCapInds:
-            #iterate over all nodes
-            for j in range(newAssign[:,brokenCapInd].size):
+            #iterate over all nodes (shuffled to avoid bias)
+            inds = np.arange(newAssign[:,brokenCapInd].size)
+            np.random.shuffle(inds)
+            for j in inds:
                 #check whether node has a surplus
                 assigned = np.sum(newAssign[j,:])
                 hasSurplus = (assigned - probDef.demand[j]) > 0
@@ -51,6 +53,16 @@ class MeanRecombiner(Recombiner):
                     brokenCaps[brokenCapInd] -= 1
                     if brokenCaps[brokenCapInd] == 0:
                         break
+        #remove oversupply
+        oversupply = np.sum(newAssign,1) - probDef.demand
+        oversupplyInds = np.argwhere(oversupply > 0)
+        #iterate over oversupplied nodes
+        for osInd in oversupplyInds.flat:
+            # dcecrement the smallest value oversupply[osInd] times
+            #(this remvoves vehicles that visit the node unneccessarily)
+            for _ in range(int(oversupply[osInd])):
+                minInd = np.argmin(newAssign[osInd,:])
+                newAssign[osInd,minInd] -= 1
 
 
 

@@ -10,7 +10,6 @@ class Mutator(ABC):
     def mutate(self,toMutate:Individual,probDef:ProblemDefinition)->Individual:
         pass
 
-    @abstractmethod
     def dynamicAdaptation(self, progress):
         pass
 
@@ -42,5 +41,21 @@ class SwapMutator(Mutator):
         toMutate.checkConsistency(probDef)
         return toMutate
 
-    def dynamicAdaptation(self, progress):
-        pass
+
+class assignMutator(Mutator):
+    def __init__(self,remProb:float = 0.5):
+        """
+        set remProb
+        :param remProb:
+        """
+        self.remProb = remProb
+    def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
+        """
+        remove vehicle from node with prob remProb
+        add vehicle to node with prob 1-remProb
+        :param toMutate:
+        :param probDef:
+        :return:
+        """
+        shallRem = np.random.rand() <= self.remProb
+        #TODO: implement
