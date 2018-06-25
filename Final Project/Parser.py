@@ -9,10 +9,10 @@ class Parser:
         :param path:
         :return:
         """
-        capacity = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\capacity.txt",dtype=int)
-        demand = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\demand.txt",dtype=int)
-        distance = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\distance.txt",dtype=float)
-        transCost = np.loadtxt("..\\VRP_Examples\\"+folderName+"\\transportation_cost.txt",dtype=float)
+        capacity = np.loadtxt("VRP_Examples\\"+folderName+"\\capacity.txt",dtype=int)
+        demand = np.loadtxt("VRP_Examples\\"+folderName+"\\demand.txt",dtype=int)
+        distance = np.loadtxt("VRP_Examples\\"+folderName+"\\distance.txt",dtype=float)
+        transCost = np.loadtxt("VRP_Examples\\"+folderName+"\\transportation_cost.txt",dtype=float)
 
         return capacity,demand,distance,transCost
 

@@ -84,5 +84,5 @@ class MeanRecombiner(Recombiner):
 
         newInd = Individual(newAssign)
         #DEBUG:
-        newInd.checkConsistency(probDef)
+        #newInd.checkConsistency(probDef)
         return newInd

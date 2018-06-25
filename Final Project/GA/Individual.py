@@ -29,24 +29,26 @@ class Individual(IndividualProto):
     def __calcFitness(self):
         tspEstimates = np.empty(PD.probDef.nrVehicles)
         #get nodes for each vehicle (graph)
-        for i in range(PD.probDef.nrVehicles):
-            graph = np.nonzero(self.assign[:,i] > 0)[0]
-            #all node indices in graph need to be incremented because the 0 node is not in the representation
-            np.add(graph,1,graph)
-            #the 0 node must then be added, creates copy :(
-            graph = np.append(graph,0)
-            #get respective slice of distance matrix
-            #TODO: this slicing returns a copy, is it possible to do it so it returns a view?
-            distSlice = PD.probDef.distance[graph][:,graph]
-            tspEstimates[i] = np.sum(distSlice)
-
+        for vehicleInd in range(PD.probDef.nrVehicles):
+            tspEstimates[vehicleInd] = np.sum(self.__extractDistMatrix(vehicleInd))
         return -np.sum(tspEstimates*PD.probDef.transCost)
 
-    def __calcGraphs(self):
-        pass
+    def __extractDistMatrix(self,vehicleInd):
+        graphInds = np.nonzero(self.assign[:,vehicleInd] > 0)[0]
+        #all node indices in graph need to be incremented because the 0 node is not in the representation
+        np.add(graphInds,1,graphInds)
+        #the 0 node must then be added, creates copy :(
+        graphInds = np.insert(graphInds,0,0)
+        #get respective slice of distance matrix
+        # TODO: this slicing returns a copy, is it possible to do it so it returns a view?
+        return PD.probDef.distance[graphInds][:,graphInds]
 
-    def repairInd(self):
-        pass
+    def extractDistMatrices(self):
+        distMatrices = []
+        for vehicleInd in range(PD.probDef.nrVehicles):
+            distMatrices.append(self.__extractDistMatrix(vehicleInd))
+        return distMatrices
+
 
     @staticmethod
     def initIndividual(probDef: PD, initType: str):
@@ -76,17 +78,6 @@ class Individual(IndividualProto):
         """
         assert( ((np.sum(self.assign, 0) - probDef.capacity) <= 0).all() )
         assert( ((np.sum(self.assign, 1) - probDef.demand) >= 0).all() )
-
-    #@staticmethod
-    #deprecated, old representation
-    # def calcRandomIndividual(probDef:ProblemDefinition):
-    #
-    #     assign = []
-    #     for demand in probDef.demand:
-    #         assign.append(np.random.choice(probDef.enumCapacity,demand,False))
-    #     randInd = Individual(assign)
-    #     return randInd
-
 
 
     """

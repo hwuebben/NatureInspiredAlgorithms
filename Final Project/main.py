@@ -1,11 +1,13 @@
 from VRPsolver import VRPsolver
+from Parser import Parser
+from GA.ProblemDefinition import ProblemDefinition
+
+from GeneticAlgorithm import GeneticAlgorithm
+from ProblemDefinition import ProblemDefinition
 
 def initGA():
-    import Initializer, Mutator, Recombiner, Selector, Replacer, Terminator, LocalSearcher
-    from GeneticAlgorithm import GeneticAlgorithm
-    from ProblemDefinition import ProblemDefinition
+
     from Benchmark import Benchmark
-    from Parser import Parser
     nameOfVRP = "VRP1"
     # Set up an example problem
     capacity, demand, distance, transCost = Parser.readVRP(nameOfVRP)
@@ -27,7 +29,7 @@ def initGA():
                           probDef, popSize, nrOffspring, localSearcher)
     return ga
 
-def initACO(distanceMatrix):
+def initACO():
     import ACO
     import Evaporator
     import Initializer
@@ -48,7 +50,35 @@ def initACO(distanceMatrix):
                                    True)
     return aco
 
-ga = initGA()
-aco = initACO()
 
-vrpSolver = VRPsolver(ga,aco)
+nameOfVRP = "VRP1"
+capacity, demand, distance, transCost = Parser.readVRP(nameOfVRP)
+probDef = ProblemDefinition(capacity, demand, distance, transCost)
+
+from GA import Initializer, Mutator, Recombiner, Selector, Replacer, Terminator, LocalSearcher
+gaParams = {
+            "initializer":Initializer.RandomInitializer(),
+            "mutator": Mutator.SwapMutator(),
+            "recombiner":Recombiner.MeanRecombiner(),
+            "selector": Selector.TournamentSelector(s=20, dynAdapt=True),
+            "replacer": Replacer.bottomReplacer(),
+            "terminator": Terminator.maxRuntimeTerminator(10),
+            "localSearcher": LocalSearcher.Idle(),
+            "popSize": 100
+}
+
+from ACO import Initializer, Evaporator, Intensifier, Heuristics,Terminator
+acoParams = {
+            "initializer": Initializer.TSP_Initializer(),
+            "evaporator":Evaporator.Evaporator(rho=0.05),
+            "intensifier":Intensifier.Intensifier(delta=0.05),
+            "heuristic":Heuristics.TSPHeuristic,
+            "nrAnts":50,
+            "alpha":1,
+            "beta":2,
+            "terminators":[Terminator.maxItTerminator(maxIt=1), Terminator.convergenceTerminator(maxIter=50)]
+
+}
+
+vrpSolver = VRPsolver(probDef)
+vrpSolver.optimizeWithParams(gaParams,acoParams)

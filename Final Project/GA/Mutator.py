@@ -38,7 +38,7 @@ class SwapMutator(Mutator):
             toMutate.assign[i,incInd] += 1
             loads[redInd] -= 1
             loads[incInd] += 1
-        toMutate.checkConsistency(probDef)
+        #toMutate.checkConsistency(probDef)
         return toMutate
 
 
