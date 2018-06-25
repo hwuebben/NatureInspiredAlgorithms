@@ -1,4 +1,6 @@
-def runGA():
+from VRPsolver import VRPsolver
+
+def initGA():
     import Initializer, Mutator, Recombiner, Selector, Replacer, Terminator, LocalSearcher
     from GeneticAlgorithm import GeneticAlgorithm
     from ProblemDefinition import ProblemDefinition
@@ -21,13 +23,11 @@ def runGA():
     popSize = 100
     nrOffspring = int(popSize / 10)
     # Create Genetic Algorithm instance
-    GA = GeneticAlgorithm(initializer, selector, recombiner, mutator, replacer, terminator,
+    ga = GeneticAlgorithm(initializer, selector, recombiner, mutator, replacer, terminator,
                           probDef, popSize, nrOffspring, localSearcher)
-    bestIndividual, results = GA.run()
-    print("best Individuals fitness: ", bestIndividual.fitness)
-    return bestIndividual
+    return ga
 
-def runACO(distanceMatrix):
+def initACO(distanceMatrix):
     import ACO
     import Evaporator
     import Initializer
@@ -46,13 +46,9 @@ def runACO(distanceMatrix):
     terminator = [Terminator.maxItTerminator(maxIt=1), Terminator.convergenceTerminator(maxIter=50)]
     aco = ACO.Ant_Colony_Optimizer(problem, initializer, evaporator, intensifier, solution_gen, terminator, 3, True,
                                    True)
-    solutions, scores = aco.run()
+    return aco
 
-    return solutions,scores
+ga = initGA()
+aco = initACO()
 
-
-
-bestIndividual = runGA()
-
-
-solution, scores = runACO()
+vrpSolver = VRPsolver(ga,aco)
