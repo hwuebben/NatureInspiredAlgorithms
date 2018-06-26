@@ -41,7 +41,7 @@ class Ant_Colony_Optimizer:
         while not any([t.checkTermination(self) for t in self.terminator]):
             # Construct solutions and evaluate solutions
             iteration_solutions, iteration_scores = self.solution_generator.get_solutions(self.pheromone_matrix)
-
+            #TODO: having the result for each iteration is nice, but inefficient (should be optional)
             self.sorted_solutions.append(iteration_solutions)
             self.sorted_scores.append(iteration_scores)
             self.best_score = iteration_scores[0]

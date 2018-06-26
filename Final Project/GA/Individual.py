@@ -2,6 +2,7 @@ from __future__ import division
 import numpy as np
 from ProblemDefinition import ProblemDefinition as PD
 from abc import ABC, abstractmethod
+import Heuristic
 
 class IndividualProto(ABC):
 
@@ -27,13 +28,10 @@ class Individual(IndividualProto):
         self.fitness = self.__calcFitness()
 
     def __calcFitness(self):
-        tspEstimates = np.empty(PD.probDef.nrVehicles)
-        #get nodes for each vehicle (graph)
-        for vehicleInd in range(PD.probDef.nrVehicles):
-            tspEstimates[vehicleInd] = np.sum(self.__extractDistMatrix(vehicleInd))
-        return -np.sum(tspEstimates*PD.probDef.transCost)
+        heuristic =  Heuristic.BeardwoodHeuristic()
+        return heuristic.calcHeuVal(self,PD.probDef)
 
-    def __extractDistMatrix(self,vehicleInd):
+    def extractDistMatrix(self,vehicleInd):
         graphInds = np.nonzero(self.assign[:,vehicleInd] > 0)[0]
         #all node indices in graph need to be incremented because the 0 node is not in the representation
         np.add(graphInds,1,graphInds)
@@ -46,7 +44,7 @@ class Individual(IndividualProto):
     def extractDistMatrices(self):
         distMatrices = []
         for vehicleInd in range(PD.probDef.nrVehicles):
-            distMatrices.append(self.__extractDistMatrix(vehicleInd))
+            distMatrices.append(self.extractDistMatrix(vehicleInd))
         return distMatrices
 
 

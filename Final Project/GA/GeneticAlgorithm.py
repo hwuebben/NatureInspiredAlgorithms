@@ -41,7 +41,7 @@ class GeneticAlgorithm:
             ind0 = self.selector.select(self.pop)
             ind1 = self.selector.select(self.pop)
             indNew = self.recombiner.recombine(self.probDef, ind0, ind1)
-            indNew = self.mutator.mutate(indNew,self.probDef)
+            self.mutator.mutate(indNew,self.probDef)
             newInds[i] = self.localSearcher.search(indNew)
         return newInds
 

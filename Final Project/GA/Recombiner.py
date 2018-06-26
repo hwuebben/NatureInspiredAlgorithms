@@ -19,9 +19,6 @@ class Recombiner(ABC):
 
 
 class MeanRecombiner(Recombiner):
-    def __init__(self):
-        #epsilon is used to check whether number is a fraction
-        self.epsilon = 1e-5
 
     def recombine(self, probDef: ProblemDefinition, ind0: Individual, ind1: Individual):
 
@@ -61,8 +58,9 @@ class MeanRecombiner(Recombiner):
             # dcecrement the smallest value oversupply[osInd] times
             #(this remvoves vehicles that visit the node unneccessarily)
             for _ in range(int(oversupply[osInd])):
-                minInd = np.argmin(newAssign[osInd,:])
-                newAssign[osInd,minInd] -= 1
+                min = np.min(newAssign[osInd,np.nonzero(newAssign[osInd])])
+                minInds = np.argwhere(newAssign[osInd] == min).flat
+                newAssign[osInd,np.random.choice(minInds)] -= 1
 
 
 
@@ -82,6 +80,19 @@ class MeanRecombiner(Recombiner):
         #
         #         assign = newAssign[defInd]
 
+        newInd = Individual(newAssign)
+        #DEBUG:
+        newInd.checkConsistency(probDef)
+        return newInd
+
+class SimpleMeanRecombiner(Recombiner):
+    """
+    should be used with the RearrangeRecombiner
+    """
+
+    def recombine(self, probDef: ProblemDefinition, ind0: Individual, ind1: Individual):
+        newAssign = ind0.assign + ind1.assign
+        np.divide(newAssign,2.,newAssign)
         newInd = Individual(newAssign)
         #DEBUG:
         #newInd.checkConsistency(probDef)

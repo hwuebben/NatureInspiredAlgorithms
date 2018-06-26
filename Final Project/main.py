@@ -81,4 +81,5 @@ acoParams = {
 }
 
 vrpSolver = VRPsolver(probDef)
-vrpSolver.optimizeWithParams(gaParams,acoParams)
+bestScore = vrpSolver.optimizeWithParams(gaParams,acoParams)
+print("Overall best Sol value: ",bestScore)

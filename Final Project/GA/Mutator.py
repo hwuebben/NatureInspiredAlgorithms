@@ -13,11 +13,10 @@ class Mutator(ABC):
     def dynamicAdaptation(self, progress):
         pass
 
-class SwapMutator(Mutator):
+class RandomMutator(Mutator):
 
     def mutate(self, toMutate:Individual,probDef:ProblemDefinition):
         """
-        randomly swaps
         :param toMutate:
         :return: mutated individual
         """
@@ -38,8 +37,61 @@ class SwapMutator(Mutator):
             toMutate.assign[i,incInd] += 1
             loads[redInd] -= 1
             loads[incInd] += 1
-        #toMutate.checkConsistency(probDef)
-        return toMutate
+            #toMutate.checkConsistency(probDef)
+
+
+
+class RearrangeRecombiner(Mutator):
+    def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
+        loads = np.sum(toMutate.assign,0)
+        #for each node
+        for assigned in toMutate.assign:
+            # get indices of fractal assignments
+            fracInds = np.argwhere(assigned%1 != 0).flat
+            # get those inds that have to be reduced (because capacity is already full)
+            capInds = np.intersect1d(np.argwhere(loads - probDef.capacity == 0).flat, fracInds)
+            #boolean mask of fracInds to keep track of indices that have been processed
+            mask = np.ones(len(fracInds), dtype=bool)
+            #first process the indices that have to be reduced
+            deficit = 0
+            for capInd in capInds:
+                toMutate.assign[capInd] -= 0.5
+                deficit += 0.5
+                mask[fracInds==capInd] = False
+            #then process the rest of fracInds
+            while mask.any():
+                maxInd = np.argmax(assigned[fracInds[mask]])
+                assigned[fracInds[mask][maxInd]] += 0.5
+            #TODO: stopped here
+
+
+class SwapMutator(Mutator):
+    def __init__(self,swapRatio = 0.1):
+        self.swapRatio = swapRatio
+    def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
+        nrSwaps = max(1,int(probDef.nrNodes * self.swapRatio))
+        for _ in range(nrSwaps):
+            #calculate free capacities
+            loads = np.sum(toMutate.assign, 0)
+            freeCaps = probDef.capacity - loads
+            #find random index to swap
+            randInd = [np.random.randint(0,probDef.nrNodes),np.random.randint(0,probDef.nrVehicles)]
+            #get corresponding assignment
+            assignment = toMutate.assign[randInd[0]]
+            #create shuffled indices
+            randIndsSwap = np.arange(0,probDef.nrVehicles)
+            np.random.shuffle(randIndsSwap)
+            #try them 1 by 1
+            for randIndSwap in randIndsSwap:
+                isSuited = (assignment[randIndSwap] <= freeCaps[randInd[1]]) and (assignment[randInd[1]] <= freeCaps[randIndSwap])
+                isSuited = isSuited and (randIndSwap != randInd[1])
+                if isSuited:
+                    #do the swap:
+                    ass = assignment[randIndSwap]
+                    assignment[randIndSwap] = assignment[randInd[1]]
+                    assignment[randInd[1]] = ass
+                    break
+
 
 
 class assignMutator(Mutator):
@@ -59,3 +111,5 @@ class assignMutator(Mutator):
         """
         shallRem = np.random.rand() <= self.remProb
         #TODO: implement
+
+
