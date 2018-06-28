@@ -69,15 +69,19 @@ class convergenceTerminator(Terminator):
         :param maxIter:
         :param rtol:
         """
-        self.lastPerf = 0
+        self.lastPerf = np.finfo(np.float64).min
         self.counter = 0
         self.maxIter = maxIter
         self.rtol = rtol
 
     def checkTermination(self,GA):
-        perf = np.max(GA.pop).getFitness()
+        perf = np.max(GA.pop).fitness
+        print("best fitness value: ",perf)
         if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
             self.counter += 1
+        else:
+            self.counter = 0
+        self.lastPerf = perf
         if self.counter >= self.maxIter:
             return True
         return False

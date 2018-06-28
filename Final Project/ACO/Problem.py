@@ -1,9 +1,10 @@
 import os
 import numpy as np
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from Module import Module
 
 
-class Problem(ABC):
+class Problem(Module):
 
     @abstractmethod
     def get_score(self, solution: np.array) -> float:

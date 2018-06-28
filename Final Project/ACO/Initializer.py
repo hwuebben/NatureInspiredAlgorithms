@@ -1,8 +1,9 @@
 import numpy as np
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from Module import Module
 
 
-class AbstractInitializer(ABC):
+class AbstractInitializer(Module):
 
     @abstractmethod
     def initialize(self, num_cities : int) -> np.array:
@@ -13,7 +14,7 @@ class AbstractInitializer(ABC):
         """
         pass
 
-class TSP_Initializer(ABC):
+class TSP_Initializer(AbstractInitializer):
 
     def initialize(self, problem) -> np.array:
         """

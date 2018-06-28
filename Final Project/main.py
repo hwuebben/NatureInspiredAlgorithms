@@ -62,7 +62,7 @@ gaParams = {
             "recombiner":Recombiner.MeanRecombiner(),
             "selector": Selector.TournamentSelector(s=20, dynAdapt=True),
             "replacer": Replacer.bottomReplacer(),
-            "terminator": Terminator.maxRuntimeTerminator(10),
+            "terminator": Terminator.maxRuntimeTerminator(5),
             "localSearcher": LocalSearcher.Idle(),
             "popSize": 100
 }
@@ -76,7 +76,7 @@ acoParams = {
             "nrAnts":50,
             "alpha":1,
             "beta":2,
-            "terminators":[Terminator.maxItTerminator(maxIt=1), Terminator.convergenceTerminator(maxIter=50)]
+            "terminators":[Terminator.convergenceTerminator(maxIter=1)]
 
 }
 

@@ -1,9 +1,10 @@
 from __future__ import division
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 import numpy as np
 import time
+from Module import Module
 
-class Terminator(ABC):
+class Terminator(Module):
 
     @abstractmethod
     def checkTermination(self, aco):
@@ -56,6 +57,9 @@ class maxRuntimeTerminator(Terminator):
     def estimateProgress(self):
         return (time.time()-self.startTime) / self.maxRuntime
 
+    def reset(self):
+        self.startTime = None
+
 
 class convergenceTerminator(Terminator):
 
@@ -66,7 +70,7 @@ class convergenceTerminator(Terminator):
         :param maxIter:
         :param rtol:
         """
-        self.lastPerf = 0
+        self.lastPerf = np.finfo(np.float64).min
         self.counter = 0
         self.maxIter = maxIter
         self.rtol = rtol
@@ -80,5 +84,6 @@ class convergenceTerminator(Terminator):
             return True
         return False
 
-
-
+    def reset(self):
+        self.lastPerf = np.finfo(np.float64).min
+        self.counter = 0

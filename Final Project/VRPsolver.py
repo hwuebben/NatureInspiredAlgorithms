@@ -1,17 +1,24 @@
 import numpy as np
 from GA.ProblemDefinition import ProblemDefinition as PD
+import time
 class VRPsolver:
 
     def __init__(self,vrpProblem:PD):
         self.vrpProblem = vrpProblem
 
     def optimizeWithParams(self,gaParams:dict, acoParams:dict):
+        print("init GA")
         ga = self.__class__.__initGA(self.vrpProblem, gaParams)
+        print("start running GA")
+        startTime = time.time()
         bestIndividual, results = ga.run()
+        print("GA finished, runtime: ",time.time() - startTime)
         distMatrices = bestIndividual.extractDistMatrices()
+        startTime = time.time()
+        print("start optimizing TSPs with ACO")
         bestSolutions,bestScores = self.optimizeTSPs(distMatrices,acoParams)
+        print("done with ACO, runtime: ",time.time()-startTime)
         return self.evalSol(bestScores)
-
 
     def optimizeTSPs(self,distMatrices,acoParams):
         from ACO import Problem
@@ -19,6 +26,7 @@ class VRPsolver:
         bestScores = []
         for i,distMatrix in enumerate(distMatrices):
             aco=self.__class__.__initACO(Problem.TSPProblem(distMatrix),acoParams)
+            aco.reset()
             solutions, scores = aco.run()
             bestSolutions.append(solutions)
             bestScores.append(scores)
@@ -27,9 +35,6 @@ class VRPsolver:
     def evalSol(self, bestScores):
             bestScoresFinal = np.array([np.min(x) for x in bestScores])
             return np.sum(bestScoresFinal*self.vrpProblem.transCost)
-
-
-
 
     @classmethod
     def __initGA(cls,vrpProblem, gaParams):

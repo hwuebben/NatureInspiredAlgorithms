@@ -1,10 +1,11 @@
 import numpy as np
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from Problem import Problem, PermutationProblem
 from Heuristics import Heuristic
+from Module import Module
 
 
-class AbstractSolutionGenerator(ABC):
+class AbstractSolutionGenerator(Module):
 
     def __init__(self, number_of_ants: int, problem: Problem):
         self.number_of_ants = number_of_ants
@@ -39,7 +40,6 @@ class AbstractSolutionGenerator(ABC):
 
         return solutions, scores
 
-
 class PermutationSolutionGenerator(AbstractSolutionGenerator):
 
     def __init__(self, number_of_ants: int, alpha: int, beta: int, heuristic: Heuristic, problem: PermutationProblem):
@@ -52,8 +52,9 @@ class PermutationSolutionGenerator(AbstractSolutionGenerator):
         super().__init__(number_of_ants, problem)
         self.alpha = alpha
         self.beta = beta
-        if (heuristic is not None) and (beta != 0):
-            etas = heuristic.calculate_etas(problem)
+        self.heuristic = heuristic
+        if (self.heuristic is not None) and (beta != 0):
+            etas = self.heuristic.calculate_etas(problem)
             self.nominator = lambda x, y, z: np.power(x[y, z], self.alpha) * np.power(etas[y, z], self.beta)
             self.denominator = lambda x, y, z: np.sum(np.power(x[y, z], self.alpha) * np.power(etas[y, z], self.beta))
         else:

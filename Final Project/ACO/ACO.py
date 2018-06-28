@@ -1,9 +1,9 @@
 from Problem import Problem
-from Evaporator import *
-from Initializer import *
-from Intensifier import *
-from SolutionGenerator import *
-from Terminator import *
+from ACO.Evaporator import *
+from ACO.Initializer import *
+from ACO.Intensifier import *
+from ACO.SolutionGenerator import *
+from ACO.Terminator import *
 import matplotlib.pyplot as plt
 
 
@@ -61,3 +61,8 @@ class Ant_Colony_Optimizer:
             self.nrIt += 1
 
         return np.array(self.sorted_solutions), np.array(self.sorted_scores)
+    def reset(self):
+        for t in self.terminator: t.reset()
+        self.solution_generator.reset()
+        self.problem.reset()
+        self.initializer.reset()

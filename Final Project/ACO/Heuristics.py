@@ -1,9 +1,10 @@
 import numpy as np
 from Problem import Problem, TSPProblem
-from abc import ABC, abstractmethod
+from abc import abstractmethod
+from Module import Module
 
 
-class Heuristic(ABC):
+class Heuristic(Module):
 
     @classmethod
     @abstractmethod
