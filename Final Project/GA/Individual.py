@@ -6,6 +6,12 @@ import Heuristic
 
 class IndividualProto(ABC):
 
+    # @classmethod
+    # @abstractmethod
+    # def copyConstructor(cls,individual):
+    #     pass
+
+
     @staticmethod
     @abstractmethod
     def initIndividual(probDef: PD, initType: str):
@@ -76,6 +82,10 @@ class Individual(IndividualProto):
         """
         assert( ((np.sum(self.assign, 0) - probDef.capacity) <= 0).all() )
         assert( ((np.sum(self.assign, 1) - probDef.demand) >= 0).all() )
+
+    # @classmethod
+    # def copyConstructor(cls,individual):
+    #     return cls(individual.assign)
 
 
     """

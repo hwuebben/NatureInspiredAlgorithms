@@ -1,12 +1,13 @@
 import numpy as np
 from Individual import Individual
 import LocalSearcher
+import copy
 
 
 class GeneticAlgorithm:
 
     def __init__(self, initializer, selector, recombiner, mutator, replacer, terminator,
-                 probDef, popSize, nrOffspring, localSearcher = LocalSearcher.Idle()):
+                 probDef, popSize, nrOffspring, localSearcher = LocalSearcher.Idle(), includeUnmutated = True):
         self.initializer = initializer
         self.selector = selector
         self.recombiner = recombiner
@@ -20,6 +21,7 @@ class GeneticAlgorithm:
         self.nrIt = 0
         self.popSize = popSize
         self.nrOffspring = nrOffspring
+        self.includeUnmutated = includeUnmutated
 
     def run(self):
         results = list()
@@ -36,11 +38,13 @@ class GeneticAlgorithm:
         return np.max(self.pop), np.array(results)
 
     def __generateOffspring(self, nrOff):
-        newInds = np.empty(nrOff, dtype=Individual)
+        newInds = np.empty(nrOff*(self.includeUnmutated+1), dtype=Individual)
         for i in range(nrOff):
             ind0 = self.selector.select(self.pop)
             ind1 = self.selector.select(self.pop)
             indNew = self.recombiner.recombine(self.probDef, ind0, ind1)
+            if self.includeUnmutated:
+                newInds[-(i+1)] = copy.deepcopy(indNew)
             self.mutator.mutate(indNew,self.probDef)
             newInds[i] = self.localSearcher.search(indNew)
         return newInds

@@ -12,7 +12,7 @@ class VRPsolver:
         print("start running GA")
         startTime = time.time()
         bestIndividual, results = ga.run()
-        print("GA finished, runtime: ",time.time() - startTime)
+        print("GA finished, runtime: ",time.time() - startTime,"best Fitness: ",bestIndividual.fitness)
         distMatrices = bestIndividual.extractDistMatrices()
         startTime = time.time()
         print("start optimizing TSPs with ACO")

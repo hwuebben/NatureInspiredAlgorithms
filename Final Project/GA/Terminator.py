@@ -76,7 +76,7 @@ class convergenceTerminator(Terminator):
 
     def checkTermination(self,GA):
         perf = np.max(GA.pop).fitness
-        print("best fitness value: ",perf)
+        #print("best fitness value: ",perf)
         if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
             self.counter += 1
         else:

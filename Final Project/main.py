@@ -59,12 +59,12 @@ from GA import Initializer, Mutator, Recombiner, Selector, Replacer, Terminator,
 gaParams = {
             "initializer":Initializer.RandomInitializer(),
             "mutator": Mutator.SwapMutator(),
-            "recombiner":Recombiner.MeanRecombiner(),
-            "selector": Selector.TournamentSelector(s=20, dynAdapt=True),
+            "recombiner":Recombiner.SmartMeanRecombiner(),
+            "selector": Selector.RouletteSelector(),
             "replacer": Replacer.bottomReplacer(),
-            "terminator": Terminator.maxRuntimeTerminator(5),
+            "terminator": Terminator.convergenceTerminator(20,0),
             "localSearcher": LocalSearcher.Idle(),
-            "popSize": 100
+            "popSize": 200
 }
 
 from ACO import Initializer, Evaporator, Intensifier, Heuristics,Terminator
