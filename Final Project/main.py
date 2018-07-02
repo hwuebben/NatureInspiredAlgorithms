@@ -57,14 +57,14 @@ probDef = ProblemDefinition(capacity, demand, distance, transCost)
 
 from GA import Initializer, Mutator, Recombiner, Selector, Replacer, Terminator, LocalSearcher
 gaParams = {
-            "initializer":Initializer.RandomInitializer(),
+            "initializer":Initializer.HeuristicInitializer(),
             "mutator": Mutator.SwapMutator(),
             "recombiner":Recombiner.SmartMeanRecombiner(),
             "selector": Selector.RouletteSelector(),
             "replacer": Replacer.bottomReplacer(),
-            "terminator": Terminator.convergenceTerminator(20,0),
+            "terminator": Terminator.convergenceTerminator(10,0),
             "localSearcher": LocalSearcher.Idle(),
-            "popSize": 200
+            "popSize": 300
 }
 
 from ACO import Initializer, Evaporator, Intensifier, Heuristics,Terminator
@@ -76,7 +76,7 @@ acoParams = {
             "nrAnts":50,
             "alpha":1,
             "beta":2,
-            "terminators":[Terminator.convergenceTerminator(maxIter=1)]
+            "terminators":[Terminator.convergenceTerminator(1,0.001)]
 
 }
 

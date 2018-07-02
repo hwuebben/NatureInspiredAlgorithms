@@ -12,7 +12,7 @@ class IndividualProto(ABC):
     #     pass
 
 
-    @staticmethod
+    @classmethod
     @abstractmethod
     def initIndividual(probDef: PD, initType: str):
         """
@@ -54,13 +54,15 @@ class Individual(IndividualProto):
         return distMatrices
 
 
-    @staticmethod
-    def initIndividual(probDef: PD, initType: str):
+    @classmethod
+    def initIndividual(cls,probDef: PD, initType: str):
         if initType == "random":
-            return Individual.calcRandomIndividual(probDef)
+            return cls.calcRandomIndividual(probDef)
+        elif initType == "heuristic":
+            return cls.calcHeuristicIndividual(probDef)
 
-    @staticmethod
-    def calcRandomIndividual(probDef:PD):
+    @classmethod
+    def calcRandomIndividual(cls,probDef:PD):
         assign = np.zeros((probDef.nrNodes, probDef.nrVehicles))
         for i in range(assign.shape[0]):
             loads = np.sum(assign, 0)
@@ -73,15 +75,48 @@ class Individual(IndividualProto):
                 capLeft[randInd] -= 1
                 if capLeft[randInd] == 0:
                     capLeftInds = np.delete(capLeftInds,np.argwhere(capLeftInds == randInd))
-        return Individual(assign)
+        return cls(assign)
 
-    def checkConsistency(self,probDef:PD):
+    @classmethod
+    def calcHeuristicIndividual(cls,probDef:PD):
+        assign = np.zeros((probDef.nrNodes, probDef.nrVehicles))
+        distsOverall = np.copy(probDef.distance)
+        demands = np.copy(probDef.demand)
+        capacities = np.copy(probDef.capacity)
+        vehicleInds = np.argsort(probDef.transCost)
+        i = 0
+        while np.sum(demands) > 0:
+            "copy distsOverall matrix to keep track of which nodes are visited by this vehicle"
+            dists = np.copy(distsOverall)
+            "choose vehicle (always choose from the cheapest ones)"
+            vehicleInd = vehicleInds[i]
+            i+=1
+            "assign nodes to vehicle until capacity is full"
+            currentNode = 0
+            while capacities[vehicleInd] > 0 and np.sum(demands) > 0:
+                "set distances of self to inf to not visit again"
+                dists[:,currentNode] = np.inf
+                "use simple heuristic to choose nodes (smallest Distance)"
+                currentNode = np.argmin(dists[currentNode])
+                delivery = min(demands[currentNode-1], capacities[vehicleInd])
+                demands[currentNode-1] -= delivery
+                capacities[vehicleInd] -= delivery
+                assign[currentNode-1,vehicleInd] = delivery
+                if demands[currentNode-1] == 0:
+                    distsOverall[:,currentNode] = np.inf
+        return cls(assign)
+
+
+    def checkConsistency(self,probDef:PD, strict=True):
         """
         function for debug purposes, checks whether the individual is a valid solution
         :return:
         """
         assert( ((np.sum(self.assign, 0) - probDef.capacity) <= 0).all() )
-        assert( ((np.sum(self.assign, 1) - probDef.demand) >= 0).all() )
+        if strict:
+            assert (((np.sum(self.assign, 1) - probDef.demand) == 0).all())
+        else:
+            assert( ((np.sum(self.assign, 1) - probDef.demand) >= 0).all() )
 
     # @classmethod
     # def copyConstructor(cls,individual):

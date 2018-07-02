@@ -29,3 +29,11 @@ class RandomInitializer(Initializer):
         for i in range(popSize):
             population[i] = Individual.initIndividual(probDef, "random")
         return population
+
+class HeuristicInitializer(Initializer):
+
+    def initialize(self, probDef, popSize):
+        population = np.empty(popSize, dtype=Individual)
+        for i in range(popSize):
+            population[i] = Individual.initIndividual(probDef, "heuristic")
+        return population

@@ -1,9 +1,10 @@
 from Problem import Problem
-from ACO.Evaporator import *
-from ACO.Initializer import *
-from ACO.Intensifier import *
-from ACO.SolutionGenerator import *
-from ACO.Terminator import *
+from ACO.Evaporator import Evaporator
+from ACO.Initializer import AbstractInitializer
+from ACO.Intensifier import Intensifier
+from ACO.SolutionGenerator import AbstractSolutionGenerator
+from ACO.Terminator import Terminator
+import numpy as np
 import matplotlib.pyplot as plt
 
 

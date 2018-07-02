@@ -1,6 +1,8 @@
 import numpy as np
 from GA.ProblemDefinition import ProblemDefinition as PD
 import time
+import copy
+
 class VRPsolver:
 
     def __init__(self,vrpProblem:PD):
@@ -26,7 +28,6 @@ class VRPsolver:
         bestScores = []
         for i,distMatrix in enumerate(distMatrices):
             aco=self.__class__.__initACO(Problem.TSPProblem(distMatrix),acoParams)
-            aco.reset()
             solutions, scores = aco.run()
             bestSolutions.append(solutions)
             bestScores.append(scores)
@@ -51,24 +52,26 @@ class VRPsolver:
             popSize = gaParams["popSize"]
             nrOffspring = int(popSize / 10)
 
-            return GeneticAlgorithm(initializer, selector, recombiner, mutator, replacer, terminator,
-                                  vrpProblem, popSize, nrOffspring, localSearcher)
         except(ValueError):
             raise ValueError("gaParams needs the following entries..")
+
+        return GeneticAlgorithm(initializer, selector, recombiner, mutator, replacer, terminator,
+                                  vrpProblem, popSize, nrOffspring, localSearcher)
+
 
 
     @classmethod
     def __initACO(cls,tspProblem, acoParams):
 
         from ACO import ACO,SolutionGenerator
-        initializer = acoParams["initializer"]
-        evaporator = acoParams["evaporator"]
-        intensifier = acoParams["intensifier"]
-        heuristic = acoParams["heuristic"]
-        nrAnts = acoParams["nrAnts"]
-        alpha =acoParams["alpha"]
-        beta = acoParams["beta"]
-        solutionGen = SolutionGenerator.PermutationSolutionGenerator(nrAnts,alpha,beta,heuristic,tspProblem)
-        terminators = acoParams["terminators"]
+        initializer = copy.deepcopy(acoParams["initializer"])
+        evaporator = copy.deepcopy(acoParams["evaporator"])
+        intensifier = copy.deepcopy(acoParams["intensifier"])
+        heuristic = copy.deepcopy(acoParams["heuristic"])
+        nrAnts = copy.deepcopy(acoParams["nrAnts"])
+        alpha =copy.deepcopy(acoParams["alpha"])
+        beta = copy.deepcopy(acoParams["beta"])
+        solutionGen = copy.deepcopy(SolutionGenerator.PermutationSolutionGenerator(nrAnts,alpha,beta,heuristic,tspProblem))
+        terminators = copy.deepcopy(acoParams["terminators"])
         return ACO.Ant_Colony_Optimizer(tspProblem, initializer, evaporator, intensifier, solutionGen, terminators, 3,
                                        True, True)

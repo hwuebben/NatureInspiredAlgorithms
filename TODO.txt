@@ -1,0 +1,4 @@
+- GA und ACO sollten parallel arbeiten
+- Initializer hinzufügen: Ausgangsgraphen durch einfache Heuristik erzeugen
+- Fitness Heuristik evaluieren
+- ACO optimieren
