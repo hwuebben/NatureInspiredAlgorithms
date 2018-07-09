@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 from ProblemDefinition import ProblemDefinition
 from Individual import Individual
+import copy
 
 
 class Recombiner(ABC):
@@ -87,6 +88,9 @@ class MeanRecombiner(Recombiner):
 
 
 class SmartMeanRecombiner(Recombiner):
+    def __init__(self):
+        self.nrFails = 0
+        self.nrSuccesses = 0
     def recombine(self, probDef: ProblemDefinition, ind0: Individual, ind1: Individual):
         """
 
@@ -95,6 +99,7 @@ class SmartMeanRecombiner(Recombiner):
         :param ind1:
         :return:
         """
+        print("Fail-Success ratio: ",self.nrFails,self.nrSuccesses)
         """
         step 1: calculate ceiling of mean
         """
@@ -117,20 +122,27 @@ class SmartMeanRecombiner(Recombiner):
         for bkInd in brokenCapInds:
             assign = newAssign[:,bkInd]
             # get indices that could potentially be reduced to 0
-            possInds = np.nonzero(np.logical_and(demDiffs >= assign, assign > 0))[0]
+            possInds = np.flatnonzero(np.logical_and(demDiffs >= assign, assign > 0))
             # if none of those exist, just take all that are greater than 0
             if possInds.size == 0:
-                possInds = np.nonzero(np.logical_and(demDiffs > 0, assign > 0))[0]
+                possInds = np.flatnonzero(np.logical_and(demDiffs > 0, assign > 0))
             # shuffle to remove bias
             np.random.shuffle(possInds)
             while capDiffs[bkInd] > 0:
+                if possInds.size == 0:
+                    """
+                    Recombination failed, cap can't be repaired
+                    """
+                    #TODO: apply other fail safe recombiner
+                    self.nrFails += 1
+                    return copy.deepcopy(np.random.choice([ind0, ind1]))
                 minInd = np.argmin(assign[possInds])
                 reduceBy = min(assign[possInds[minInd]], demDiffs[possInds[minInd]])
                 assign[possInds[minInd]] -= reduceBy
                 demDiffs[possInds[minInd]] -= reduceBy
                 capDiffs[bkInd] -= reduceBy
                 possInds = np.delete(possInds,minInd)
-
+        self.nrSuccesses += 1
         if np.sum(demDiffs) == 0:
             return Individual(newAssign)
 

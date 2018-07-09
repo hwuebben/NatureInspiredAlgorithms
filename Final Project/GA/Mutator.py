@@ -91,6 +91,7 @@ class SwapMutator(Mutator):
                     assignment[randIndSwap] = assignment[randInd[1]]
                     assignment[randInd[1]] = ass
                     break
+        # toMutate.checkConsistency(probDef)
 
 
 

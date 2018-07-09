@@ -32,6 +32,7 @@ class Individual(IndividualProto):
         """
         self.assign = assign
         self.fitness = self.__calcFitness()
+        # self.checkConsistency(PD.probDef)
 
     def __calcFitness(self):
         heuristic =  Heuristic.BeardwoodHeuristic()
@@ -83,21 +84,36 @@ class Individual(IndividualProto):
         distsOverall = np.copy(probDef.distance)
         demands = np.copy(probDef.demand)
         capacities = np.copy(probDef.capacity)
-        vehicleInds = np.argsort(probDef.transCost)
-        i = 0
+        # vehicleInds = np.argsort(probDef.transCost)
+        vehicleInds = np.arange(probDef.nrVehicles)
+        pickProbs = 1 - (probDef.transCost / np.sum(probDef.transCost))
+        if probDef.nrVehicles == 1:
+            pickProbs[0] = 1
+        pickProbs /= np.sum(pickProbs)
+        # i = 0
         while np.sum(demands) > 0:
             "copy distsOverall matrix to keep track of which nodes are visited by this vehicle"
             dists = np.copy(distsOverall)
             "choose vehicle (always choose from the cheapest ones)"
-            vehicleInd = vehicleInds[i]
-            i+=1
+            vehicleInd = np.random.choice(vehicleInds,None,True,pickProbs)
+            pickProbs[vehicleInd] = 0
+            pickProbs /= np.sum(pickProbs)
+            # i+=1
             "assign nodes to vehicle until capacity is full"
             currentNode = 0
             while capacities[vehicleInd] > 0 and np.sum(demands) > 0:
                 "set distances of self to inf to not visit again"
                 dists[:,currentNode] = np.inf
-                "use simple heuristic to choose nodes (smallest Distance)"
-                currentNode = np.argmin(dists[currentNode])
+                "use simple heuristic to choose nodes (probabilistic choice anti proportional to distance)"
+                # currentNode = np.argmin(dists[currentNode])
+                pickProbsNode = 1 - dists[currentNode] / np.sum(dists[currentNode][np.isfinite(dists[currentNode])])
+                #if dists[currentNode] has only one finite value it needs to be set from zero to 1
+                if pickProbsNode[pickProbsNode == 0].size == 1:
+                    pickProbsNode[pickProbsNode == 0] = 1
+                pickProbsNode[np.isinf(pickProbsNode)] = 0
+                pickProbsNode /= np.sum(pickProbsNode)
+
+                currentNode = np.random.choice(np.arange(dists[currentNode].size),None,True,pickProbsNode)
                 delivery = min(demands[currentNode-1], capacities[vehicleInd])
                 demands[currentNode-1] -= delivery
                 capacities[vehicleInd] -= delivery

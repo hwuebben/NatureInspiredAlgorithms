@@ -36,4 +36,5 @@ class HeuristicInitializer(Initializer):
         population = np.empty(popSize, dtype=Individual)
         for i in range(popSize):
             population[i] = Individual.initIndividual(probDef, "heuristic")
+            # population[i].checkConsistency(probDef)
         return population
