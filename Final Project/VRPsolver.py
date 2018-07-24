@@ -2,6 +2,7 @@ import numpy as np
 from GA.ProblemDefinition import ProblemDefinition as PD
 import time
 import copy
+import datetime
 
 class VRPsolver:
 
@@ -14,6 +15,7 @@ class VRPsolver:
         print("start running GA")
         startTime = time.time()
         bestIndividual, results = ga.run()
+        ga.pickleStore(datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S"))
         print("GA finished, runtime: ",time.time() - startTime,"best Fitness: ",bestIndividual.fitness)
         distMatrices = bestIndividual.extractDistMatrices()
         startTime = time.time()
@@ -22,13 +24,18 @@ class VRPsolver:
         print("done with ACO, runtime: ",time.time()-startTime)
         return self.evalSol(bestScores)
 
+
     def optimizeTSPs(self,distMatrices,acoParams):
         from ACO import Problem
         bestSolutions = []
         bestScores = []
         for i,distMatrix in enumerate(distMatrices):
-            aco=self.__class__.__initACO(Problem.TSPProblem(distMatrix),acoParams)
-            solutions, scores = aco.run()
+            if not (distMatrix == 0).all():
+                aco=self.__class__.__initACO(Problem.TSPProblem(distMatrix),acoParams)
+                solutions, scores = aco.run()
+            else:
+                scores = [0]
+                solutions = [0]
             bestSolutions.append(solutions)
             bestScores.append(scores)
         return bestSolutions,bestScores
@@ -50,7 +57,7 @@ class VRPsolver:
             localSearcher = gaParams["localSearcher"]
 
             popSize = gaParams["popSize"]
-            nrOffspring = int(popSize / 10)
+            nrOffspring = int(popSize / 3)
 
         except(ValueError):
             raise ValueError("gaParams needs the following entries..")

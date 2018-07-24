@@ -99,7 +99,7 @@ class SmartMeanRecombiner(Recombiner):
         :param ind1:
         :return:
         """
-        print("Fail-Success ratio: ",self.nrFails,self.nrSuccesses)
+        #print("Fail-Success ratio: ",self.nrFails,self.nrSuccesses)
         """
         step 1: calculate ceiling of mean
         """

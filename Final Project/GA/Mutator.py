@@ -68,6 +68,7 @@ class RearrangeRecombiner(Mutator):
 class SwapMutator(Mutator):
     def __init__(self,swapRatio = 0.1):
         self.swapRatio = swapRatio
+        self.origSwapRatio = swapRatio
     def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
         nrSwaps = max(1,int(probDef.nrNodes * self.swapRatio))
         for _ in range(nrSwaps):
@@ -92,6 +93,9 @@ class SwapMutator(Mutator):
                     assignment[randInd[1]] = ass
                     break
         # toMutate.checkConsistency(probDef)
+
+    def dynamicAdaptation(self, progress):
+        self.swapRatio = (1-progress) * self.origSwapRatio
 
 
 

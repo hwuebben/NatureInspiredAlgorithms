@@ -46,6 +46,8 @@ class Ant_Colony_Optimizer:
             self.sorted_solutions.append(iteration_solutions)
             self.sorted_scores.append(iteration_scores)
             self.best_score = iteration_scores[0]
+            if self.best_score == 0:
+                print("score is 0")
             if self.verbose:
                 print('Iteration %d - best score: %d' % (self.nrIt, self.best_score))
 
