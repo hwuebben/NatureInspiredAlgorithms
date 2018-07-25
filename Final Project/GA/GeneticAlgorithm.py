@@ -8,7 +8,7 @@ import pickle
 class GeneticAlgorithm:
 
     def __init__(self, initializer, selector, recombiner, mutator, replacer, terminators,
-                 probDef, popSize, nrOffspring, localSearcher = LocalSearcher.Idle(), includeUnmutated = True):
+                 probDef, popSize, offspringProp, localSearcher = LocalSearcher.Idle(), includeUnmutated = True):
         self.initializer = initializer
         self.selector = selector
         self.recombiner = recombiner
@@ -21,7 +21,7 @@ class GeneticAlgorithm:
         self.pop = self.initializer.initialize(self.probDef, popSize)
         self.nrIt = 0
         self.popSize = popSize
-        self.nrOffspring = nrOffspring
+        self.nrOffspring = int(offspringProp*popSize)
         self.includeUnmutated = includeUnmutated
 
     def run(self):
@@ -46,6 +46,7 @@ class GeneticAlgorithm:
             indNew = self.recombiner.recombine(self.probDef, ind0, ind1)
             if self.includeUnmutated:
                 newInds[-(i+1)] = copy.deepcopy(indNew)
+            #indNewCopy = copy.deepcopy(indNew)
             self.mutator.mutate(indNew,self.probDef)
             newInds[i] = self.localSearcher.search(indNew)
         return newInds

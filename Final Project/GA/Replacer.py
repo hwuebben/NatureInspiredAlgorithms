@@ -7,6 +7,13 @@ class Replacer(ABC):
     def replace(self, newInds, pop):
         pass
 
+class KeepBestReplacer(Replacer):
+    def replace(self, newInds, pop):
+        unified = np.concatenate((newInds, pop))
+        unified = np.sort(unified)
+        pop = unified[-pop.size::]
+        return pop
+
 
 class BottomReplacer(Replacer):
 

@@ -18,6 +18,67 @@ class Recombiner(ABC):
         """
         pass
 
+class InspirationalRecombiner(Recombiner):
+    def recombine(self, probDef, ind0, ind1):
+        newAssign = copy.deepcopy(ind0.assign)
+        loads = np.sum(newAssign, 0)
+        freeCaps = probDef.capacity - loads
+        potInds = np.argwhere((ind0.assign > 0) != (ind1.assign > 0))
+        np.random.shuffle(potInds)
+        success = False
+        for potInd in potInds:
+            if success:
+                break
+            #copy respective entry
+            newAss = newAssign[potInd[0]]
+            newVal = ind1.assign[potInd[0],potInd[1]]
+            oldVal = ind0.assign[potInd[0],potInd[1]]
+
+            if newVal == 0:
+                # assign the new Value then try to make it work
+                newAss[potInd[1]] = newVal
+                #get only the non zero entries (0entries shouldn't be vhanged)
+                nonZeros = np.nonzero(newAss)[0]
+                #check whether it can be done
+                if np.sum(freeCaps[nonZeros]) >= oldVal:
+                    #if so iterate over nonzero indices and repair
+                    np.random.shuffle(nonZeros)
+                    left = oldVal
+                    for nz in nonZeros:
+                        addVal = min(freeCaps[nz], left)
+                        newAss[nz] += addVal
+                        left -= addVal
+                        if left == 0:
+                            success = True
+                            break
+                #else revert changes
+                else:
+                    newAss[potInd[1]] = oldVal
+
+            else:
+                #check whether it can be done
+                potential = np.sum(newAss)
+                if freeCaps[potInd[1]] > 0 and potential > 0:
+                    #if so do it
+                    nonZeros = np.nonzero(newAss)[0]
+                    newVal = min(newVal,potential,freeCaps[potInd[1]])
+                    newAss[potInd[1]] = newVal
+                    np.random.shuffle(nonZeros)
+                    left = newVal
+                    for nz in nonZeros:
+                        subVal = min(newAss[nz], left)
+                        newAss[nz] -= subVal
+                        left -= subVal
+                        if left == 0:
+                            success = True
+                            break
+        newIndi = Individual(newAssign)
+        newIndi.checkConsistency(probDef)
+        return newIndi
+
+
+
+
 
 class MeanRecombiner(Recombiner):
 

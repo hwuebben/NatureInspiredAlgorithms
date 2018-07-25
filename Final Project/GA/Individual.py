@@ -36,7 +36,10 @@ class Individual(IndividualProto):
 
     def __calcFitness(self):
         heuristic =  Heuristic.BeardwoodHeuristic()
+        #heuristic = Heuristic.AcoHeuristic()
         return heuristic.calcHeuVal(self,PD.probDef)
+    def recalcFitness(self):
+        self.fitness = self.__calcFitness()
 
     def extractDistMatrix(self,vehicleInd):
         graphInds = np.nonzero(self.assign[:,vehicleInd] > 0)[0]

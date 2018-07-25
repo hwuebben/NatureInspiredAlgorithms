@@ -85,19 +85,23 @@ class SwapMutator(Mutator):
             #try them 1 by 1
             for randIndSwap in randIndsSwap:
                 isSuited = (assignment[randIndSwap] <= freeCaps[randInd[1]]) and (assignment[randInd[1]] <= freeCaps[randIndSwap])
-                isSuited = isSuited and (randIndSwap != randInd[1])
+                #also make sure to not swap two identical values
+                isSuited = isSuited and (assignment[randIndSwap] != assignment[randInd[1]])
                 if isSuited:
                     #do the swap:
                     ass = assignment[randIndSwap]
                     assignment[randIndSwap] = assignment[randInd[1]]
                     assignment[randInd[1]] = ass
                     break
-        # toMutate.checkConsistency(probDef)
+        toMutate.recalcFitness()
+        #return toMutate
 
     def dynamicAdaptation(self, progress):
         self.swapRatio = (1-progress) * self.origSwapRatio
 
-
+class IdleMutator(Mutator):
+    def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
+        pass
 
 class assignMutator(Mutator):
     def __init__(self,remProb:float = 0.5):

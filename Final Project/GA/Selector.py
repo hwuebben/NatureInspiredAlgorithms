@@ -50,28 +50,24 @@ class SmartRouletteSelector(Selector):
         :return: selected individual
         """
         probs = [x.fitness for x in pop]
-        #if fitness values are negative, make positive
-        minProb = min(probs)
-        if minProb < 0:
-            probs -= minProb
+        #scale fitness values from positive 1 onwards (negative ones become positive)
+        probs -= (min(probs)-1)
         probs /= sum(probs)
         first = np.random.choice(pop,replace=False, p=probs)
 
         firstAss = first.assign > 0
 
-        #find appropriate mate
-        # probs = [self.invHamming(firstAss, x) if x != first else 0 for x in pop]
-        # probs /= np.sum(probs)
-        # second = np.random.choice(pop,replace=False, p=probs)
-
-        invHammings = [self.invHamming(firstAss,x) for x in pop]
-        maxInds = np.argmax(invHammings).flatten()
-        probs = invHammings[maxInds]/np.sum(invHammings[maxInds])
+        invHammings = np.array([self.invHamming(firstAss,x) if not(x is first) else 0 for x in pop])
+        #maxInds = np.argmax(invHammings).flatten()
+        maxInds = np.argwhere(invHammings >= (np.max(invHammings)*0.99)).flatten()
         popSlice = pop[maxInds]
-        if popSlice.size > 1:
-            second = np.random.choice(popSlice,p = probs)
-        else:
-            second = popSlice[0]
+        probs = [x.fitness for x in popSlice]
+        #scale fitness values from positive 1 onwards (negative ones become positive)
+        probs -= (min(probs)-1)
+        probs /= sum(probs)
+        #probs = invHammings[maxInds]/np.sum(invHammings[maxInds])
+        second = np.random.choice(popSlice,p = probs)
+
         #second = max(pop, key=lambda x: self.invHamming(firstAss,x))
         return first,second
 
