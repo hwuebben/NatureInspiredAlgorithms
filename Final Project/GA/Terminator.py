@@ -51,7 +51,7 @@ class maxRuntimeTerminator(Terminator):
 
     def checkTermination(self, GA):
         perf = np.max(GA.pop).fitness
-        print("best fitness value: ",perf)
+        #print("best fitness value: ",perf)
         if self.startTime is None:
             self.startTime = time.time()
             return False

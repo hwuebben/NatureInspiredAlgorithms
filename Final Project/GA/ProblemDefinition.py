@@ -19,6 +19,7 @@ class ProblemDefinition:
 
         self.nrNodes = self.demand.size
         self.nrVehicles = self.capacity.size
+        self.problemSize = self.nrNodes*self.nrVehicles
 
         #enumCapacity contains entries for each vehicle (in the number of their capacities)
         # self.enumCapacity = []

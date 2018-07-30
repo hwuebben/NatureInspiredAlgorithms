@@ -2,3 +2,6 @@
 - Initializer hinzufügen: Ausgangsgraphen durch einfache Heuristik erzeugen
 - Fitness Heuristik evaluieren
 - ACO optimieren
+
+- dynamische Verkleinerung der POP
+- stärkerer Inspirational Recombiner (mehr Punkte)

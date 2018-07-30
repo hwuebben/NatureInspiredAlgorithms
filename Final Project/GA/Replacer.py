@@ -6,6 +6,8 @@ class Replacer(ABC):
     @abstractmethod
     def replace(self, newInds, pop):
         pass
+    def dynamicAdaptation(self, progress):
+        pass
 
 class KeepBestReplacer(Replacer):
     def replace(self, newInds, pop):
@@ -30,20 +32,35 @@ class BottomReplacer(Replacer):
         return pop
 
 class RouletteReplacer(Replacer):
+    def __init__(self, includeBest=True, dynAdapt = True):
+        self.includeBest = includeBest
+        self.dynAdapt = dynAdapt
+        self.firstPopSize = 0
+        self.targetPopSize = 0
+
     def replace(self, newInds, pop):
+        if self.firstPopSize == 0:
+            self.firstPopSize = pop.size
+            self.targetPopSize = pop.size
+
         unified = np.concatenate((newInds,pop))
-        # unified = np.empty(newInds.size + pop.size)
-        # unified[0:newInds.size] = newInds
-        # unified[newInds.size::] = pop
-        probs = [x.fitness for x in unified]
-        #if fitness values are negative, make positive
-        minProb = min(probs)
-        if minProb < 0:
-            probs -= minProb
+        #unified = set(unified)
+        minFitDec = np.min(unified).fitness-1
+        if self.includeBest:
+            bestInd = np.max(unified)
+            probs = [0 if x is bestInd else (x.fitness-minFitDec) for x in unified]
+        else:
+            probs = [(x.fitness-minFitDec) for x in unified]
         probs /= sum(probs)
-        pop = np.random.choice(unified,size=pop.size,replace=False, p=probs)
-        pop[-1] = np.max(unified)
+        pop = np.random.choice(unified,size=self.targetPopSize,replace=False, p=probs)
+        if self.includeBest:
+            pop[-1] = bestInd
         return np.array(pop)
+
+    def dynamicAdaptation(self, progress):
+        if not self.dynAdapt:
+            return
+        self.targetPopSize = max(10, int(self.firstPopSize * min(1,(1.1 - progress))))
 
 
 class deleteAllReplacer(Replacer):

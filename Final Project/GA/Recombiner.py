@@ -17,22 +17,40 @@ class Recombiner(ABC):
         :return: recombinated child
         """
         pass
+    def dynamicAdaptation(self,progress):
+        pass
 
 class InspirationalRecombiner(Recombiner):
+    def __init__(self,recombineRatio,dynAdapt = True):
+        self.originalrecombineRatio = recombineRatio
+        self.recombineRatio = recombineRatio
+        self.dynAdapt = dynAdapt
+
     def recombine(self, probDef, ind0, ind1):
+        #print("in Recombine")
+        #ind0.checkConsistency(probDef)
+        #ind1.checkConsistency(probDef)
         newAssign = copy.deepcopy(ind0.assign)
         loads = np.sum(newAssign, 0)
         freeCaps = probDef.capacity - loads
         potInds = np.argwhere((ind0.assign > 0) != (ind1.assign > 0))
         np.random.shuffle(potInds)
-        success = False
+        counter = 0
+        lastCounter = 0
+        nrInspirations = max(1,int(self.recombineRatio*probDef.problemSize))
         for potInd in potInds:
-            if success:
+            if counter == nrInspirations:
                 break
-            #copy respective entry
+            #if newAssign was edited recalculate loads and freeCaps
+            if counter > lastCounter:
+                loads = np.sum(newAssign, 0)
+                freeCaps = probDef.capacity - loads
+                lastCounter = counter
+
+
             newAss = newAssign[potInd[0]]
             newVal = ind1.assign[potInd[0],potInd[1]]
-            oldVal = ind0.assign[potInd[0],potInd[1]]
+            oldVal = newAss[potInd[1]]
 
             if newVal == 0:
                 # assign the new Value then try to make it work
@@ -49,13 +67,17 @@ class InspirationalRecombiner(Recombiner):
                         newAss[nz] += addVal
                         left -= addVal
                         if left == 0:
-                            success = True
+                            counter+=1
                             break
+                    assert(left == 0)
+                    #print("case 0")
+
                 #else revert changes
                 else:
                     newAss[potInd[1]] = oldVal
 
             else:
+
                 #check whether it can be done
                 potential = np.sum(newAss)
                 if freeCaps[potInd[1]] > 0 and potential > 0:
@@ -70,11 +92,19 @@ class InspirationalRecombiner(Recombiner):
                         newAss[nz] -= subVal
                         left -= subVal
                         if left == 0:
-                            success = True
+                            counter += 1
                             break
+                    assert(left == 0)
+                    #print("case else")
         newIndi = Individual(newAssign)
-        newIndi.checkConsistency(probDef)
+        #assert((newIndi.assign != ind0.assign).any() and (newIndi.assign != ind1.assign).any())
+        #assert(success)
+        #newIndi.checkConsistency(probDef)
         return newIndi
+    def dynamicAdaptation(self,progress):
+        if not self.dynAdapt:
+            return
+        self.recombineRatio = (1-progress)*self.originalrecombineRatio
 
 
 

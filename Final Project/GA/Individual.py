@@ -48,7 +48,6 @@ class Individual(IndividualProto):
         #the 0 node must then be added, creates copy :(
         graphInds = np.insert(graphInds,0,0)
         #get respective slice of distance matrix
-        # TODO: this slicing returns a copy, is it possible to do it so it returns a view?
         return PD.probDef.distance[graphInds][:,graphInds]
 
     def extractDistMatrices(self):

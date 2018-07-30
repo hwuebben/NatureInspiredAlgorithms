@@ -48,6 +48,7 @@ class VRPsolver:
     def optimizeWithGAinstance(self,acoParams,gaInstName):
         print("load GA instance with name: "+gaInstName)
         ga = pickle.load(open( gaInstName, "rb" ))
+
         results = []
         for ind in ga.pop:
             print("next individual fitness: ",ind.fitness)
@@ -56,7 +57,9 @@ class VRPsolver:
             print("start optimizing TSPs with ACO")
             bestSolutions,bestScores = self.optimizeTSPs(distMatrices,acoParams)
             print("done with ACO, runtime: ",time.time()-startTime)
-            results.append([ind.fitness,self.evalSol(bestScores)])
+            res = self.evalSol(bestScores)
+            print("result: ",res)
+            results.append([ind.fitness,res])
         return results
 
 
@@ -66,22 +69,23 @@ class VRPsolver:
         from GeneticAlgorithm import GeneticAlgorithm
         try:
             initializer = gaParams["initializer"]
-            mutator = gaParams["mutator"]
+            mutators = gaParams["mutators"]
             recombiner = gaParams["recombiner"]
             selector = gaParams["selector"]
             replacer = gaParams["replacer"]
-            terminator = gaParams["terminator"]
+            terminators = gaParams["terminators"]
             localSearcher = gaParams["localSearcher"]
             includeUnmutated = gaParams["includeUnmutated"]
 
             popSize = gaParams["popSize"]
             offspringProp = gaParams["offspringProp"]
+            verbose = gaParams["verbose"]
 
         except(ValueError):
             raise ValueError("gaParams needs the following entries..")
 
-        return GeneticAlgorithm(initializer, selector, recombiner, mutator, replacer, terminator,
-                                  vrpProblem, popSize, offspringProp, localSearcher, includeUnmutated)
+        return GeneticAlgorithm(initializer, selector, recombiner, mutators, replacer, terminators,
+                                  vrpProblem, popSize, offspringProp, localSearcher, includeUnmutated,verbose)
 
 
 

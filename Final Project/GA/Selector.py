@@ -36,7 +36,7 @@ class RouletteSelector(Selector):
         #if fitness values are negative, make positive
         minProb = min(probs)
         if minProb < 0:
-            probs -= minProb
+            probs -= (minProb-1)
         probs /= sum(probs)
         result = np.random.choice(pop,size=2,replace=False, p=probs)
         return result[0],result[1]
@@ -78,7 +78,7 @@ class SmartRouletteSelector(Selector):
 
 class TournamentSelector(Selector):
 
-    def __init__(self, s=2, maxS=12, dynAdapt=False):
+    def __init__(self, s=4, maxS=12, dynAdapt=False):
         self.s = s
         self.originalS = s
         self.maxS = maxS
@@ -91,10 +91,8 @@ class TournamentSelector(Selector):
         :return: selected individual
         """
         candidates =  np.random.choice(pop, min(self.s, pop.size), replace=False)
-        result =  max(candidates)
-        candidates =  np.random.choice(pop, min(self.s, pop.size), replace=False)
-        result =  max(candidates)
-        return result
+        result =  candidates[np.argsort(candidates)[-2:]]
+        return result[0],result[1]
 
     def dynamicAdaptation(self, progress):
         """

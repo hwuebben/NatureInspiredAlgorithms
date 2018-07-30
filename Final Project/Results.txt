@@ -1,0 +1,938 @@
+C:\Users\Henning\AppData\Local\Programs\Python\Python35\python.exe "C:/Users/Henning/git/NatureInspiredAlgorithms/Final Project/main.py"
+load GA instance with name: 2018-07-25-16-17-42_best.p
+next individual fitness:  -107989.680952
+start optimizing TSPs with ACO
+done with ACO, runtime:  196.47494792938232
+result:  69304.0
+next individual fitness:  -111206.502381
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.63230919837952
+result:  71064.0
+next individual fitness:  -103530.530952
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.64793419837952
+result:  64237.0
+next individual fitness:  -109088.112121
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.99171352386475
+result:  67041.0
+next individual fitness:  -118147.897619
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.05416297912598
+result:  80243.0
+next individual fitness:  -129351.998377
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.2259922027588
+result:  82377.0
+next individual fitness:  -116316.080952
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.8198025226593
+result:  71816.0
+next individual fitness:  -106892.016667
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.8978774547577
+result:  66050.0
+next individual fitness:  -128191.836364
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.1636254787445
+result:  70125.0
+next individual fitness:  -137441.184416
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.02300715446472
+result:  88323.0
+next individual fitness:  -118104.014286
+start optimizing TSPs with ACO
+done with ACO, runtime:  181.81997799873352
+result:  77447.0
+next individual fitness:  -117291.492857
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.27295112609863
+result:  72576.0
+next individual fitness:  -106118.47381
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.0541214942932
+result:  63821.0
+next individual fitness:  -115810.664286
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.88225388526917
+result:  73971.0
+next individual fitness:  -115350.641991
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.8980119228363
+result:  71931.0
+next individual fitness:  -102520.630952
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.10099148750305
+result:  59338.0
+next individual fitness:  -109162.014286
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.5228521823883
+result:  71815.0
+next individual fitness:  -119446.966667
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.64802241325378
+result:  72750.0
+next individual fitness:  -108343.392857
+start optimizing TSPs with ACO
+done with ACO, runtime:  190.08523559570312
+result:  62712.0
+next individual fitness:  -105547.445238
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.4760673046112
+result:  65744.0
+next individual fitness:  -119159.788889
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.31991338729858
+result:  76577.0
+next individual fitness:  -107187.590043
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.9604206085205
+result:  68683.0
+next individual fitness:  -117709.337013
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.80422186851501
+result:  75478.0
+next individual fitness:  -109435.621212
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.0542552471161
+result:  67132.0
+next individual fitness:  -104772.864286
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.42915058135986
+result:  65662.0
+next individual fitness:  -111106.552381
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.85100412368774
+result:  71117.0
+next individual fitness:  -115603.855195
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.7105221748352
+result:  71137.0
+next individual fitness:  -123360.416667
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.6792676448822
+result:  81765.0
+next individual fitness:  -113246.166667
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.14795684814453
+result:  71123.0
+next individual fitness:  -116277.130952
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.24179553985596
+result:  71010.0
+next individual fitness:  -118872.12381
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.9135434627533
+result:  70856.0
+next individual fitness:  -105562.030952
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.9447546005249
+result:  66921.0
+next individual fitness:  -118526.57381
+start optimizing TSPs with ACO
+done with ACO, runtime:  181.7262361049652
+result:  73533.0
+next individual fitness:  -107631.330952
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.75721406936646
+result:  69059.0
+next individual fitness:  -114895.516667
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.16362762451172
+result:  75274.0
+next individual fitness:  -114638.090043
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.19482970237732
+result:  70279.0
+next individual fitness:  -116042.425758
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.46053218841553
+result:  74264.0
+next individual fitness:  -111722.510173
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.8355152606964
+result:  67246.0
+next individual fitness:  -117825.630952
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.63226461410522
+result:  76986.0
+next individual fitness:  -99804.2166667
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.2104094028473
+result:  59935.0
+next individual fitness:  -106978.147619
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.4447739124298
+result:  68134.0
+next individual fitness:  -112750.195238
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.81980085372925
+result:  71688.0
+next individual fitness:  -110129.730952
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.00724935531616
+result:  68044.0
+next individual fitness:  -114791.142641
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.66355729103088
+result:  72809.0
+next individual fitness:  -110930.130952
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.35116243362427
+result:  67532.0
+next individual fitness:  -118239.416667
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.81989097595215
+result:  77485.0
+next individual fitness:  -119486.547619
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.25737190246582
+result:  70380.0
+next individual fitness:  -121948.936364
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.30419993400574
+result:  80834.0
+next individual fitness:  -116933.125758
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.55427765846252
+result:  72746.0
+next individual fitness:  -118558.57381
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.96042013168335
+result:  69728.0
+next individual fitness:  -97974.5309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.47611165046692
+result:  58699.0
+next individual fitness:  -100421.016667
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.85104513168335
+result:  60213.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.2573263645172
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.28857588768005
+result:  57854.0
+next individual fitness:  -100976.730952
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.8823435306549
+result:  60068.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.5228943824768
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.50727033615112
+result:  57854.0
+next individual fitness:  -99076.8309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.25732803344727
+result:  59924.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.39798951148987
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.80413222312927
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.36665201187134
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.0853705406189
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.49173593521118
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.06983590126038
+result:  57854.0
+next individual fitness:  -102831.590043
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.25737071037292
+result:  61609.0
+next individual fitness:  -102407.680952
+start optimizing TSPs with ACO
+done with ACO, runtime:  183.46052765846252
+result:  63795.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.9760422706604
+result:  57854.0
+next individual fitness:  -101001.641991
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.882342338562
+result:  59918.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.60106301307678
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.19482898712158
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  188.8040430545807
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.39794540405273
+result:  57854.0
+next individual fitness:  -113371.080952
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.72605562210083
+result:  71609.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.22603464126587
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.35102462768555
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.6323561668396
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.47606444358826
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.28856921195984
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.00724840164185
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.25728273391724
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.41352558135986
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.77288007736206
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.89792728424072
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.13228678703308
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.00728487968445
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.14791560173035
+result:  57854.0
+next individual fitness:  -106359.630952
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.00729084014893
+result:  66758.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.069837808609
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.8354253768921
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.00738263130188
+result:  57854.0
+next individual fitness:  -116356.571861
+start optimizing TSPs with ACO
+done with ACO, runtime:  182.96055483818054
+result:  75252.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.52293634414673
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.19483256340027
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.30419993400574
+result:  57854.0
+next individual fitness:  -114643.655952
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.96033215522766
+result:  69402.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.2104504108429
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.38228058815002
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.38231945037842
+result:  57854.0
+next individual fitness:  -98284.2309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.1010844707489
+result:  57593.0
+next individual fitness:  -102262.317316
+start optimizing TSPs with ACO
+done with ACO, runtime:  182.39807963371277
+result:  63470.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.05412125587463
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.52293968200684
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.78846335411072
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.91359162330627
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.50735783576965
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.64798283576965
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.8197569847107
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.1479082107544
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.2259864807129
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.96042013168335
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.96046614646912
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.88229751586914
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.78859615325928
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.21041083335876
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.92916822433472
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.21050238609314
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.92921566963196
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.11670970916748
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.14795303344727
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.08541250228882
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.85109901428223
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.2885296344757
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.86667490005493
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.30419898033142
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.96041774749756
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.38227343559265
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.0385456085205
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.49173521995544
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.1948709487915
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.25728249549866
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.35107278823853
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  188.74154615402222
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.69480657577515
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.21036410331726
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.2417004108429
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.49173665046692
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.31982254981995
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.21036577224731
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.0541651248932
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.83547115325928
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.50735545158386
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.42914819717407
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.83533692359924
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.99171328544617
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.66351342201233
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.61673045158386
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.99166798591614
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.92912793159485
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.85104990005493
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.3666489124298
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.47602558135986
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.913592338562
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.89796710014343
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.14795684814453
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.33549284934998
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.27295303344727
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.81984615325928
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.53847074508667
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.99166440963745
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.31978344917297
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.7729251384735
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.14795994758606
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.72605204582214
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.81975984573364
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.75734996795654
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.02296328544617
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.022962808609
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.41352152824402
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.1166214942932
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.9604206085205
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.31973004341125
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.83542442321777
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.2729070186615
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.71043181419373
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.94479250907898
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.8822569847107
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.0072934627533
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.99166893959045
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.46035289764404
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.06974482536316
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.25728297233582
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.56976771354675
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.41356921195984
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.47602128982544
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.21049571037292
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.06979537010193
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.99162244796753
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.25737142562866
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.05416417121887
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.71038341522217
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.7885115146637
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.60106110572815
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.4447295665741
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.44485926628113
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.92921614646912
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.3979036808014
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.05421090126038
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.74159049987793
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.35102820396423
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.0072934627533
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.49160075187683
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.52289485931396
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.14800190925598
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.5073118209839
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.08541536331177
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.2104527950287
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.64788937568665
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.38232111930847
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.17911553382874
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.83533644676208
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.7885982990265
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.5541877746582
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.1947844028473
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.16353631019592
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.3041546344757
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.67917943000793
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  187.2259922027588
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.61672711372375
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.27290511131287
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.66351509094238
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.9447958469391
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  188.58530497550964
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.49168872833252
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.00734090805054
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.39798974990845
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.66355776786804
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  185.6323103904724
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.91350269317627
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  188.81966710090637
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.86671829223633
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  184.27299690246582
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.92912650108337
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.0854148864746
+result:  57854.0
+next individual fitness:  -97314.9309524
+start optimizing TSPs with ACO
+done with ACO, runtime:  186.46039485931396
+result:  57854.0
