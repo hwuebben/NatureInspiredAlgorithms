@@ -34,23 +34,34 @@ class VRPsolver:
         gaThread = threading.Thread(target=ga.run)
         print("start running GA Thread")
         gaThread.start()
-        distMatrices = ga.getNthbestInd(0).extractDistMatrices()
-        startTime = time.time()
-        print("start optimizing TSPs with ACO")
-        acos = self.optimizeTSPs(distMatrices,acoParams)
+        while gaThread.is_alive():
+            distMatrices = ga.getNthbestInd(0).extractDistMatrices()
+            startTime = time.time()
+            print("start optimizing TSPs with ACO")
+            acos,acoThreads = self.optimizeTSPs(distMatrices,acoParams)
+            #print("done with ACO, runtime: ",time.time()-startTime)
+            for acoThread in acoThreads:
+                if acoThread is None:
+                    continue
+                while True:
+                    print("intermediate result: ", self.evalSol(self.calcBestScores(acos,distMatrices)))
+                    if acoThread.is_alive() == False:
+                        continue
+                    time.sleep(1)
+                #self.waitForIt(it=acoThread.is_alive,toBe=False)
+        return
+    def calcBestScores(self,acos,distMatrices):
         bestScores = np.empty(len(distMatrices))
         for i in range(acos.size):
             if acos[i] is None:
                 bestScores[i] = 0
             else:
-                self.waitForIt(aco=acos[i],period=0.01)
+                self.waitForIt(it=acos[i].hasSolScore, period=0.1)
                 bestScores[i] = acos[i].getBestSolScore()[1]
-        print("done with ACO, runtime: ",time.time()-startTime)
-        return self.evalSol(bestScores)
-
-    def waitForIt(self,aco,period=0.01):
+        return bestScores
+    def waitForIt(self,it,toBe=True,period=0.1):
         while True:
-            if aco.hasSolScore(): return
+            if it() == toBe: return
             time.sleep(period)
 
 
@@ -59,17 +70,19 @@ class VRPsolver:
         #bestSolutions = np.empty(distMatrices.size)
         #bestScores = np.empty(distMatrices.size)
         acos = np.empty(len(distMatrices),dtype=Ant_Colony_Optimizer)
+        acoThreads = []
         for i,distMatrix in enumerate(distMatrices):
             if not (distMatrix == 0).all():
                 aco=self.__class__.initACO(Problem.TSPProblem(distMatrix),acoParams)
                 acoThread = threading.Thread(target=aco.run)
                 acoThread.start()
+                acoThreads.append(acoThread)
                 acos[i] = aco
             else:
                 #bestScores[i] = [0]
                 #bestSolutions[i] = [0]
                 acos[i] = None
-        return acos
+        return acos, acoThreads
 
     def evalSol(self, bestScores):
             bestScoresFinal = np.array([np.min(x) for x in bestScores])
