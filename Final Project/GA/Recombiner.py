@@ -4,6 +4,7 @@ import numpy as np
 from ProblemDefinition import ProblemDefinition
 from Individual import Individual
 import copy
+import random
 
 
 class Recombiner(ABC):
@@ -107,7 +108,105 @@ class InspirationalRecombiner(Recombiner):
         self.recombineRatio = (1-progress)*self.originalrecombineRatio
 
 
+class SmartInspirationalRecombiner(Recombiner):
+    def __init__(self,recombineRatio,dynAdapt = True):
+        self.originalrecombineRatio = recombineRatio
+        self.recombineRatio = recombineRatio
+        self.dynAdapt = dynAdapt
 
+    def recombine(self, probDef, ind0, ind1):
+
+        newAssign = copy.deepcopy(ind0.assign)
+        loads = np.sum(newAssign, 0)
+        freeCaps = probDef.capacity - loads
+        """calculate potential inspiration points"""
+        potInds = np.argwhere((ind0.assign > 0) != (ind1.assign > 0))
+        """prefer those points that affect vehicles already used by ind0"""
+        vehiclesUsed = []
+        for vehicleInd in range(probDef.nrVehicles):
+            if (ind0.assign[:,vehicleInd] != 0).any():
+                vehiclesUsed.append(vehicleInd)
+        otherInds = []
+        prefInds = []
+        for potInd in potInds:
+            if potInd[1] in vehiclesUsed:
+                prefInds.append(potInd)
+            else:
+                otherInds.append(potInd)
+        random.shuffle(prefInds)
+        random.shuffle(otherInds)
+        potInds = prefInds + otherInds
+
+        counter = 0
+        lastCounter = 0
+        nrInspirations = max(1,int(self.recombineRatio*probDef.problemSize))
+        for potInd in potInds:
+            if counter == nrInspirations:
+                break
+            #if newAssign was edited recalculate loads and freeCaps
+            if counter > lastCounter:
+                loads = np.sum(newAssign, 0)
+                freeCaps = probDef.capacity - loads
+                lastCounter = counter
+
+
+            newAss = newAssign[potInd[0]]
+            newVal = ind1.assign[potInd[0],potInd[1]]
+            oldVal = newAss[potInd[1]]
+
+            if newVal == 0:
+                # assign the new Value then try to make it work
+                newAss[potInd[1]] = newVal
+                #get only the non zero entries (0entries shouldn't be vhanged)
+                nonZeros = np.nonzero(newAss)[0]
+                #check whether it can be done
+                if np.sum(freeCaps[nonZeros]) >= oldVal:
+                    #if so iterate over nonzero indices and repair
+                    np.random.shuffle(nonZeros)
+                    left = oldVal
+                    for nz in nonZeros:
+                        addVal = min(freeCaps[nz], left)
+                        newAss[nz] += addVal
+                        left -= addVal
+                        if left == 0:
+                            counter+=1
+                            break
+                    assert(left == 0)
+                    #print("case 0")
+
+                #else revert changes
+                else:
+                    newAss[potInd[1]] = oldVal
+
+            else:
+
+                #check whether it can be done
+                potential = np.sum(newAss)
+                if freeCaps[potInd[1]] > 0 and potential > 0:
+                    #if so do it
+                    nonZeros = np.nonzero(newAss)[0]
+                    newVal = min(newVal,potential,freeCaps[potInd[1]])
+                    newAss[potInd[1]] = newVal
+                    np.random.shuffle(nonZeros)
+                    left = newVal
+                    for nz in nonZeros:
+                        subVal = min(newAss[nz], left)
+                        newAss[nz] -= subVal
+                        left -= subVal
+                        if left == 0:
+                            counter += 1
+                            break
+                    assert(left == 0)
+                    #print("case else")
+        newIndi = Individual(newAssign)
+        #assert((newIndi.assign != ind0.assign).any() and (newIndi.assign != ind1.assign).any())
+        #assert(success)
+        #newIndi.checkConsistency(probDef)
+        return newIndi
+    def dynamicAdaptation(self,progress):
+        if not self.dynAdapt:
+            return
+        self.recombineRatio = (1-progress)*self.originalrecombineRatio
 
 
 class MeanRecombiner(Recombiner):

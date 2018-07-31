@@ -4,13 +4,15 @@ import time
 import copy
 import datetime
 import pickle
+import threading
+from ACO.ACO import Ant_Colony_Optimizer
 
 class VRPsolver:
 
     def __init__(self,vrpProblem:PD):
         self.vrpProblem = vrpProblem
 
-    def optimizeWithParams(self,gaParams:dict, acoParams:dict):
+    def optimizeWithParams(self,gaParams:dict, acoParams:dict, nrThreads = 3):
         print("init GA")
         ga = self.__class__.__initGA(self.vrpProblem, gaParams)
         print("start running GA")
@@ -25,21 +27,49 @@ class VRPsolver:
         print("done with ACO, runtime: ",time.time()-startTime)
         return self.evalSol(bestScores)
 
+    def optimizeWithParamsThread(self,gaParams:dict, acoParams:dict, nrThreads = 3):
+        print("init GA Thread")
+        ga = self.__class__.__initGA(self.vrpProblem, gaParams)
+        startTime = time.time()
+        gaThread = threading.Thread(target=ga.run)
+        print("start running GA Thread")
+        gaThread.start()
+        distMatrices = ga.getNthbestInd(0).extractDistMatrices()
+        startTime = time.time()
+        print("start optimizing TSPs with ACO")
+        acos = self.optimizeTSPs(distMatrices,acoParams)
+        bestScores = np.empty(len(distMatrices))
+        for i in range(acos.size):
+            if acos[i] is None:
+                bestScores[i] = 0
+            else:
+                self.waitForIt(aco=acos[i],period=0.01)
+                bestScores[i] = acos[i].getBestSolScore()[1]
+        print("done with ACO, runtime: ",time.time()-startTime)
+        return self.evalSol(bestScores)
+
+    def waitForIt(self,aco,period=0.01):
+        while True:
+            if aco.hasSolScore(): return
+            time.sleep(period)
+
 
     def optimizeTSPs(self,distMatrices,acoParams):
         from ACO import Problem
-        bestSolutions = []
-        bestScores = []
+        #bestSolutions = np.empty(distMatrices.size)
+        #bestScores = np.empty(distMatrices.size)
+        acos = np.empty(len(distMatrices),dtype=Ant_Colony_Optimizer)
         for i,distMatrix in enumerate(distMatrices):
             if not (distMatrix == 0).all():
                 aco=self.__class__.initACO(Problem.TSPProblem(distMatrix),acoParams)
-                solutions, scores = aco.run()
+                acoThread = threading.Thread(target=aco.run)
+                acoThread.start()
+                acos[i] = aco
             else:
-                scores = [0]
-                solutions = [0]
-            bestSolutions.append(solutions)
-            bestScores.append(scores)
-        return bestSolutions,bestScores
+                #bestScores[i] = [0]
+                #bestSolutions[i] = [0]
+                acos[i] = None
+        return acos
 
     def evalSol(self, bestScores):
             bestScoresFinal = np.array([np.min(x) for x in bestScores])
@@ -104,6 +134,5 @@ class VRPsolver:
         terminators = copy.deepcopy(acoParams["terminators"])
         qualityDependence = copy.deepcopy(acoParams["qualityDependence"])
         verbose = copy.deepcopy(acoParams["verbose"])
-
         return ACO.Ant_Colony_Optimizer(tspProblem, initializer, evaporator, intensifier, solutionGen, terminators, 3,
                                        qualityDependence, verbose)

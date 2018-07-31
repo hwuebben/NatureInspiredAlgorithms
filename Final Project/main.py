@@ -15,16 +15,16 @@ gaParams = {
             "mutators": [Mutator.RandomSwapMutator(mutationProb=0.5,dynAdapt=True),
                          #Mutator.RandomMutator()
             ],
-            "recombiner":Recombiner.InspirationalRecombiner(recombineRatio=0.001,dynAdapt=True),
+            "recombiner":Recombiner.SmartInspirationalRecombiner(recombineRatio=0.001,dynAdapt=True),
             "selector": Selector.RouletteSelector(),
-            "replacer": Replacer.RouletteReplacer(includeBest=True,dynAdapt=True),
+            "replacer": Replacer.RouletteReplacer(includeBest=True,dynAdapt=False),
             "terminators": [#Terminator.convergenceTerminator(100,0.001),
-                           Terminator.maxRuntimeTerminator(1*60)],
+                           Terminator.maxRuntimeTerminator(100*60)],
             "localSearcher": LocalSearcher.Idle(),
             "popSize": 50,
             "includeUnmutated": True,
             "offspringProp": 0.2,
-            "verbose": True
+            "verbose": False
 
 }
 
@@ -45,12 +45,12 @@ acoParams = {
 
 vrpSolver = VRPsolver(probDef)
 
-bestScore = vrpSolver.optimizeWithParams(gaParams,acoParams)
+bestScore = vrpSolver.optimizeWithParamsThread(gaParams,acoParams)
 
 # file = "2018-07-25-16-17-42_best.p"
-file = "2018-07-26-15-18-03.p"
-bestScore = vrpSolver.optimizeWithGAinstance(acoParams,file)
-pickle.dump(bestScore, open("FitnessAndActual_"+file, "wb"))
+# file = "2018-07-26-15-18-03.p"
+# bestScore = vrpSolver.optimizeWithGAinstance(acoParams,file)
+# pickle.dump(bestScore, open("FitnessAndActual_"+file, "wb"))
 
 print("Overall best Sol value: ",bestScore)
 

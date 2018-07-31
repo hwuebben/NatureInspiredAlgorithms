@@ -88,3 +88,10 @@ class GeneticAlgorithm:
         return False
     def pickleStore(self, name):
         pickle.dump(self,open(name+".p","wb"))
+
+    def getNthbestInd(self,n):
+        if n == 0:
+            return np.max(self.pop)
+        else:
+            return np.partition(self.pop, -n)[-n]
+

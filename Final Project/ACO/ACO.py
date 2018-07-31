@@ -64,6 +64,11 @@ class Ant_Colony_Optimizer:
             self.nrIt += 1
 
         return np.array(self.sorted_solutions), np.array(self.sorted_scores)
+
+    def getBestSolScore(self):
+        return self.sorted_solutions[-1][0], self.sorted_scores[-1][0]
+    def hasSolScore(self):
+        return (len(self.sorted_scores) > 0)
     def reset(self):
         for t in self.terminator: t.reset()
         self.solution_generator.reset()

@@ -84,7 +84,7 @@ class RandomSwapMutator(Mutator):
         nInds = np.nonzero(mask < self.mutationProb)[0]
         if nInds.size == 0:
             nInds = np.array([np.random.randint(0,probDef.nrNodes)])
-        np.random.shuffle(nInds)
+        #np.random.shuffle(nInds)
         # try vehicle indices each entry one by one in random order
         vInds = np.arange(probDef.nrVehicles)
         np.random.shuffle(vInds)
@@ -138,7 +138,7 @@ class RandomSwapMutator2(Mutator):
         nInds = np.nonzero(mask < self.mutationProb)[0]
         if nInds.size == 0:
             nInds = np.array([np.random.randint(0,probDef.nrNodes)])
-        np.random.shuffle(nInds)
+        #np.random.shuffle(nInds)
         # try vehicle indices each entry one by one in random order
         vInds = np.arange(probDef.nrVehicles)
         np.random.shuffle(vInds)
