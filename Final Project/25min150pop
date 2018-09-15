@@ -1,0 +1,90 @@
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.0  best fitness:  -93857.5730159
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.0  best fitness:  -101622.409524
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.0  best fitness:  -100897.375397
+mutParam:  0.0  recombParam:  0.0  AVG fitness:  -98792.4526455
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.01  best fitness:  -102685.855556
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.01  best fitness:  -105696.055556
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.01  best fitness:  -105165.071429
+mutParam:  0.0  recombParam:  0.01  AVG fitness:  -104515.660847
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.02  best fitness:  -101241.871429
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.02  best fitness:  -101592.346032
+init GA Thread
+start running GA
+mutParam:  0.0  recombParam:  0.02  best fitness:  -102723.563492
+mutParam:  0.0  recombParam:  0.02  AVG fitness:  -101852.593651
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.0  best fitness:  -110071.978571
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.0  best fitness:  -105269.788889
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.0  best fitness:  -109398.215873
+mutParam:  0.1  recombParam:  0.0  AVG fitness:  -108246.661111
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.01  best fitness:  -130652.736905
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.01  best fitness:  -127745.589683
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.01  best fitness:  -136565.50119
+mutParam:  0.1  recombParam:  0.01  AVG fitness:  -131654.609259
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.02  best fitness:  -130892.719697
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.02  best fitness:  -145836.436905
+init GA Thread
+start running GA
+mutParam:  0.1  recombParam:  0.02  best fitness:  -136203.682323
+mutParam:  0.1  recombParam:  0.02  AVG fitness:  -137644.279642
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.0  best fitness:  -111164.107143
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.0  best fitness:  -113633.485281
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.0  best fitness:  -115625.493254
+mutParam:  0.2  recombParam:  0.0  AVG fitness:  -113474.361893
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.01  best fitness:  -143466.394156
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.01  best fitness:  -134910.164069
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.01  best fitness:  -137720.964286
+mutParam:  0.2  recombParam:  0.01  AVG fitness:  -138699.17417
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.02  best fitness:  -153527.140476
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.02  best fitness:  -158795.935714
+init GA Thread
+start running GA
+mutParam:  0.2  recombParam:  0.02  best fitness:  -149267.666667
+mutParam:  0.2  recombParam:  0.02  AVG fitness:  -153863.580952

@@ -149,7 +149,6 @@ class SmartInspirationalRecombiner(Recombiner):
                 freeCaps = probDef.capacity - loads
                 lastCounter = counter
 
-
             newAss = newAssign[potInd[0]]
             newVal = ind1.assign[potInd[0],potInd[1]]
             oldVal = newAss[potInd[1]]
@@ -198,7 +197,7 @@ class SmartInspirationalRecombiner(Recombiner):
                             break
                     assert(left == 0)
                     #print("case else")
-        newIndi = Individual(newAssign)
+        newIndi = Individual(newAssign,probDef)
         #assert((newIndi.assign != ind0.assign).any() and (newIndi.assign != ind1.assign).any())
         #assert(success)
         #newIndi.checkConsistency(probDef)

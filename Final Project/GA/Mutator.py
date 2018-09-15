@@ -26,9 +26,9 @@ class RandomMutator(Mutator):
         loads = np.sum(toMutate.assign, 0)
         for i,NodeAssign in enumerate(toMutate.assign):
             #calculate redInd, the indice that should be reduced
-            redInd = np.random.choice(np.argwhere(NodeAssign > 0).flatten())
+            redInd = np.random.choice(np.nonzero(NodeAssign > 0)[0])
             #and incInd the one that should be increased
-            incInds = np.argwhere(np.logical_and(loads < probDef.capacity, NodeAssign > 0)).flatten()
+            incInds = np.nonzero(np.logical_and(loads < probDef.capacity, NodeAssign > 0))[0]
             #make sure not to choose the same index as redInd (would do nothing then)
             #leaving this line out allows strength of mutation to vary randomly, might not be bad
             #incInds = np.delete(incInds,np.argwhere(incInds == redInd))
@@ -51,9 +51,9 @@ class RearrangeRecombiner(Mutator):
         #for each node
         for assigned in toMutate.assign:
             # get indices of fractal assignments
-            fracInds = np.argwhere(assigned%1 != 0).flat
+            fracInds = np.nonzero(assigned%1 != 0)[0]
             # get those inds that have to be reduced (because capacity is already full)
-            capInds = np.intersect1d(np.argwhere(loads - probDef.capacity == 0).flat, fracInds)
+            capInds = np.intersect1d(np.nonzero(loads - probDef.capacity == 0)[0], fracInds)
             #boolean mask of fracInds to keep track of indices that have been processed
             mask = np.ones(len(fracInds), dtype=bool)
             #first process the indices that have to be reduced

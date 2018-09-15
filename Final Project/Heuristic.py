@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from GA.ProblemDefinition import ProblemDefinition
 from GA.Individual import Individual
 from ACO.ACO import Ant_Colony_Optimizer
-from VRPsolver import VRPsolver
+#from VRPsolver import VRPsolver.initACO
 from ACO import Problem
 
 
@@ -14,33 +14,33 @@ class Heuristic:
     def calcHeuVal(cls,ind:Individual, probDef: ProblemDefinition):
         pass
 
-class AcoHeuristic(Heuristic):
-    from ACO import Initializer, Evaporator, Intensifier, Heuristics, Terminator
-    acoParams = {
-        "initializer": Initializer.TSP_Initializer(),
-        "evaporator": Evaporator.Evaporator(rho=0.05),
-        "intensifier": Intensifier.Intensifier(delta=0.05),
-        "heuristic": Heuristics.TSPHeuristic,
-        "nrAnts": 10,
-        "alpha": 1,
-        "beta": 2,
-        "terminators": [Terminator.convergenceTerminator(1, 0.0001), Terminator.maxRuntimeTerminator(1)],
-        "qualityDependence": True,
-        "verbose": False
-    }
-
-    @classmethod
-    def calcHeuVal(cls,ind:Individual, probDef: ProblemDefinition):
-
-        heuVals = np.empty(probDef.nrVehicles)
-        for vehicleInd in range(probDef.nrVehicles):
-            distMatrix = ind.extractDistMatrix(vehicleInd)
-            if (distMatrix == 0).all():
-                heuVals[vehicleInd] = 0
-            else:
-                aco = VRPsolver.initACO(Problem.TSPProblem(distMatrix), cls.acoParams)
-                heuVals[vehicleInd] = np.min(aco.run()[1]) * probDef.transCost[vehicleInd]
-        return -np.sum(heuVals)
+# class AcoHeuristic(Heuristic):
+#     from ACO import Initializer, Evaporator, Intensifier, Heuristics, Terminator
+#     acoParams = {
+#         "initializer": Initializer.TSP_Initializer(),
+#         "evaporator": Evaporator.Evaporator(rho=0.05),
+#         "intensifier": Intensifier.Intensifier(delta=0.05),
+#         "heuristic": Heuristics.TSPHeuristic,
+#         "nrAnts": 10,
+#         "alpha": 1,
+#         "beta": 2,
+#         "terminators": [Terminator.convergenceTerminator(1, 0.0001), Terminator.maxRuntimeTerminator(1)],
+#         "qualityDependence": True,
+#         "verbose": False
+#     }
+#
+#     @classmethod
+#     def calcHeuVal(cls,ind:Individual, probDef: ProblemDefinition):
+#
+#         heuVals = np.empty(probDef.nrVehicles)
+#         for vehicleInd in range(probDef.nrVehicles):
+#             distMatrix = ind.extractDistMatrix(vehicleInd)
+#             if (distMatrix == 0).all():
+#                 heuVals[vehicleInd] = 0
+#             else:
+#                 aco = VRPSolver.initACO(Problem.TSPProblem(distMatrix), cls.acoParams)
+#                 heuVals[vehicleInd] = np.min(aco.run()[1]) * probDef.transCost[vehicleInd]
+#         return -np.sum(heuVals)
 class BeardwoodHeuristic(Heuristic):
     """
     'In 1959,´Beardwood et al. [1] derived an asymptotic expected tour length formula.

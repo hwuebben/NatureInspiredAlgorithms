@@ -30,6 +30,13 @@ class BottomReplacer(Replacer):
         pop = np.sort(pop)
         pop[0:newInds.size] = newInds
         return pop
+class PlainReplacer(Replacer):
+    def __init__(self,keepMax = False):
+        self.keepMax = keepMax
+    def replace(self, newInds, pop):
+        if self.keepMax:
+            newInds[np.argmin(newInds)] = np.max(pop)
+        return newInds
 
 class RouletteReplacer(Replacer):
     def __init__(self, includeBest=True, dynAdapt = True):
@@ -55,12 +62,12 @@ class RouletteReplacer(Replacer):
         pop = np.random.choice(unified,size=self.targetPopSize,replace=False, p=probs)
         if self.includeBest:
             pop[-1] = bestInd
-        return np.array(pop)
+        return pop
 
     def dynamicAdaptation(self, progress):
         if not self.dynAdapt:
             return
-        self.targetPopSize = max(10, int(self.firstPopSize * min(1,(1.1 - progress))))
+        self.targetPopSize = int(self.firstPopSize * min(1,(1.5 - progress)))
 
 
 class deleteAllReplacer(Replacer):

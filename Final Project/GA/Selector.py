@@ -25,21 +25,32 @@ class Selector(ABC):
 
 
 class RouletteSelector(Selector):
-
-    def select(self, pop):
-        """
-        perform roulette wheel selection on pop
-        :param pop:
-        :return: selected individual
-        """
+    def setProbs(self,pop):
         probs = [x.fitness for x in pop]
         #if fitness values are negative, make positive
         minProb = min(probs)
         if minProb < 0:
             probs -= (minProb-1)
         probs /= sum(probs)
-        result = np.random.choice(pop,size=2,replace=False, p=probs)
+        self.probs = probs
+    def select(self, pop):
+        """
+        perform roulette wheel selection on pop
+        :param pop:
+        :return: selected individual
+        """
+        result = np.random.choice(pop,size=2,replace=False, p=self.probs)
         return result[0],result[1]
+    def singleSelect(self,pop,nrSelect):
+        probs = [x.fitness for x in pop]
+        #if fitness values are negative, make positive
+        minProb = min(probs)
+        if minProb < 0:
+            probs -= (minProb-1)
+        probs /= sum(probs)
+        result = np.random.choice(pop,size=nrSelect,replace=False, p=probs)
+        return result
+
 
 class SmartRouletteSelector(Selector):
 
@@ -59,7 +70,7 @@ class SmartRouletteSelector(Selector):
 
         invHammings = np.array([self.invHamming(firstAss,x) if not(x is first) else 0 for x in pop])
         #maxInds = np.argmax(invHammings).flatten()
-        maxInds = np.argwhere(invHammings >= (np.max(invHammings)*0.99)).flatten()
+        maxInds = np.nonzero(invHammings >= (np.max(invHammings)*0.99))[0]
         popSlice = pop[maxInds]
         probs = [x.fitness for x in popSlice]
         #scale fitness values from positive 1 onwards (negative ones become positive)

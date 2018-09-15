@@ -25,19 +25,20 @@ class IndividualProto(ABC):
         pass
 
 class Individual(IndividualProto):
-    def __init__(self, assign : np.array):
+    def __init__(self, assign : np.array, probDef):
         """
 
         :param assign:
         """
         self.assign = assign
+        self.probDef = probDef
         self.fitness = self.__calcFitness()
         # self.checkConsistency(PD.probDef)
 
     def __calcFitness(self):
         heuristic =  Heuristic.BeardwoodHeuristic()
         #heuristic = Heuristic.AcoHeuristic()
-        return heuristic.calcHeuVal(self,PD.probDef)
+        return heuristic.calcHeuVal(self,self.probDef)
     def recalcFitness(self):
         self.fitness = self.__calcFitness()
 
@@ -48,11 +49,11 @@ class Individual(IndividualProto):
         #the 0 node must then be added, creates copy :(
         graphInds = np.insert(graphInds,0,0)
         #get respective slice of distance matrix
-        return PD.probDef.distance[graphInds][:,graphInds]
+        return self.probDef.distance[graphInds][:,graphInds]
 
     def extractDistMatrices(self):
         distMatrices = []
-        for vehicleInd in range(PD.probDef.nrVehicles):
+        for vehicleInd in range(self.probDef.nrVehicles):
             distMatrices.append(self.extractDistMatrix(vehicleInd))
         return distMatrices
 
@@ -70,7 +71,9 @@ class Individual(IndividualProto):
         for i in range(assign.shape[0]):
             loads = np.sum(assign, 0)
             capLeft = probDef.capacity - loads
-            capLeftInds = np.argwhere(capLeft > 0).flatten()
+            #capLeftInds = np.argwhere(capLeft > 0).flatten()
+            capLeftInds = np.nonzero(capLeft > 0)[0]
+
             for _ in range(probDef.demand[i]):
 
                 randInd = np.random.choice(capLeftInds)
@@ -78,7 +81,7 @@ class Individual(IndividualProto):
                 capLeft[randInd] -= 1
                 if capLeft[randInd] == 0:
                     capLeftInds = np.delete(capLeftInds,np.argwhere(capLeftInds == randInd))
-        return cls(assign)
+        return cls(assign,probDef)
 
     @classmethod
     def calcHeuristicIndividual(cls,probDef:PD):
@@ -122,7 +125,7 @@ class Individual(IndividualProto):
                 assign[currentNode-1,vehicleInd] = delivery
                 if demands[currentNode-1] == 0:
                     distsOverall[:,currentNode] = np.inf
-        return cls(assign)
+        return cls(assign,probDef)
 
 
     def checkConsistency(self,probDef:PD, strict=True):

@@ -12,19 +12,19 @@ probDef = ProblemDefinition(capacity, demand, distance, transCost)
 from GA import Initializer, Mutator, Recombiner, Selector, Replacer, Terminator, LocalSearcher
 gaParams = {
             "initializer":Initializer.HeuristicInitializer(),
-            "mutators": [Mutator.RandomSwapMutator(mutationProb=0.5,dynAdapt=True),
+            "mutators": [Mutator.RandomSwapMutator(mutationProb=0.2,dynAdapt=True),
                          #Mutator.RandomMutator()
             ],
             "recombiner":Recombiner.SmartInspirationalRecombiner(recombineRatio=0.001,dynAdapt=True),
             "selector": Selector.RouletteSelector(),
             "replacer": Replacer.RouletteReplacer(includeBest=True,dynAdapt=False),
             "terminators": [#Terminator.convergenceTerminator(100,0.001),
-                           Terminator.maxRuntimeTerminator(100*60)],
-            "localSearcher": LocalSearcher.Idle(),
+                           Terminator.maxRuntimeTerminator(10*60)],
+            "localSearcher": LocalSearcher.TspTourSimplifier(singleIteration=False),
             "popSize": 50,
             "includeUnmutated": True,
-            "offspringProp": 0.2,
-            "verbose": False
+            "offspringProp": 0.0,
+            "verbose": True
 
 }
 
@@ -37,7 +37,10 @@ acoParams = {
             "nrAnts":100,
             "alpha":1,
             "beta":1,
-            "terminators":[Terminator.convergenceTerminator(100,0.0001)],
+            "terminators":[
+                #Terminator.convergenceTerminator(100,0.0001)
+                Terminator.maxRuntimeTerminator(60)
+            ],
             "qualityDependence": True,
             "verbose": False
 
@@ -45,7 +48,7 @@ acoParams = {
 
 vrpSolver = VRPsolver(probDef)
 
-bestScore = vrpSolver.optimizeWithParamsThread(gaParams,acoParams)
+bestScore = vrpSolver.optimizeWithParams(gaParams,acoParams)
 
 # file = "2018-07-25-16-17-42_best.p"
 # file = "2018-07-26-15-18-03.p"

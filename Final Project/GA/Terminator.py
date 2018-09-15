@@ -61,6 +61,21 @@ class maxRuntimeTerminator(Terminator):
     def estimateProgress(self):
         return (time.time()-self.startTime) / self.maxRuntime
 
+class Pulsator(Terminator):
+    def __init__(self,firstPulseLength = 20,multiplicator=2):
+        self.pulseLength = firstPulseLength
+        self.progress = -(1/firstPulseLength)
+        self.multiplicator = multiplicator
+    def checkTermination(self, GA):
+        return False
+    def estimateProgress(self):
+        if self.progress >= 1:
+            self.progress = 0
+            self.pulseLength *= self.multiplicator
+        else:
+            self.progress += (1./self.pulseLength)
+        return min(1,self.progress)
+
 
 class convergenceTerminator(Terminator):
 

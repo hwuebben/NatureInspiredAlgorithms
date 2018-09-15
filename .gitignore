@@ -1,3 +1,22 @@
+Skip to content
+ 
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ @hwuebben Sign out
+3
+0 3 hwuebben/NatureInspiredAlgorithms
+forked from Cypher42/NatureInspiredAlgorithms
+ Code  Pull requests 0  Projects 0  Wiki  Insights  Settings
+NatureInspiredAlgorithms/.gitignore
+15036be  on 13 Apr
+@hwuebben hwuebben using sorted pop list, implemented selection and replacement
+@hwuebben @Cypher42
+     
+52 lines (40 sloc)  688 Bytes
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
@@ -49,3 +68,6 @@ Temporary Items
 #project idea files
 .idea
 __pycache__
+
+#stored experiment results
+*.p
