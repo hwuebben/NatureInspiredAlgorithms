@@ -4,10 +4,9 @@ from Initializer import *
 from Intensifier import *
 from SolutionGenerator import *
 from Terminator import *
-import matplotlib.pyplot as plt
 
 
-class Ant_Colony_Optimizer:
+class AntColonyOptimizer:
 
     def __init__(self,
                  problem: VehicleRoutingProblem,

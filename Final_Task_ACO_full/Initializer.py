@@ -14,6 +14,7 @@ class AbstractInitializer(ABC):
         """
         pass
 
+
 class VRP_Initializer(ABC):
 
     def initialize(self, problem: VehicleRoutingProblem) -> np.array:
@@ -22,7 +23,7 @@ class VRP_Initializer(ABC):
         :param problem:
         :return: pheromone matrix
         """
-        num_of_vehicles = problem.vehicles
-        num_of_nodes = problem.get_size()
-        shape = [1 + num_of_vehicles * num_of_nodes, 1 + num_of_vehicles * num_of_nodes]
+        vehicles = problem.vehicles
+        items = problem.get_size()
+        shape = [1 + vehicles * items, 1 + vehicles * items]
         return np.ones(shape)

@@ -33,11 +33,11 @@ class VehicleRoutingProblem(PermutationProblem):
         :param problem: integer, specifying the problem, valid inputs are 1,2 and 3
         :return:
         """
-        if problem >= 1 and problem <=4:
-            self.path = 'problem_' + str(problem)
-        else:
-            raise ValueError('Unknown benchmark problem, valid inputs are 1-4')
-        self.capacity, self.demand, self.distance_matrix, self.transportation_cost = self.__load_data()
+        self.path = 'problem_' + str(problem)
+        try:
+            self.capacity, self.demand, self.distance_matrix, self.transportation_cost = self.__load_data()
+        except FileNotFoundError:
+            raise ValueError('Unknown benchmark problem ' + str(problem))
         if self.distance_matrix.shape[0] != self.distance_matrix.shape[1]:
             raise AssertionError('Distance matrix is not quadratic.')
         if self.distance_matrix.shape[0] != self.demand.shape[0]+1:
