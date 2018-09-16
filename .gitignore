@@ -71,3 +71,4 @@ __pycache__
 
 #stored experiment results
 *.p
+*.png

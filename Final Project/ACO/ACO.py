@@ -6,7 +6,7 @@ from ACO.SolutionGenerator import AbstractSolutionGenerator
 from ACO.Terminator import Terminator
 import numpy as np
 import matplotlib.pyplot as plt
-
+import pickle
 
 class Ant_Colony_Optimizer:
 
@@ -74,3 +74,13 @@ class Ant_Colony_Optimizer:
         self.solution_generator.reset()
         self.problem.reset()
         self.initializer.reset()
+
+    def pickleStoreBestSol(self,name):
+
+        bestSol, bestScore = self.getBestSolScore()
+        toPickle = (self.problem,bestSol, bestScore)
+        name = name+".p"
+        #print(name)
+        #path = folderPath / name
+        with open('finalResults\\'+name, 'wb') as f:
+            pickle.dump(toPickle, f)

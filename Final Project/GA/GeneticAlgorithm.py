@@ -5,6 +5,7 @@ import copy
 import pickle
 import time
 from pathlib import Path
+import multiprocessing as mp
 
 class GeneticAlgorithm:
 
@@ -21,9 +22,9 @@ class GeneticAlgorithm:
         self.probDef = probDef
         self.pop = self.initializer.initialize(self.probDef, popSize)
         self.nrIt = 0
-        self.popSize = popSize
-        #self.offspringProp = offspringProp
-        self.nrOffspring = max(1,int(offspringProp*popSize))
+        #self.popSize = popSize
+        self.offspringProp = offspringProp
+        #self.nrOffspring = max(1,int(offspringProp*popSize))
 
         self.includeUnmutated = includeUnmutated
         self.verbose = verbose
@@ -38,12 +39,15 @@ class GeneticAlgorithm:
                 queue.put_nowait(bestInd)
 
     def runWithPipe(self,pipe):
-        #main loop
+        #main loop#
         while not any([t.checkTermination(self) for t in self.terminators]):
             self.iteration()
             if pipe.poll():
-                n = pipe.receive()
+                n = pipe.recv()
                 pipe.send(self.getNthbestInd(n))
+        if pipe.poll(None):
+            n = pipe.recv()
+            pipe.send(self.getNthbestInd(n))
     def runWithPipeFinalGA(self,pipe):
         while not any([t.checkTermination(self) for t in self.terminators]):
             self.iteration()
@@ -60,7 +64,7 @@ class GeneticAlgorithm:
         if self.verbose:
             print("best fitness: ", np.max(self.pop).fitness)
             print("terminator progress: ", self.terminators[-1].estimateProgress())
-        newInds = self.__generateOffspring(self.nrOffspring)
+        newInds = self.__generateOffspring(max(1,int(self.offspringProp*self.pop.size)))
         #newInds = self.__generateOffspringSingleSelect(self.nrOffspring)
         self.pop = self.replacer.replace(newInds, self.pop)
         self.nrIt += 1
@@ -159,3 +163,5 @@ class GeneticAlgorithm:
         else:
             self.queue.put_nowait(np.partition(self.pop, -n)[-n])
 
+if __name__ == '__main__':
+    mp.freeze_support()

@@ -13,6 +13,7 @@ class VRPsolver:
 
     def __init__(self,vrpProblem:PD):
         self.vrpProblem = vrpProblem
+        self.cpuCount = mp.cpu_count()
 
     def runGAQueue(self,gaParams:dict):
         print("init GA")
@@ -36,16 +37,17 @@ class VRPsolver:
         return finalGA
 
 
-    def optimizeWithParamsMP(self,gaParams:dict, acoParams:dict):
+    def optimizeWithParamsMP(self,gaParams:dict, acoParams:dict,problemName = ""):
+        #mp.freeze_support()
         print("init GA Thread")
         ga = self.__class__.__initGA(self.vrpProblem, gaParams)
         parent_conn, child_conn = mp.Pipe()
         gaPro = mp.Process(target=ga.runWithPipe,args=(child_conn,))
         print("start running GA Thread")
         gaPro.start()
-        keepGoing = True
-        while keepGoing:
-            keepGoing = gaPro.is_alive()
+        #keepGoing = True
+        while gaPro.is_alive():
+            #keepGoing = gaPro.is_alive()
             parent_conn.send(0)
             distMatrices = parent_conn.recv().extractDistMatrices()
             bestScore = np.inf
@@ -54,20 +56,27 @@ class VRPsolver:
             print("start optimizing TSPs with ACO")
             #TODO: use MP here too
             acos,acoThreads = self.optimizeTSPsThread(distMatrices,acoParams)
+            stillAlive = lambda: np.any([x.is_alive() for x in acoThreads])
+            keepGoingACO = True
             #print("done with ACO, runtime: ",time.time()-startTime)
-            for acoThread in acoThreads:
-                if acoThread is None:
-                    continue
-                while True:
-                    score = self.evalSol(self.calcBestScores(acos,distMatrices))
-                    if score < bestScore:
-                        bestScore = score
-                        print("new best score: ",bestScore)
-                    if not acoThread.is_alive():
-                        continue
-                    time.sleep(2)
+            while keepGoingACO:
+                keepGoingACO = stillAlive()
+
+                score = self.evalSol(self.calcBestScores(acos,distMatrices))
+                if score < bestScore:
+                    bestScore = score
+                    print("new best score: ",bestScore)
+                    self.storeAllACOs(problemName+"_maxRuntimeGA_"+str(ga.terminators[-1].maxRuntime),acos)
+                time.sleep(1)
                 #self.waitForIt(it=acoThread.is_alive,toBe=False)
+        print("done")
         return
+    def storeAllACOs(self,name,acos):
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        for i,aco in enumerate(acos):
+            if aco is None:
+                continue
+            aco.pickleStoreBestSol(name+"_ACO_nr_"+str(i)+"_"+timestamp)
 
     def optimizeWithParams(self,gaParams:dict, acoParams:dict, nrThreads = 3):
         print("init GA")
@@ -108,7 +117,7 @@ class VRPsolver:
                         bestScore = score
                         print("new best score: ",bestScore)
                     if not acoThread.is_alive():
-                        continue
+                        break
                     time.sleep(2)
                 #self.waitForIt(it=acoThread.is_alive,toBe=False)
         return
@@ -226,3 +235,7 @@ class VRPsolver:
         verbose = copy.deepcopy(acoParams["verbose"])
         return ACO.Ant_Colony_Optimizer(tspProblem, initializer, evaporator, intensifier, solutionGen, terminators, 3,
                                        qualityDependence, verbose)
+
+
+if __name__ == '__main__':
+    mp.freeze_support()

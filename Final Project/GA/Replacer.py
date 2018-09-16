@@ -67,7 +67,7 @@ class RouletteReplacer(Replacer):
     def dynamicAdaptation(self, progress):
         if not self.dynAdapt:
             return
-        self.targetPopSize = int(self.firstPopSize * min(1,(1.5 - progress)))
+        self.targetPopSize = int(self.firstPopSize * min(1,(1.1 - progress)))
 
 
 class deleteAllReplacer(Replacer):
