@@ -92,5 +92,9 @@ class VehicleRoutingProblem(PermutationProblem):
             score += np.sum(costs)
         return score
 
-    def get_size(self):
+    def get_size(self) -> float:
+        """
+        calculate the problem size (number of columns in the distance matrix)
+        :return:
+        """
         return self.distance_matrix.shape[0]

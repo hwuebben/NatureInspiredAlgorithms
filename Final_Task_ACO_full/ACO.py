@@ -7,6 +7,9 @@ from Terminator import *
 
 
 class AntColonyOptimizer:
+    """
+    Main class of the ant colony optimizer
+    """
 
     def __init__(self,
                  problem: VehicleRoutingProblem,
@@ -18,6 +21,18 @@ class AntColonyOptimizer:
                  num_solutions: int=1,
                  quality_dependence: bool=False,
                  verbose: bool=False):
+        """
+
+        :param problem:     the vehicle routing problem to solve
+        :param initializer:
+        :param evaporator:
+        :param intensifier:
+        :param solution_gen:
+        :param terminator:
+        :param num_solutions:
+        :param quality_dependence:
+        :param verbose:
+        """
 
         self.problem = problem
         self.initializer = initializer

@@ -1,7 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_evolution(results, nrBoxplots):
+def plot_evolution(results: list, nrBoxplots: int) -> None:
+    """
+    Print the evolution of the model
+    :param results: the output of the ACO as list or
+    :param nrBoxplots: the number of boxplots on the plot
+    :return:
+    """
     plt.figure(figsize=(20,8))
     plt.title('Distribution of results for each generation')
     nrGenerations = results.shape[0]

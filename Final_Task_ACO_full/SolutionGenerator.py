@@ -20,7 +20,7 @@ class AbstractSolutionGenerator(ABC):
         """
         pass
 
-    def get_solutions(self, pheromone_matrix: np.array):
+    def get_solutions(self, pheromone_matrix: np.array) -> np.array:
         """
         Create solutions corresponding to the number of ants and returns them in descent order by their score
         :param pheromone_matrix: the pheromon values for each decision
@@ -73,7 +73,7 @@ class VRPSolutionGenerator(AbstractSolutionGenerator):
         else:
             self.nominator = lambda x, y, z: np.power(x[y, z], self.alpha)
 
-    def construct_single_solution(self, pheromone_matrix: np.array):
+    def construct_single_solution(self, pheromone_matrix: np.array) -> list:
         """
         Creates a single solution for a permutation based on the pheromone matrix.
 

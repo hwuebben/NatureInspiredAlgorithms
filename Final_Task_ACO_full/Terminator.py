@@ -4,12 +4,20 @@ import numpy as np
 import time
 
 class Terminator(ABC):
+    """
+    Astract terminator, the objects defines the termination condition of the learning process
+    """
 
     @abstractmethod
-    def checkTermination(self, aco):
+    def checkTermination(self, aco) -> bool:
+        """
+        Checks if the learning process reached it's goalstate
+        :param aco: the optimizer
+        :return: False: commence training, True: goalstate reached, end training
+        """
         pass
 
-    def estimateProgress(self):
+    def estimateProgress(self) -> float:
         """
         return the progress (from 0-1) of the GA
         this method CAN be overwritten to enable modules to change
@@ -28,12 +36,12 @@ class maxItTerminator(Terminator):
         """
         self.maxIt = maxIt
 
-    def checkTermination(self, aco):
+    def checkTermination(self, aco) -> float:
         if aco.nrIt >= self.maxIt:
             return True
         return False
 
-    def estimateProgress(self):
+    def estimateProgress(self) -> bool:
         return self.nrIt/self.maxIt
 
 class maxRuntimeTerminator(Terminator):
@@ -46,14 +54,14 @@ class maxRuntimeTerminator(Terminator):
         self.maxRuntime = maxRuntime
         self.startTime = None
 
-    def checkTermination(self, aco):
+    def checkTermination(self, aco) -> bool:
         if self.startTime is None:
             self.startTime = time.time()
             return False
         else:
             return ((self.startTime+self.maxRuntime) <= time.time())
 
-    def estimateProgress(self):
+    def estimateProgress(self) -> bool:
         return (time.time()-self.startTime) / self.maxRuntime
 
 
@@ -71,7 +79,7 @@ class convergenceTerminator(Terminator):
         self.maxIter = maxIter
         self.rtol = rtol
 
-    def checkTermination(self, aco):
+    def checkTermination(self, aco) -> bool:
         perf = aco.iteration_best_score
         if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
             self.counter += 1
@@ -79,6 +87,3 @@ class convergenceTerminator(Terminator):
         if self.counter >= self.maxIter:
             return True
         return False
-
-
-
