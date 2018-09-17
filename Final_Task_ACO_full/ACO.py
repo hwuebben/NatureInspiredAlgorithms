@@ -24,14 +24,14 @@ class AntColonyOptimizer:
         """
 
         :param problem:     the vehicle routing problem to solve
-        :param initializer:
-        :param evaporator:
-        :param intensifier:
-        :param solution_gen:
-        :param terminator:
-        :param num_solutions:
-        :param quality_dependence:
-        :param verbose:
+        :param initializer: Initializer object for initializing the pheromon matrix
+        :param evaporator:  Evaporation strategy for the pheromone matrix
+        :param intensifier: Intensifier strategy for the peromone matrix
+        :param solution_gen: Solution Generator strategy
+        :param terminator:  One or multiple terminators that act as stop condicitons for the optimization process
+        :param num_solutions: the number of solutions to generate
+        :param quality_dependence: switching on and off if the intensifier update should be score dependant
+        :param verbose:     if true, get updates about the training process each iteration
         """
 
         self.problem = problem
@@ -53,7 +53,11 @@ class AntColonyOptimizer:
         self.best_score = -1
         self.iteration_best_score = -1
 
-    def run(self):
+    def run(self) -> tuple:
+        """
+        The run function executes the optimization process, utilizing the modules provided in the constructor.
+        :return: two numpy arrays: the solutions and their respective scores.
+        """
         while not any([t.checkTermination(self) for t in self.terminator]):
             # Construct solutions and evaluate solutions
             iteration_solutions, iteration_scores = self.solution_generator.get_solutions(self.pheromone_matrix)

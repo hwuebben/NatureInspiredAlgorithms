@@ -8,7 +8,7 @@ from Heuristics import TSPHeuristic
 from Terminator import *
 import time
 
-
+# Setup of all ACO components
 problem = VehicleRoutingProblem(problem=2)
 initializer = VRP_Initializer()
 evaporator = Evaporator(rho=0.05)
@@ -17,6 +17,7 @@ heuristic = TSPHeuristic
 solution_gen = VRPSolutionGenerator(number_of_ants=80, alpha=2, beta=5, heuristic=heuristic, problem=problem)
 terminator = [maxItTerminator(maxIt=100), convergenceTerminator(maxIter=20)]
 
+# Print the Vehicle Routing Problem
 vehicles = problem.capacity.shape[0]
 items = problem.demand.shape[0] + 1
 print('Number of vehicles: ' + str(vehicles))
@@ -27,8 +28,11 @@ print('Capacity: ' + str(problem.capacity))
 print('Transportation cost: \n' + str(problem.transportation_cost))
 print('Transportation cost per item: \n' + str(problem.transportation_cost / problem.capacity))
 
+
+# Instantiate the ACO
 aco = AntColonyOptimizer(problem, initializer, evaporator, intensifier, solution_gen, terminator, 3, True, True)
 
+# Run the ACO optimizer
 startTime = time.time()
 solutions, scores = aco.run()
 print('Runtime: ' + str(time.time() - startTime) + ' seconds')
@@ -45,6 +49,7 @@ print('Runtime per iteration: ' + str((time.time() - startTime) / solutions.shap
 
 print('Best score: ' + str(aco.best_score))
 
+# Receive best solution and print some additional info
 zero_vehicles = list()
 selected_vehicles = list()
 best_solution = np.array(aco.best_solution)

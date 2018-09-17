@@ -37,11 +37,20 @@ class maxItTerminator(Terminator):
         self.maxIt = maxIt
 
     def checkTermination(self, aco) -> float:
+        """
+        checks if the maximum number if iterations are done, if so: True else False
+        :param aco:
+        :return:
+        """
         if aco.nrIt >= self.maxIt:
             return True
         return False
 
     def estimateProgress(self) -> bool:
+        """
+        percentage of iterations performed
+        :return:
+        """
         return self.nrIt/self.maxIt
 
 class maxRuntimeTerminator(Terminator):
@@ -55,6 +64,11 @@ class maxRuntimeTerminator(Terminator):
         self.startTime = None
 
     def checkTermination(self, aco) -> bool:
+        """
+        check if the maximum runtime was reached
+        :param aco: ACO optimizer
+        :return: true if runtime maximum has been surpassed, else false
+        """
         if self.startTime is None:
             self.startTime = time.time()
             return False
@@ -62,6 +76,10 @@ class maxRuntimeTerminator(Terminator):
             return ((self.startTime+self.maxRuntime) <= time.time())
 
     def estimateProgress(self) -> bool:
+        """
+        return the percentage of the time intervall that allready has passed
+        :return:
+        """
         return (time.time()-self.startTime) / self.maxRuntime
 
 
@@ -80,6 +98,11 @@ class convergenceTerminator(Terminator):
         self.rtol = rtol
 
     def checkTermination(self, aco) -> bool:
+        """
+        checks if the model is converged or didn't exceeded the maximum number of iterations
+        :param aco: ACO optimizer
+        :return: True if converged (or maxIter iterations reached) else False
+        """
         perf = aco.iteration_best_score
         if np.isclose(perf, self.lastPerf, rtol=self.rtol, atol=0):
             self.counter += 1
