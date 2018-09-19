@@ -70,7 +70,8 @@ class PermutationSolutionGenerator(AbstractSolutionGenerator):
         """
         steps = self.problem.get_size()
         selectable_items = np.arange(1, steps, 1)
-        solution = np.array([0])
+        #solution = np.array([0])
+        solution = [0]
 
         for step in range(steps-1):
             # Determine probabilities for next item
@@ -80,7 +81,8 @@ class PermutationSolutionGenerator(AbstractSolutionGenerator):
             # Choose next item based on probabilities
             next_item = np.random.choice(np.arange(0, selectable_items.shape[0], 1), 1, False, p_items)
             # Add next chosen item to solution and remove it from selectable solutions
-            solution = np.append(solution, selectable_items[next_item])
+            #solution = np.append(solution, selectable_items[next_item])
+            solution.append(selectable_items[next_item])
             selectable_items = np.delete(selectable_items, next_item)
 
-        return solution
+        return np.array(solution)

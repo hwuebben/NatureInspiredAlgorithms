@@ -38,9 +38,13 @@ def calcOverallRes(vehicleRes, problemName):
     if problemName == "VRP2":
         VRPcosts = np.array([8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 12, 12, 12, 12, 12, 12, 12, 16, 16, 16, 16, 19, 19 ])
     vehicleResArr = np.zeros(VRPcosts.size)
-    for i,x in vehicleRes.items():
-        vehicleResArr[i] = x
-    return np.sum(vehicleResArr * VRPcosts)
+    problems = np.zeros(VRPcosts.size,dtype=object)
+    solutions = np.zeros(VRPcosts.size,dtype=object)
+    for i,results in vehicleRes.items():
+        vehicleResArr[i] = results[2]
+        problems[i] = results[1]
+        solutions[i] = results[0]
+    return problems, solutions, np.sum(vehicleResArr * VRPcosts)
 directory = "finalResults"
 
 resultsVRP1 = {}
@@ -66,39 +70,61 @@ for filename in os.listdir(directory):
         resultDict[runtime] ={}
         runtimeDict = resultDict[runtime]
     try:
-        runtimeDict[timestamp][vehicleID] = bestScore
+        runtimeDict[timestamp][vehicleID] = results
     except:
         runtimeDict[timestamp] = {}
-        runtimeDict[timestamp][vehicleID] = bestScore
+        runtimeDict[timestamp][vehicleID] = results
 if problemName == "VRP1":
     resultsVRP=timestampsToTimes(resultsVRP1)
 if problemName == "VRP2":
     resultsVRP=timestampsToTimes(resultsVRP2)
 
+allBestScore = np.inf
+allBestProbsAndSols = np.empty(2,dtype=object)
+print("start loop")
 for runtimeRes, timesRes in resultsVRP.items():
     scores = []
     times = []
+    problems = []
+    solutions = []
     for time, vehicleRes in timesRes.items():
-        score = calcOverallRes(vehicleRes,problemName)
+        print("time: ",time)
+        problem,solution,score = calcOverallRes(vehicleRes,problemName)
         scores.append(score)
+        problems.append(problem)
+        solutions.append(solutions)
         times.append(time)
+        #print("test")
+    # fig = plt.figure("results for "+problemName+" "+str(runtimeRes)+" seconds runtime")
+    # plt.xlabel("percent of runtime")
+    # plt.ylabel("score")
+    # plt.title("results for "+problemName+" "+str(runtimeRes)+" seconds runtime")
 
-    fig = plt.figure("results for "+problemName+" "+str(runtimeRes)+" seconds runtime")
-    plt.xlabel("percent of runtime")
-    plt.ylabel("score")
-    plt.title("results for "+problemName+" "+str(runtimeRes)+" seconds runtime")
-    bestScore = np.inf
     sortArgs = np.argsort(times)
     times = np.array(times)[sortArgs]
     scores = np.array(scores)[sortArgs]
+    problems = np.array(problems)[sortArgs]
+    solutions = np.array(solutions)[sortArgs]
 
+    bestScore = np.inf
+    print("test1")
     for i,time in enumerate(times):
+        print("test2")
         if scores[i] < bestScore:
-            plt.plot(time,scores[i],"ro")
+            #plt.plot(time,scores[i],"ro")
             bestScore = scores[i]
-    plt.suptitle("best score: "+str(bestScore))
-    #plt.show()
-    fig.savefig("results for "+problemName+" "+str(runtimeRes)+" seconds runtime")
+            if bestScore < allBestScore:
+                allBestScore = bestScore
+                allBestProbsAndSols[0] = problems[i]
+                allBestProbsAndSols[1] = solutions[i]
+
+    print(runtimeRes)
+
+    # plt.suptitle("best score: "+str(bestScore))
+    # #plt.show()
+    # fig.savefig("results for "+problemName+" "+str(runtimeRes)+" seconds runtime")
+print("done")
+np.savetxt("AllBest for "+problemName,allBestProbsAndSols)
 
 
 
