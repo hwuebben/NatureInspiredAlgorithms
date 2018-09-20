@@ -22,7 +22,7 @@ def calcOverallRes(vehicleRes, problemName):
     return problems, solutions, np.sum(vehicleResArr * VRPcosts)
 
 
-problemName = "VRP1"
+problemName = "VRP2"
 directory = "finalResults"
 resultsVRP1 = {}
 resultsVRP2 = {}
@@ -72,21 +72,27 @@ for runtimeRes, timesRes in resultsVRP.items():
         bestAcoSolutions = solution
 
 file2write = open("bestSol" + problemName, 'w')
-file2write.write(problemName + "\n")
-file2write.write(str(bestScore) + "\n")
-file2write.write(bestRunTime + "\n")
+file2write.write("problem Name: "+problemName + "\n")
+file2write.write("score: "+str(bestScore) + "\n")
+file2write.write("timestamp: "+bestRunTime + "\n")
+file2write.write("\n")
 file2write.write("problems by vehicles:" + "\n")
 for i, prob in enumerate(bestAcoProblems):
+    file2write.write(str(i)+":\n")
     if isinstance(prob, int):
-        file2write.write(str(i) + ": " + str(prob) + "\n")
+        file2write.write(str(prob) + "\n")
     else:
-        file2write.write(str(i) + ": " + np.array2string(prob.distance_matrix) + "\n")
-for i,sol in enumerate(bestAcoSolutions):
-    if isinstance(sol, int):
-        file2write.write(str(i) + ": " + str(sol) + "\n")
-    else:
-        file2write.write(str(i) + ": " + np.array2string(sol) + "\n")
+        file2write.write(np.array2string(prob.distance_matrix) + "\n")
 
+file2write.write("\n")
+
+file2write.write("solutions by vehicles:" + "\n")
+for i,sol in enumerate(bestAcoSolutions):
+    file2write.write(str(i)+":\n")
+    if isinstance(sol, int):
+        file2write.write(str(sol) + "\n")
+    else:
+        file2write.write(np.array2string(sol) + "\n")
 file2write.close()
 
 # np.savetxt("bestSol"+problemName,bestAcoProblems)

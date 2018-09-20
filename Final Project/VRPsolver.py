@@ -7,6 +7,7 @@ import pickle
 import threading
 from ACO.ACO import Ant_Colony_Optimizer
 import multiprocessing as mp
+from SolutionVRP import SolutionVRP
 from GeneticAlgorithm import GeneticAlgorithm
 
 class VRPsolver:
@@ -45,12 +46,15 @@ class VRPsolver:
         gaPro = mp.Process(target=ga.runWithPipe,args=(child_conn,))
         print("start running GA Thread")
         gaPro.start()
+        self.bestSolution = None
         #keepGoing = True
         while gaPro.is_alive():
             #keepGoing = gaPro.is_alive()
+            #get best GA indvidual(s)
             parent_conn.send(0)
-            distMatrices = parent_conn.recv().extractDistMatrices()
-            bestScore = np.inf
+            gaInd = parent_conn.recv()
+            distMatrices = gaInd.extractDistMatrices()
+            #bestScore = np.inf
             print("new distMatrix")
             startTime = time.time()
             print("start optimizing TSPs with ACO")
@@ -61,16 +65,23 @@ class VRPsolver:
             #print("done with ACO, runtime: ",time.time()-startTime)
             while keepGoingACO:
                 keepGoingACO = stillAlive()
-
-                score = self.evalSol(self.calcBestScores(acos,distMatrices))
-                if score < bestScore:
-                    bestScore = score
-                    print("new best score: ",bestScore)
-                    self.storeAllACOs(problemName+"_maxRuntimeGA_"+str(ga.terminators[-1].maxRuntime),acos)
+                scoresAndSols = self.calcBestScoresSols(acos,distMatrices)
+                score = self.evalSol(scoresAndSols[0])
+                if (self.bestSolution is None) or (score < self.bestSolution.solution["score"]):
+                    self.bestSolution = SolutionVRP(problemName,self.vrpProblem,score,gaInd.assign,
+                                               distMatrices,scoresAndSols[1])
+                # if score < bestScore:
+                #     bestScore = score
+                #     print("new best score: ",bestScore)
+                #     self.storeAllACOs(problemName+"_maxRuntimeGA_"+str(ga.terminators[-1].maxRuntime),acos)
                 time.sleep(1)
                 #self.waitForIt(it=acoThread.is_alive,toBe=False)
         print("done")
-        return
+        return self.bestSolution
+
+    def getBestSeen(self):
+        return self.bestSolution
+
     def storeAllACOs(self,name,acos):
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         for i,aco in enumerate(acos):
@@ -121,15 +132,18 @@ class VRPsolver:
                     time.sleep(2)
                 #self.waitForIt(it=acoThread.is_alive,toBe=False)
         return
-    def calcBestScores(self,acos,distMatrices):
-        bestScores = np.empty(len(distMatrices))
+    def calcBestScoresSols(self,acos,distMatrices):
+        bestScores = np.zeros(len(distMatrices))
+        acoSols = np.zeros(len(distMatrices),dtype=object)
         for i in range(acos.size):
             if acos[i] is None:
-                bestScores[i] = 0
+                continue
             else:
                 self.waitForIt(it=acos[i].hasSolScore, period=0.1)
-                bestScores[i] = acos[i].getBestSolScore()[1]
-        return bestScores
+                solScore = acos[i].getBestSolScore()
+                bestScores[i] = solScore[1]
+                acoSols[i] = solScore[0]
+        return bestScores, acoSols
     def waitForIt(self,it,toBe=True,period=0.1):
         while True:
             if it() == toBe: return
