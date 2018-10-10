@@ -1,4 +1,4 @@
-from Problem import Problem
+from ACO.Problem import Problem
 from ACO.Evaporator import Evaporator
 from ACO.Initializer import AbstractInitializer
 from ACO.Intensifier import Intensifier

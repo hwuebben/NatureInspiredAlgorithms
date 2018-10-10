@@ -1,8 +1,8 @@
 import numpy as np
 from abc import abstractmethod
-from Problem import Problem, PermutationProblem
-from Heuristics import Heuristic
-from Module import Module
+from ACO.Problem import Problem, PermutationProblem
+from ACO.Heuristics import Heuristic
+from ACO.Module import Module
 
 
 class AbstractSolutionGenerator(Module):

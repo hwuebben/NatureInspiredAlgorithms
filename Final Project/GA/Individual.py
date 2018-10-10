@@ -1,6 +1,6 @@
 from __future__ import division
 import numpy as np
-from ProblemDefinition import ProblemDefinition as PD
+from GA.ProblemDefinition import ProblemDefinition as PD
 from abc import ABC, abstractmethod
 import Heuristic
 

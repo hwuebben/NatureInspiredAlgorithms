@@ -1,6 +1,6 @@
 import numpy as np
-from Individual import Individual
-import LocalSearcher
+from GA.Individual import Individual
+import GA.LocalSearcher as LocalSearcher
 import copy
 import pickle
 import time

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from ProblemDefinition import ProblemDefinition as PD
+from GA.ProblemDefinition import ProblemDefinition as PD
 
 
 class LocalSearcher(ABC):

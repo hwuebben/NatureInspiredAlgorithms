@@ -8,7 +8,7 @@ import threading
 from ACO.ACO import Ant_Colony_Optimizer
 import multiprocessing as mp
 from SolutionVRP import SolutionVRP
-from GeneticAlgorithm import GeneticAlgorithm
+from GA.GeneticAlgorithm import GeneticAlgorithm
 
 class VRPsolver:
 
@@ -209,7 +209,7 @@ class VRPsolver:
 
     @classmethod
     def __initGA(cls,vrpProblem, gaParams):
-        from GeneticAlgorithm import GeneticAlgorithm
+        from GA.GeneticAlgorithm import GeneticAlgorithm
         try:
             initializer = gaParams["initializer"]
             mutators = gaParams["mutators"]

@@ -2,7 +2,7 @@ from __future__ import division
 from abc import abstractmethod
 import numpy as np
 import time
-from Module import Module
+from ACO.Module import Module
 
 class Terminator(Module):
 
