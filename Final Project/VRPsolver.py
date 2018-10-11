@@ -8,7 +8,7 @@ import threading
 from ACO.ACO import Ant_Colony_Optimizer
 import multiprocessing as mp
 from SolutionVRP import SolutionVRP
-from GeneticAlgorithm import GeneticAlgorithm
+from GA.GeneticAlgorithm import GeneticAlgorithm
 
 class VRPsolver:
 
@@ -48,11 +48,23 @@ class VRPsolver:
         gaPro.start()
         self.bestSolution = None
         #keepGoing = True
+        #already optimized Individuals
+        optimizedInds = set()
         while gaPro.is_alive():
             #keepGoing = gaPro.is_alive()
             #get best GA indvidual(s)
-            parent_conn.send(0)
-            gaInd = parent_conn.recv()
+            newIndFound = False
+            ithBest = 0
+            while not newIndFound:
+                parent_conn.send(ithBest)
+                gaInd = parent_conn.recv()
+                hashVal = hash(gaInd.assign.tobytes())
+                if not hashVal in optimizedInds:
+                    newIndFound = True
+                else:
+                    print("Ind: ",ithBest," has already been optimized")
+                    ithBest += 1
+                optimizedInds.add(hashVal)
             distMatrices = gaInd.extractDistMatrices()
             #bestScore = np.inf
             print("new distMatrix")
@@ -209,7 +221,7 @@ class VRPsolver:
 
     @classmethod
     def __initGA(cls,vrpProblem, gaParams):
-        from GeneticAlgorithm import GeneticAlgorithm
+        from GA.GeneticAlgorithm import GeneticAlgorithm
         try:
             initializer = gaParams["initializer"]
             mutators = gaParams["mutators"]
