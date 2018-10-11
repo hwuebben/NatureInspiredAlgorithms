@@ -1,6 +1,6 @@
 import numpy as np
 from abc import abstractmethod
-from Module import Module
+from ACO.Module import Module
 
 
 class AbstractInitializer(Module):

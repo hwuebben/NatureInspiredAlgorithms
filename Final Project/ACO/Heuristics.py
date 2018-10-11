@@ -1,7 +1,7 @@
 import numpy as np
-from Problem import Problem, TSPProblem
+from ACO.Problem import Problem, TSPProblem
 from abc import abstractmethod
-from Module import Module
+from ACO.Module import Module
 
 
 class Heuristic(Module):

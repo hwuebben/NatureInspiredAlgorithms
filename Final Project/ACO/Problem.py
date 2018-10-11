@@ -1,7 +1,7 @@
 import os
 import numpy as np
 from abc import abstractmethod
-from Module import Module
+from ACO.Module import Module
 
 
 class Problem(Module):
@@ -80,7 +80,7 @@ class TSPProblem(PermutationProblem):
         :param solution: NxN binary matrix
         :return:
         """
-        return np.sum(self.get_distance_matrix()[solution[0:-1], solution[1:]])
+        return np.sum(self.get_distance_matrix()[solution[0:-1], solution[1:]]) + self.get_distance_matrix()[solution[-1],0]
 
     def get_size(self):
         return self.distance_matrix.shape[0]

@@ -1,8 +1,8 @@
 from __future__ import division
 from abc import ABC, abstractmethod
 import numpy as np
-from ProblemDefinition import ProblemDefinition
-from Individual import Individual
+from GA.ProblemDefinition import ProblemDefinition
+from GA.Individual import Individual
 import copy
 import random
 

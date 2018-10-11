@@ -1,7 +1,6 @@
 import numpy as np
 from abc import ABC, abstractmethod
 from GA.ProblemDefinition import ProblemDefinition
-from GA.Individual import Individual
 from ACO.ACO import Ant_Colony_Optimizer
 #from VRPsolver import VRPsolver.initACO
 from ACO import Problem
@@ -11,7 +10,7 @@ class Heuristic:
 
     @classmethod
     @abstractmethod
-    def calcHeuVal(cls,ind:Individual, probDef: ProblemDefinition):
+    def calcHeuVal(cls,ind, probDef: ProblemDefinition):
         pass
 
 # class AcoHeuristic(Heuristic):
@@ -53,7 +52,7 @@ class BeardwoodHeuristic(Heuristic):
     the value of b is irrelevant since the heuristic only need to correlate with the actual value
     """
     @classmethod
-    def calcHeuVal(cls,ind:Individual, probDef: ProblemDefinition):
+    def calcHeuVal(cls,ind, probDef: ProblemDefinition):
         heuVals = np.empty(probDef.nrVehicles)
         #get nodes for each vehicle (graph)
         for vehicleInd in range(probDef.nrVehicles):
@@ -75,7 +74,7 @@ class DaganzoHeuristic(Heuristic):
     T* ~ 2D + 0.57(NA)½'
 
     """
-    def calcHeuVal(cls,ind:Individual, probDef: ProblemDefinition):
+    def calcHeuVal(cls,ind, probDef: ProblemDefinition):
         pass
 
 

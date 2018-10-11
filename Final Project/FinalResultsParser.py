@@ -45,7 +45,7 @@ def calcOverallRes(vehicleRes, problemName):
         problems[i] = results[1]
         solutions[i] = results[0]
     return problems, solutions, np.sum(vehicleResArr * VRPcosts)
-directory = "finalResults"
+directory = "."
 
 resultsVRP1 = {}
 resultsVRP2 = {}

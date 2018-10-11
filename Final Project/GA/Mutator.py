@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
-from Individual import Individual
-from ProblemDefinition import ProblemDefinition
+from GA.Individual import Individual
+from GA.ProblemDefinition import ProblemDefinition
 import copy
 import random
 

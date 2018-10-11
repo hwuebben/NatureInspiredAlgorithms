@@ -2,8 +2,8 @@ from VRPsolver import VRPsolver
 from Parser import Parser
 from GA.ProblemDefinition import ProblemDefinition
 import pickle
-from GeneticAlgorithm import GeneticAlgorithm
-from ProblemDefinition import ProblemDefinition
+from GA.GeneticAlgorithm import GeneticAlgorithm
+from GA.ProblemDefinition import ProblemDefinition
 import multiprocessing as mp
 
 
@@ -55,7 +55,7 @@ def runWithRuntime(runtime):
 if __name__ == '__main__':
     mp.freeze_support()
 
-    nameOfVRP = "VRP2"
+    nameOfVRP = "VRP1"
     capacity, demand, distance, transCost = Parser.readVRP(nameOfVRP)
     probDef = ProblemDefinition(capacity, demand, distance, transCost)
     vrpSolver = VRPsolver(probDef)
@@ -63,6 +63,7 @@ if __name__ == '__main__':
     runtime = 10
     bestSol = runWithRuntime(runtime)
     print("best Score: ",bestSol.solution["score"])
+    print(bestSol.solution)
     pickle._dump(bestSol, open("bestSol"+str(runtime)+"MinuteRun"+nameOfVRP+".p","wb"))
 
     # for problem in ["VRP1","VRP2"]:
