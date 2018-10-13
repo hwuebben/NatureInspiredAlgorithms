@@ -5,7 +5,7 @@ from GA.ProblemDefinition import ProblemDefinition
 from GA.Individual import Individual
 import copy
 import random
-
+import numba
 
 class Recombiner(ABC):
     @abstractmethod
@@ -170,7 +170,7 @@ class SmartInspirationalRecombiner(Recombiner):
                         if left == 0:
                             counter+=1
                             break
-                    assert(left == 0)
+                    #assert(left == 0)
                     #print("case 0")
 
                 #else revert changes
@@ -195,12 +195,126 @@ class SmartInspirationalRecombiner(Recombiner):
                         if left == 0:
                             counter += 1
                             break
-                    assert(left == 0)
+                    #assert(left == 0)
                     #print("case else")
         newIndi = Individual(newAssign,probDef)
         #assert((newIndi.assign != ind0.assign).any() and (newIndi.assign != ind1.assign).any())
         #assert(success)
         #newIndi.checkConsistency(probDef)
+        return newIndi
+    def dynamicAdaptation(self,progress):
+        if not self.dynAdapt:
+            return
+        self.recombineRatio = (1-progress)*self.originalrecombineRatio
+
+@numba.jit(nopython=True,cache=True)
+def SmartInspirationalRecombineJit(recombRatio, ind0Ass, ind1Ass, capacity, nrVehicles, problemSize):
+    newAssign = np.copy(ind0Ass)
+    loads = np.sum(newAssign, 0)
+    freeCaps = capacity - loads
+    """calculate potential inspiration points"""
+    potInds = np.nonzero(np.ravel((ind0Ass > 0) != (ind1Ass > 0)))
+    # potInds = np.nonzero(((ind0Ass > 0) != (ind1Ass > 0)))
+
+    """prefer those points that affect vehicles already used by ind0"""
+    vehiclesUsed = []
+    for vehicleInd in range(nrVehicles):
+        if (ind0Ass[:, vehicleInd] != 0).any():
+            vehiclesUsed.append(vehicleInd)
+    otherInds = []
+    prefInds = []
+    for i in range(potInds[0].size):
+        potIndX = potInds[0][i] // ind0Ass.shape[1]
+        potIndY = potInds[0][i] % ind0Ass.shape[1]
+        # potInd = [potIndX,potIndY]
+        if potIndY in vehiclesUsed:
+            prefInds.append(potInds[0][i])
+        else:
+            otherInds.append(potInds[0][i])
+    prefInds = np.array(prefInds)
+    otherInds = np.array(otherInds)
+    np.random.shuffle(prefInds)
+    np.random.shuffle(otherInds)
+    potInds = np.concatenate((prefInds, otherInds))
+
+    counter = 0
+    lastCounter = 0
+    nrInspirations = max(1, int(recombRatio * problemSize))
+    for potInd in potInds:
+        potIndX = potInd // ind0Ass.shape[1]
+        potIndY = potInd % ind0Ass.shape[1]
+        if counter == nrInspirations:
+            break
+        # if newAssign was edited recalculate loads and freeCaps
+        if counter > lastCounter:
+            loads = np.sum(newAssign, 0)
+            freeCaps = capacity - loads
+            lastCounter = counter
+
+        newAss = newAssign[potIndX]
+        newVal = ind1Ass[potIndX, potIndY]
+        oldVal = newAss[potIndY]
+
+        if newVal == 0:
+            # assign the new Value then try to make it work
+            newAss[potIndY] = newVal
+            # get only the non zero entries (0entries shouldn't be vhanged)
+            nonZeros = np.nonzero(newAss)[0]
+            # check whether it can be done
+            if np.sum(freeCaps[nonZeros]) >= oldVal:
+                # if so iterate over nonzero indices and repair
+                np.random.shuffle(nonZeros)
+                left = oldVal
+                for nz in nonZeros:
+                    addVal = min(freeCaps[nz], left)
+                    newAss[nz] += addVal
+                    left -= addVal
+                    if left == 0:
+                        counter += 1
+                        break
+                        # assert(left == 0)
+                        # print("case 0")
+
+            # else revert changes
+            else:
+                newAss[potIndY] = oldVal
+
+        else:
+
+            # check whether it can be done
+            potential = np.sum(newAss)
+            if freeCaps[potIndY] > 0 and potential > 0:
+                # if so do it
+                nonZeros = np.nonzero(newAss)[0]
+                newVal = min(newVal, potential, freeCaps[potIndY])
+                newAss[potIndY] = newVal
+                np.random.shuffle(nonZeros)
+                left = newVal
+                for nz in nonZeros:
+                    subVal = min(newAss[nz], left)
+                    newAss[nz] -= subVal
+                    left -= subVal
+                    if left == 0:
+                        counter += 1
+                        break
+                        # assert(left == 0)
+                        # print("case else")
+
+    # assert((newIndi.assign != ind0.assign).any() and (newIndi.assign != ind1.assign).any())
+    # assert(success)
+    # newIndi.checkConsistency(probDef)
+    return newAssign
+class SmartInspirationalRecombinerJit(Recombiner):
+    def __init__(self,recombineRatio,dynAdapt = True):
+        self.originalrecombineRatio = recombineRatio
+        self.recombineRatio = recombineRatio
+        self.dynAdapt = dynAdapt
+
+    def recombine(self, probDef, ind0, ind1):
+        recombRatio = self.recombineRatio
+        newAssign = SmartInspirationalRecombineJit(recombRatio,ind0.assign,ind1.assign,probDef.capacity,
+                                  probDef.nrVehicles,probDef.problemSize)
+        newIndi = Individual(newAssign, probDef)
         return newIndi
     def dynamicAdaptation(self,progress):
         if not self.dynAdapt:

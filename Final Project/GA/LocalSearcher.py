@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import numpy as np
 from GA.ProblemDefinition import ProblemDefinition as PD
-
+import numba
 
 class LocalSearcher(ABC):
     @abstractmethod
@@ -79,6 +79,50 @@ class TspTourSimplifierQuick(LocalSearcher):
             #ind.checkConsistency(PD.probDef)
         return ind
 
+
+@numba.jit(nopython=True, cache=True)
+def simplifierQuickJit(assign, capacity, singleIteration):
+    # loads
+    loads = np.sum(assign, 0)
+    # remaining capacities
+    remCaps = capacity - loads
+    changesMadeTotal = False
+    while True:
+        changesMadeIter = False
+        for i in range(assign.shape[0]):
+            nodeAssign = assign[i]
+            inds = np.nonzero(nodeAssign > 0)[0]
+            maxInd = np.argmax(remCaps[inds])
+            minAssignInd = np.argmin(nodeAssign[inds])
+            # check whether the smallest assignment can be removed (taken over)
+            if (maxInd != minAssignInd) and (remCaps[inds[maxInd]] >= nodeAssign[inds[minAssignInd]]):
+                nodeAssign[inds[maxInd]] += nodeAssign[inds[minAssignInd]]
+                # fix remCaps
+                remCaps[inds[maxInd]] -= nodeAssign[inds[minAssignInd]]
+                remCaps[inds[minAssignInd]] += nodeAssign[inds[minAssignInd]]
+                # set to zero
+                nodeAssign[inds[minAssignInd]] = 0
+                changesMadeIter = True
+                changesMadeTotal = True
+        # break if singleIteration or changes have been made
+        if singleIteration or (not changesMadeIter):
+            break
+    return changesMadeTotal
+class TspTourSimplifierQuickJit(LocalSearcher):
+    def __init__(self,singleIteration=True):
+        self.singleIteration = singleIteration
+    """
+    Tries to simplify tsp tours, by identifying redundant vehicles.
+    """
+    def search(self, ind,probDef):
+
+        changesMadeTotal= simplifierQuickJit(ind.assign,probDef.capacity,self.singleIteration)
+        if changesMadeTotal:
+            ind.recalcFitness()
+            #ind.checkConsistency(PD.probDef)
+        return ind
+
+
 class TspTourSimplifier(LocalSearcher):
     def __init__(self,singleIteration=True):
         self.singleIteration = singleIteration
@@ -118,6 +162,55 @@ class TspTourSimplifier(LocalSearcher):
             #break if singleIteration or changes have been made
             if self.singleIteration or (not changesMadeIter):
                 break
+        if changesMadeTotal:
+            ind.recalcFitness()
+            #ind.checkConsistency(PD.probDef)
+        return ind
+
+@numba.jit(nopython=True, cache=True)
+def simplifierJit(assign, capacity, singleIteration):
+    # loads
+    loads = np.sum(assign, 0)
+    # remaining capacities
+    remCaps = capacity - loads
+    changesMadeTotal = False
+    while True:
+        changesMadeIter = False
+        for i in range(assign.shape[0]):
+            nodeAssign = assign[i]
+            inds = np.nonzero(nodeAssign > 0)[0]
+            maxInd = np.argmax(remCaps[inds])
+            minAssignInd = np.argmin(nodeAssign[inds])
+            # check whether the smallest assignment can be removed (taken over)
+            if (maxInd != minAssignInd) and (remCaps[inds[maxInd]] >= nodeAssign[inds[minAssignInd]]):
+                np.random.shuffle(inds)
+                # iterate over all inds randomly and try to do the trick
+                for i, idx in enumerate(inds):
+                    suitableInds = np.nonzero(remCaps[idx] >= nodeAssign[inds[i + 1::]])[0]
+                    if suitableInds.size == 0:
+                        continue
+                    # get the absolute nodeAssign indice of suitable element
+                    naInd = inds[np.random.choice(suitableInds) + i + 1]
+                    nodeAssign[idx] += nodeAssign[naInd]
+                    # fix remCaps
+                    remCaps[idx] -= nodeAssign[naInd]
+                    remCaps[naInd] += nodeAssign[naInd]
+                    # set to zero
+                    nodeAssign[naInd] = 0
+                    changesMadeIter = True
+                    changesMadeTotal = True
+        # break if singleIteration or changes have been made
+        if singleIteration or (not changesMadeIter):
+            break
+    return changesMadeTotal
+class TspTourSimplifierJit(LocalSearcher):
+    def __init__(self,singleIteration=True):
+        self.singleIteration = singleIteration
+    """
+    Tries to simplify tsp tours, by identifying redundant vehicles.
+    """
+    def search(self, ind,probDef):
+        changesMadeTotal = simplifierJit(ind.assign,probDef.capacity,self.singleIteration)
         if changesMadeTotal:
             ind.recalcFitness()
             #ind.checkConsistency(PD.probDef)

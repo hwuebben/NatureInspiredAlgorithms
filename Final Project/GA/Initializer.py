@@ -38,3 +38,21 @@ class HeuristicInitializer(Initializer):
             population[i] = Individual.initIndividual(probDef, "heuristic")
             # population[i].checkConsistency(probDef)
         return population
+
+class HeuristicInitializer2(Initializer):
+
+    def initialize(self, probDef, popSize):
+        population = np.empty(popSize, dtype=Individual)
+        for i in range(popSize):
+            population[i] = Individual.initIndividual(probDef, "heuristic2")
+            # population[i].checkConsistency(probDef)
+        return population
+
+class MixedInitializer(Initializer):
+
+    def initialize(self, probDef, popSize):
+        population = np.empty(popSize, dtype=Individual)
+        for i in range(popSize):
+            population[i] = Individual.initIndividual(probDef, "mixed")
+            # population[i].checkConsistency(probDef)
+        return population

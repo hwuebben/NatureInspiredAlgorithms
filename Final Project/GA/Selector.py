@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import numpy as np
-
+import numba
 
 class Selector(ABC):
 
@@ -25,12 +25,12 @@ class Selector(ABC):
 
 class RouletteSelector(Selector):
     def setProbs(self,pop):
-        probs = [x.fitness for x in pop]
-        #if fitness values are negative, make positive
-        minProb = min(probs)
-        if minProb < 0:
-            probs -= (minProb-1)
-        probs /= sum(probs)
+        #since fitness values are negative, make positive
+        minProb = np.min(pop).fitness
+        maxProb = np.max(pop).fitness
+        probs = np.array([x.fitness - (minProb+maxProb) for x in pop])
+
+        probs /= np.sum(probs)
         self.probs = probs
     def select(self, pop):
         """
@@ -45,11 +45,37 @@ class RouletteSelector(Selector):
         #if fitness values are negative, make positive
         minProb = min(probs)
         if minProb < 0:
-            probs -= (minProb-1)
+            probs -= (minProb+max(probs))
         probs /= sum(probs)
         result = np.random.choice(pop,size=nrSelect,replace=False, p=probs)
         return result
+class RouletteSelectorJit(Selector):
+    def setProbs(self,pop):
+        def f(minProb,maxProb):
+            #since fitness values are negative, make positive
+            minProb = np.min(pop).fitness
+            maxProb = np.max(pop).fitness
+            probs = np.array([x.fitness - (minProb+maxProb) for x in pop])
 
+            probs /= np.sum(probs)
+            self.probs = probs
+    def select(self, pop):
+        """
+        perform roulette wheel selection on pop
+        :param pop:
+        :return: selected individual
+        """
+        result = np.random.choice(pop,size=2,replace=False, p=self.probs)
+        return result[0],result[1]
+    def singleSelect(self,pop,nrSelect):
+        probs = [x.fitness for x in pop]
+        #if fitness values are negative, make positive
+        minProb = min(probs)
+        if minProb < 0:
+            probs -= (minProb+max(probs))
+        probs /= sum(probs)
+        result = np.random.choice(pop,size=nrSelect,replace=False, p=probs)
+        return result
 
 class SmartRouletteSelector(Selector):
 

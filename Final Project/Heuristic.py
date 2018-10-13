@@ -59,6 +59,27 @@ class BeardwoodHeuristic(Heuristic):
             distMatrix = ind.extractDistMatrix(vehicleInd)
             heuVals[vehicleInd] = np.mean(distMatrix) * distMatrix.shape[0] * probDef.transCost[vehicleInd]
         return -np.sum(heuVals)
+class BeardwoodHeuristic2(Heuristic):
+    """
+    'In 1959,´Beardwood et al. [1] derived an asymptotic expected tour length formula.
+    T* ~ b(NA)½, for euclidean distances
+    N = number of points
+    A = Area
+    b=0.75 has been approximated for large N'
+    Since A only exists in euclidean problems it will be replaced by
+    the average distance between all points
+    the value of b is irrelevant since the heuristic only need to correlate with the actual value
+    """
+    @classmethod
+    def calcHeuVal(cls,ind, probDef: ProblemDefinition):
+        heuVals = np.zeros(probDef.nrVehicles)
+        #get nodes for each vehicle (graph)
+        for vehicleInd in range(probDef.nrVehicles):
+            distMatrix = ind.extractDistMatrix(vehicleInd)
+            if distMatrix.shape[0] > 1:
+                heuVals[vehicleInd] = (np.mean(distMatrix[:,0]) + np.mean(distMatrix[0,:]) + \
+                                      np.mean(distMatrix[1::,1::]) * (distMatrix.shape[0]-1)) * probDef.transCost[vehicleInd]
+        return -np.sum(heuVals)
 
 
 class DaganzoHeuristic(Heuristic):

@@ -4,7 +4,7 @@ from GA.Individual import Individual
 from GA.ProblemDefinition import ProblemDefinition
 import copy
 import random
-
+import numba
 class Mutator(ABC):
 
     @abstractmethod
@@ -68,6 +68,7 @@ class RearrangeRecombiner(Mutator):
                 assigned[fracInds[mask][maxInd]] += 0.5
             #TODO: stopped here
 
+
 class RandomSwapMutator(Mutator):
     def __init__(self,mutationProb=0.5,dynAdapt = True):
         self.mutationProb = mutationProb
@@ -115,6 +116,68 @@ class RandomSwapMutator(Mutator):
                         break
             #assert(nodeIndiceDone)
         toMutate.recalcFitness()
+        #toMutate.checkConsistency(probDef)
+
+    def dynamicAdaptation(self, progress):
+        if not self.dynAdapt:
+            return
+        self.mutationProb = self.origMutationProb * (1-progress)
+
+
+@numba.jit(nopython=True, cache=True)
+def doRandomSwapMutation(assign,capacity,nrNodes,nrVehicles,mutationProb):
+    # toMutate.checkConsistency(probDef)
+    # calculate free capacities
+    loads = np.sum(assign, 0)
+    freeCaps = capacity - loads
+    # try node indices each entry one by one in random order
+    mask = np.random.rand(nrNodes)
+    nInds = np.nonzero(mask < mutationProb)[0]
+    if nInds.size == 0:
+        nInds = np.array([np.random.randint(0, nrNodes)])
+    # np.random.shuffle(nInds)
+    # try vehicle indices each entry one by one in random order
+    vInds = np.arange(nrVehicles)
+    np.random.shuffle(vInds)
+    for nInd0 in nInds:
+        NodeAssign = assign[nInd0]
+        nodeIndiceDone = False
+        for i, vInd0 in enumerate(vInds):
+            if nodeIndiceDone:
+                break
+            for vInd1 in vInds[i + 1::]:
+                isSuited0 = (NodeAssign[vInd0] != NodeAssign[vInd1])
+                if not isSuited0:
+                    continue
+                isSuited1 = (NodeAssign[vInd0] <= (freeCaps[vInd1] + NodeAssign[vInd1])) and (
+                NodeAssign[vInd1] <= (freeCaps[vInd0] + NodeAssign[vInd0]))
+                isSuited = isSuited0 and isSuited1
+                # also make sure to not swap two identical values
+
+                if isSuited:
+                    # do the swap:
+                    ass = NodeAssign[vInd0]
+                    NodeAssign[vInd0] = NodeAssign[vInd1]
+                    NodeAssign[vInd1] = ass
+                    # repair freeCaps
+                    diff = NodeAssign[vInd0] - NodeAssign[vInd1]
+                    freeCaps[vInd0] -= diff
+                    freeCaps[vInd1] += diff
+                    nodeIndiceDone = True
+                    break
+    return nodeIndiceDone
+
+class RandomSwapMutatorJit(Mutator):
+    def __init__(self,mutationProb=0.5,dynAdapt = True):
+        self.mutationProb = mutationProb
+        self.origMutationProb = mutationProb
+        self.dynAdapt = dynAdapt
+
+    def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
+        somethingDone = doRandomSwapMutation(toMutate.assign,probDef.capacity,probDef.nrNodes,probDef.nrVehicles,self.mutationProb)
+
+        toMutate.recalcFitness()
+
         #toMutate.checkConsistency(probDef)
 
     def dynamicAdaptation(self, progress):

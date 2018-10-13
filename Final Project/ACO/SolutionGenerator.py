@@ -27,16 +27,17 @@ class AbstractSolutionGenerator(Module):
         :param pheromone_matrix: the pheromon values for each decision
         :return: solutions: number of ants x size of solution array containing all ants' solutions ordered by score
         """
-        solutions = list()
-        scores = list()
-
+        #solutions = list()
+        #scores = list()
+        solutions = np.empty((self.number_of_ants,self.problem.get_size()+1),dtype=int)
+        scores = np.empty(self.number_of_ants)
         for i in range(self.number_of_ants):
-            solutions.append(self.construct_single_solution(pheromone_matrix))
-            scores.append(self.problem.get_score(solutions[i]))
+            solutions[i] = self.construct_single_solution(pheromone_matrix)
+            scores[i] = self.problem.get_score(solutions[i])
 
         sort_index = np.argsort(scores)
-        solutions = np.array(solutions)[sort_index]
-        scores = np.array(scores)[sort_index]
+        solutions = solutions[sort_index]
+        scores = scores[sort_index]
 
         return solutions, scores
 
@@ -71,18 +72,18 @@ class PermutationSolutionGenerator(AbstractSolutionGenerator):
         steps = self.problem.get_size()
         selectable_items = np.arange(1, steps, 1)
         #solution = np.array([0])
-        solution = [0]
-
-        for step in range(steps-1):
+        #solution = [0]
+        solution = np.zeros(steps+1,dtype=int)
+        for i,step in enumerate(range(steps-1)):
             # Determine probabilities for next item
-            last_item = solution[-1]
+            last_item = solution[i]
             p_items = self.nominator(pheromone_matrix, last_item, selectable_items) \
                       / self.denominator(pheromone_matrix, last_item, selectable_items)
             # Choose next item based on probabilities
             next_item = np.random.choice(np.arange(0, selectable_items.shape[0], 1), 1, False, p_items)
             # Add next chosen item to solution and remove it from selectable solutions
             #solution = np.append(solution, selectable_items[next_item])
-            solution.append(selectable_items[next_item])
+            #solution.append(selectable_items[next_item])
+            solution[i+1] = selectable_items[next_item]
             selectable_items = np.delete(selectable_items, next_item)
-
-        return np.array(solution)
+        return solution

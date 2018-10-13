@@ -52,12 +52,13 @@ class RouletteReplacer(Replacer):
 
         unified = np.concatenate((newInds,pop))
         #unified = set(unified)
-        minFitDec = np.min(unified).fitness-1
+        bestInd = np.max(unified)
+        minFitDec = np.min(unified).fitness+bestInd.fitness
         if self.includeBest:
-            bestInd = np.max(unified)
-            probs = [0 if x is bestInd else (x.fitness-minFitDec) for x in unified]
+
+            probs = np.array([0 if x is bestInd else (x.fitness-minFitDec) for x in unified])
         else:
-            probs = [(x.fitness-minFitDec) for x in unified]
+            probs = np.array([(x.fitness-minFitDec) for x in unified])
         probs /= sum(probs)
         pop = np.random.choice(unified,size=self.targetPopSize,replace=False, p=probs)
         if self.includeBest:
@@ -67,7 +68,7 @@ class RouletteReplacer(Replacer):
     def dynamicAdaptation(self, progress):
         if not self.dynAdapt:
             return
-        self.targetPopSize = int(self.firstPopSize * min(1,(1.1 - progress)))
+        self.targetPopSize = max(5,int(self.firstPopSize * min(1,(1.1 - progress))))
 
 
 class deleteAllReplacer(Replacer):

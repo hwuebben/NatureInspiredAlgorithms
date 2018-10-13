@@ -1,5 +1,5 @@
 import numpy as np
-
+import os
 class Parser:
 
     @staticmethod
@@ -9,6 +9,9 @@ class Parser:
         :param path:
         :return:
         """
+        abspath = os.path.abspath(__file__)
+        dname = os.path.dirname(abspath)
+        os.chdir(dname)
         capacity = np.loadtxt("VRP_Examples\\"+folderName+"\\capacity.txt",dtype=int)
         demand = np.loadtxt("VRP_Examples\\"+folderName+"\\demand.txt",dtype=int)
         distance = np.loadtxt("VRP_Examples\\"+folderName+"\\distance.txt",dtype=float)
@@ -24,8 +27,3 @@ class Parser:
         :return:
         """
         pass
-    
-
-
-parser = Parser()
-parser.readVRP("VRP1")

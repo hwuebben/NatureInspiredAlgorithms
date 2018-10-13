@@ -80,7 +80,7 @@ class TSPProblem(PermutationProblem):
         :param solution: NxN binary matrix
         :return:
         """
-        return np.sum(self.get_distance_matrix()[solution[0:-1], solution[1:]]) + self.get_distance_matrix()[solution[-1],0]
+        return np.sum(self.get_distance_matrix()[solution[0:-1], solution[1:]])
 
     def get_size(self):
         return self.distance_matrix.shape[0]

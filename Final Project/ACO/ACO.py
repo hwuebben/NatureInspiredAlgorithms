@@ -38,11 +38,12 @@ class Ant_Colony_Optimizer:
         self.sorted_solutions = list()
         self.best_score = 0
 
+        self.bestSolScoreSeen = [None,np.inf]
+
     def run(self):
         while not any([t.checkTermination(self) for t in self.terminator]):
             # Construct solutions and evaluate solutions
             iteration_solutions, iteration_scores = self.solution_generator.get_solutions(self.pheromone_matrix)
-            #TODO: having the result for each iteration is nice, but inefficient (should be optional)
             self.sorted_solutions.append(iteration_solutions)
             self.sorted_scores.append(iteration_scores)
             self.best_score = iteration_scores[0]
@@ -50,6 +51,9 @@ class Ant_Colony_Optimizer:
                 print("score is 0")
             if self.verbose:
                 print('Iteration %d - best score: %d' % (self.nrIt, self.best_score))
+            if self.best_score < self.bestSolScoreSeen[1]:
+                self.bestSolScoreSeen[0] = iteration_solutions[0]
+                self.bestSolScoreSeen[1] = self.best_score
 
             # Update pheromone matrix
             self.pheromone_matrix = self.evaporator.evaporate(self.pheromone_matrix)
@@ -66,9 +70,11 @@ class Ant_Colony_Optimizer:
         return np.array(self.sorted_solutions), np.array(self.sorted_scores)
 
     def getBestSolScore(self):
-        return self.sorted_solutions[-1][0], self.sorted_scores[-1][0]
+        return self.bestSolScoreSeen[0], self.bestSolScoreSeen[1]
+        #return self.sorted_solutions[-1][0], self.sorted_scores[-1][0]
     def hasSolScore(self):
-        return (len(self.sorted_scores) > 0)
+        #return (len(self.sorted_scores) > 0)
+        return self.bestSolScoreSeen[1] < np.inf
     def reset(self):
         for t in self.terminator: t.reset()
         self.solution_generator.reset()

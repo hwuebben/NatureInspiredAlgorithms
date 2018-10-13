@@ -3,7 +3,7 @@ import numpy as np
 from GA.ProblemDefinition import ProblemDefinition as PD
 from abc import ABC, abstractmethod
 import Heuristic
-
+import numba
 class IndividualProto(ABC):
 
     # @classmethod
@@ -24,6 +24,22 @@ class IndividualProto(ABC):
         """
         pass
 
+
+@numba.jit(nopython=True,cache=True)
+def beardWoodJit(nrVehicles, assign, distance, transCost):
+    heuVal = 0
+    # get nodes for each vehicle (graph)
+    for vehicleInd in range(nrVehicles):
+        graphInds = np.nonzero(assign[:, vehicleInd] > 0)[0]
+        zeros = np.zeros(graphInds.size)
+        if graphInds.size > 0:
+            # all node indices in graph need to be incremented because the 0 node is not in the representation
+            np.add(graphInds, 1, graphInds)
+            distMatrixSmall = distance[graphInds][:, graphInds]
+            heuVal += (np.mean(distance[graphInds][:,0]) + np.mean(distance[0][graphInds]) + \
+                       np.mean(distMatrixSmall) * (distMatrixSmall.shape[0])) \
+                      * transCost[vehicleInd]
+    return -heuVal
 class Individual(IndividualProto):
     def __init__(self, assign : np.array, probDef):
         """
@@ -36,9 +52,27 @@ class Individual(IndividualProto):
         # self.checkConsistency(PD.probDef)
 
     def __calcFitness(self):
-        heuristic =  Heuristic.BeardwoodHeuristic()
+        #heuristic = Heuristic.BeardwoodHeuristic2()
         #heuristic = Heuristic.AcoHeuristic()
-        return heuristic.calcHeuVal(self,self.probDef)
+        #return heuristic.calcHeuVal(self,self.probDef)
+        return self.beardwoodHeuJit()
+    def beardwoodHeu(self):
+        heuVal = 0
+        #get nodes for each vehicle (graph)
+        for vehicleInd in range(self.probDef.nrVehicles):
+            graphInds = np.nonzero(self.assign[:, vehicleInd] > 0)[0]
+            if graphInds.size > 0:
+                # all node indices in graph need to be incremented because the 0 node is not in the representation
+                np.add(graphInds, 1, graphInds)
+                distMatrixSmall = self.probDef.distance[graphInds][:, graphInds]
+                heuVal += (np.mean(self.probDef.distance[graphInds,0]) + np.mean(self.probDef.distance[0,graphInds]) + \
+                                        np.mean(distMatrixSmall) * (distMatrixSmall.shape[0]))\
+                                        * self.probDef.transCost[vehicleInd]
+        return -heuVal
+
+    def beardwoodHeuJit(self):
+
+        return beardWoodJit(self.probDef.nrVehicles,self.assign,self.probDef.distance,self.probDef.transCost)
     def recalcFitness(self):
         self.fitness = self.__calcFitness()
 
@@ -60,10 +94,14 @@ class Individual(IndividualProto):
 
     @classmethod
     def initIndividual(cls,probDef: PD, initType: str):
+        if initType == "mixed":
+            initType = np.random.choice(["random","heuristic","heuristic2"])
         if initType == "random":
             return cls.calcRandomIndividual(probDef)
         elif initType == "heuristic":
             return cls.calcHeuristicIndividual(probDef)
+        elif initType == "heuristic2":
+            return cls.calcHeuristicIndividual2(probDef)
 
     @classmethod
     def calcRandomIndividual(cls,probDef:PD):
@@ -127,6 +165,50 @@ class Individual(IndividualProto):
                     distsOverall[:,currentNode] = np.inf
         return cls(assign,probDef)
 
+    @classmethod
+    def calcHeuristicIndividual2(cls, probDef: PD):
+        assign = np.zeros((probDef.nrNodes, probDef.nrVehicles))
+        distsOverall = np.copy(probDef.distance)
+        demands = np.copy(probDef.demand)
+        capacities = np.copy(probDef.capacity)
+        # vehicleInds = np.argsort(probDef.transCost)
+        vehicleInds = np.arange(probDef.nrVehicles)
+        pickProbs = 1 - (probDef.transCost / np.sum(probDef.transCost))
+        if probDef.nrVehicles == 1:
+            pickProbs[0] = 1
+        pickProbs /= np.sum(pickProbs)
+        # i = 0
+        while np.sum(demands) > 0:
+            "copy distsOverall matrix to keep track of which nodes are visited by this vehicle"
+            dists = np.copy(distsOverall)
+            "choose vehicle (always choose from the cheapest ones)"
+            vehicleInd = np.random.choice(vehicleInds, None, True, pickProbs)
+            pickProbs[vehicleInd] = 0
+            pickProbs /= np.sum(pickProbs)
+            # i+=1
+            "assign nodes to vehicle until capacity is full"
+            currentNode = 0
+            while capacities[vehicleInd] > 0 and np.sum(demands) > 0:
+                "set distances of self to inf to not visit again"
+                dists[:, currentNode] = np.inf
+                "use simple heuristic to choose nodes (probabilistic choice anti proportional to distance)"
+                # currentNode = np.argmin(dists[currentNode])
+                # pickProbsNode = 1 - dists[currentNode] / np.sum(dists[currentNode][np.isfinite(dists[currentNode])])
+                # # if dists[currentNode] has only one finite value it needs to be set from zero to 1
+                # if pickProbsNode[pickProbsNode == 0].size == 1:
+                #     pickProbsNode[pickProbsNode == 0] = 1
+                # pickProbsNode[np.isinf(pickProbsNode)] = 0
+                # pickProbsNode /= np.sum(pickProbsNode)
+
+                # currentNode = np.random.choice(np.arange(dists[currentNode].size), None, True, pickProbsNode)
+                currentNode = np.argmin(dists[currentNode])
+                delivery = min(demands[currentNode - 1], capacities[vehicleInd])
+                demands[currentNode - 1] -= delivery
+                capacities[vehicleInd] -= delivery
+                assign[currentNode - 1, vehicleInd] = delivery
+                if demands[currentNode - 1] == 0:
+                    distsOverall[:, currentNode] = np.inf
+        return cls(assign, probDef)
 
     def checkConsistency(self,probDef:PD, strict=True):
         """
@@ -149,6 +231,9 @@ class Individual(IndividualProto):
     """
     def __eq__(self, other):
         return self.fitness == other.fitness
+
+    def __ne__(self, other):
+        return self.fitness != other.fitness
 
     def __lt__(self, other):
         return self.fitness < other.fitness

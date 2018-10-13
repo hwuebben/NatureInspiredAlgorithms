@@ -12,9 +12,10 @@ from GA.GeneticAlgorithm import GeneticAlgorithm
 
 class VRPsolver:
 
-    def __init__(self,vrpProblem:PD):
+    def __init__(self,vrpProblem:PD,verbose = False):
         self.vrpProblem = vrpProblem
         self.cpuCount = mp.cpu_count()
+        self.verbose = verbose
 
     def runGAQueue(self,gaParams:dict):
         print("init GA")
@@ -49,22 +50,13 @@ class VRPsolver:
         self.bestSolution = None
         #keepGoing = True
         #already optimized Individuals
-        optimizedInds = set()
         while gaPro.is_alive():
             #keepGoing = gaPro.is_alive()
             #get best GA indvidual(s)
-            newIndFound = False
-            ithBest = 0
-            while not newIndFound:
-                parent_conn.send(ithBest)
-                gaInd = parent_conn.recv()
-                hashVal = hash(gaInd.assign.tobytes())
-                if not hashVal in optimizedInds:
-                    newIndFound = True
-                else:
-                    print("Ind: ",ithBest," has already been optimized")
-                    ithBest += 1
-                optimizedInds.add(hashVal)
+
+            parent_conn.send(True)
+            gaInd = parent_conn.recv()
+
             distMatrices = gaInd.extractDistMatrices()
             #bestScore = np.inf
             print("new distMatrix")
@@ -79,9 +71,12 @@ class VRPsolver:
                 keepGoingACO = stillAlive()
                 scoresAndSols = self.calcBestScoresSols(acos,distMatrices)
                 score = self.evalSol(scoresAndSols[0])
+
                 if (self.bestSolution is None) or (score < self.bestSolution.solution["score"]):
                     self.bestSolution = SolutionVRP(problemName,self.vrpProblem,score,gaInd.assign,
                                                distMatrices,scoresAndSols[1])
+                    if self.verbose:
+                        print("VRP score: ",score)
                 # if score < bestScore:
                 #     bestScore = score
                 #     print("new best score: ",bestScore)

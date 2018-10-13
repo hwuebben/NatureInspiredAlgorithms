@@ -39,15 +39,32 @@ class GeneticAlgorithm:
                 queue.put_nowait(bestInd)
 
     def runWithPipe(self,pipe):
+        def sendBest(self,sentInds):
+            ithBest = 0
+            alreadySent = True
+            ind = self.getNthbestInd(ithBest)
+            while alreadySent:
+                hashVal = hash(ind.assign.tobytes())
+                if not hashVal in sentInds:
+                    alreadySent = False
+                else:
+                    # TODO: theoretisch koennten alle inds schon mal gesendet worden sein, dann kaeme es hier zum Fehler
+                    print("Ind: ", ithBest, " has already been optimized")
+                    ithBest += 1
+                    ind = self.getNthbestInd(ithBest)
+            sentInds.add(hashVal)
+            pipe.send(ind)
+
+        sentInds = set()
         #main loop#
         while not any([t.checkTermination(self) for t in self.terminators]):
             self.iteration()
             if pipe.poll():
-                n = pipe.recv()
-                pipe.send(self.getNthbestInd(n))
+                pipe.recv()
+                sendBest(self,sentInds)
         if pipe.poll(None):
-            n = pipe.recv()
-            pipe.send(self.getNthbestInd(n))
+            pipe.recv()
+            sendBest(self,sentInds)
     def runWithPipeFinalGA(self,pipe):
         while not any([t.checkTermination(self) for t in self.terminators]):
             self.iteration()
