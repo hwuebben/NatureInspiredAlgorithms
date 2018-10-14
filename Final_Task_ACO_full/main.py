@@ -14,8 +14,8 @@ initializer = VRP_Initializer()
 evaporator = Evaporator(rho=0.05)
 intensifier = Intensifier(delta=0.075)
 heuristic = TSPHeuristic
-solution_gen = VRPSolutionGenerator(number_of_ants=80, alpha=2, beta=5, heuristic=heuristic, problem=problem)
-terminator = [maxItTerminator(maxIt=100), convergenceTerminator(maxIter=20)]
+solution_gen = VRPSolutionGenerator(number_of_ants=100, alpha=2, beta=5, heuristic=heuristic, problem=problem)
+terminator = [maxItTerminator(maxIt=3), convergenceTerminator(maxIter=20)]
 
 # Print the Vehicle Routing Problem
 vehicles = problem.capacity.shape[0]
@@ -38,23 +38,24 @@ solutions, scores = aco.run()
 print('Runtime: ' + str(time.time() - startTime) + ' seconds')
 print('Runtime per iteration: ' + str((time.time() - startTime) / solutions.shape[0]) + ' seconds')
 
-#all_nodes = None
-#for vehicle_solution in aco.best_solution[0]:
-#    if all_nodes is None:
-#        all_nodes = vehicle_solution
-#    else:
-#        all_nodes = np.concatenate((all_nodes, vehicle_solution))
-#all_nodes = np.arange(num_of_nodes)[np.bincount(all_nodes) > 1]
-#print('Redundant customers: \n' + str(all_nodes))
+all_nodes = None
+best_solution = np.array(aco.best_solution)
+for vehicle in range(problem.vehicles):
+    if all_nodes is None:
+        all_nodes = (best_solution[vehicle] - 1) % aco.problem.get_size()
+    else:
+        all_nodes = np.concatenate((all_nodes, (best_solution[vehicle] - 1) % aco.problem.get_size()))
+all_nodes = np.arange(problem.get_size())[np.bincount(all_nodes) > 1]
+print('Redundant customers: \n' + str(all_nodes))
 
 print('Best score: ' + str(aco.best_score))
 
 # Receive best solution and print some additional info
 zero_vehicles = list()
 selected_vehicles = list()
-best_solution = np.array(aco.best_solution)
+best_solution = np.array(aco.best_solution[:, 1:])
 for vehicle in range(problem.vehicles):
-    if np.sum(best_solution[vehicle]) == 0:
+    if np.sum((best_solution[vehicle] - 1) % aco.problem.get_size()) == 0:
         zero_vehicles.append(vehicle)
     else:
         best_solution[vehicle][best_solution[vehicle] > 0] \

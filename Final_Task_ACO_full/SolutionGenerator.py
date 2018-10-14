@@ -100,6 +100,7 @@ class VRPSolutionGenerator(AbstractSolutionGenerator):
             selectable_start_items = selectable_start_items[selectable_start_items != next_item]
 
             vehicle = (next_item - 1) // self.problem.get_size()
+            # Vehicle solution starts with switching to the position of the next vehicle in the pheromone matrix
             vehicle_solutions[vehicle, 0:2] = [last_item, next_item]
             step = 2
             while remaining_capacity[vehicle] > 0 and np.sum(remaining_demand > 0):
@@ -107,6 +108,8 @@ class VRPSolutionGenerator(AbstractSolutionGenerator):
                 selectable_items = selectable_vehicle_items[vehicle]
                 customers = (selectable_items - 1) % self.problem.get_size() - 1
                 selectable_items = selectable_items[remaining_demand[customers] > 0]
+                if selectable_items.shape[0] == 0:
+                    break
                 # Determine probabilities for next item = customer
                 p_nominator = self.nominator(pheromone_matrix, last_item, selectable_items)
                 p_items = p_nominator / np.sum(p_nominator)
