@@ -13,6 +13,7 @@ class Heuristic(ABC):
     def calculate_etas(cls, problem: Problem) -> np.array:
         """
         Calculate the heuristic given a arbitrary problem
+
         :param problem:  the Problem in question
         :return: result of the heuristic estimation
         """
@@ -24,9 +25,10 @@ class TSPHeuristic(Heuristic):
     @classmethod
     def calculate_etas(cls, problem: VehicleRoutingProblem) -> np.array:
         """
-        Calculate the estimated time of arrival of vehicles for a vehicle routingproblem
+        Calculate eta proportional to travel times of vehicles between nodes for a vehicle routing problem
+
         :param problem: a vehicle routing problem as vehicle routing problem object
-        :return: estimated times of arrival for all vehicles provided by the problem
+        :return: value matrix proportional to travel times of vehicles between nodes
         """
         vehicle_etas = 1 / (problem.distance_matrix + np.eye(problem.get_size())) - np.eye(problem.get_size())
         num_of_vehicles = problem.vehicles

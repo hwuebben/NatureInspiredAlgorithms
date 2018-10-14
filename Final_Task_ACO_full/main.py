@@ -15,7 +15,7 @@ evaporator = Evaporator(rho=0.05)
 intensifier = Intensifier(delta=0.075)
 heuristic = TSPHeuristic
 solution_gen = VRPSolutionGenerator(number_of_ants=100, alpha=2, beta=5, heuristic=heuristic, problem=problem)
-terminator = [maxItTerminator(maxIt=3), convergenceTerminator(maxIter=20)]
+terminator = [MaxItTerminator(maxIt=100), ConvergenceTerminator(maxIter=20)]
 
 # Print the Vehicle Routing Problem
 vehicles = problem.capacity.shape[0]
@@ -38,6 +38,7 @@ solutions, scores = aco.run()
 print('Runtime: ' + str(time.time() - startTime) + ' seconds')
 print('Runtime per iteration: ' + str((time.time() - startTime) / solutions.shape[0]) + ' seconds')
 
+# Determine and print customers approached by more than one vehicle
 all_nodes = None
 best_solution = np.array(aco.best_solution)
 for vehicle in range(problem.vehicles):

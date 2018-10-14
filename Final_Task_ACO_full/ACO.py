@@ -28,7 +28,7 @@ class AntColonyOptimizer:
         :param evaporator:  Evaporation strategy for the pheromone matrix
         :param intensifier: Intensifier strategy for the peromone matrix
         :param solution_gen: Solution Generator strategy
-        :param terminator:  One or multiple terminators that act as stop condicitons for the optimization process
+        :param terminator:  One or multiple terminators that act as stop conditions for the optimization process
         :param num_solutions: the number of solutions to generate
         :param quality_dependence: switching on and off if the intensifier update should be score dependant
         :param verbose:     if true, get updates about the training process each iteration
@@ -56,6 +56,7 @@ class AntColonyOptimizer:
     def run(self) -> tuple:
         """
         The run function executes the optimization process, utilizing the modules provided in the constructor.
+
         :return: two numpy arrays: the solutions and their respective scores.
         """
         while not any([t.checkTermination(self) for t in self.terminator]):

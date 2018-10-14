@@ -9,6 +9,7 @@ class Problem(ABC):
     def get_score(self, solution: np.array) -> float:
         """
         Calculate the score based on the problem definition
+
         :param solution: matrix describing a solution wrt the problem structure
         :return: the score for the solution
         """
@@ -21,7 +22,8 @@ class PermutationProblem(Problem):
     def get_size(self):
         """
         Get the size of the sequence to be permuted
-        :return:
+
+        :return: size of the sequence to be permuted
         """
 
 
@@ -51,7 +53,8 @@ class VehicleRoutingProblem(PermutationProblem):
     def __load_data(self) -> np.array:
         """
         parse .tsp file into the distance matrix.
-        :return:
+
+        :return: capacities, demands, distances, transportation cost
         """
         with open('.'+os.sep+'ressources'+os.sep+self.path+os.sep+'capacity.txt','r') as fp:
             capacity = self.__parse_line(fp.readline())
@@ -69,8 +72,9 @@ class VehicleRoutingProblem(PermutationProblem):
     def __parse_line(self, line: str) -> list:
         """
         parse a single line of the .tsp-file into a list of integers.
+
         :param line:
-        :return:
+        :return: parsed line
         """
         row = line.split(' ')
         for i in range(len(row)-1):
@@ -80,9 +84,10 @@ class VehicleRoutingProblem(PermutationProblem):
 
     def get_score(self, solution: np.array) -> float:
         """
-        calculate the score based on the distance between cities
+        calculate the score as a sum of the cost-weighted distances travelled by all vehicles
+
         :param solution: NxN binary matrix
-        :return:
+        :return: score
         """
         score = 0
         for vehicle, vehicle_solution in enumerate(solution):
@@ -95,6 +100,7 @@ class VehicleRoutingProblem(PermutationProblem):
     def get_size(self) -> float:
         """
         calculate the problem size (number of columns in the distance matrix)
-        :return:
+
+        :return: problem size
         """
         return self.distance_matrix.shape[0]

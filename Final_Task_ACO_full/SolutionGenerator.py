@@ -7,6 +7,10 @@ from Heuristics import Heuristic
 class AbstractSolutionGenerator(ABC):
 
     def __init__(self, number_of_ants: int, problem: Problem):
+        """
+        :param number_of_ants:
+        :param problem: the problem definition to be optimized on
+        """
         self.number_of_ants = number_of_ants
         self.problem = problem
 
@@ -23,6 +27,7 @@ class AbstractSolutionGenerator(ABC):
     def get_solutions(self, pheromone_matrix: np.array) -> np.array:
         """
         Create solutions corresponding to the number of ants and returns them in descent order by their score
+
         :param pheromone_matrix: the pheromon values for each decision
         :return: solutions: number of ants x size of solution array containing all ants' solutions ordered by score
         """
@@ -44,10 +49,14 @@ class VRPSolutionGenerator(AbstractSolutionGenerator):
 
     def __init__(self, number_of_ants: int, alpha: int, beta: int, heuristic: Heuristic, problem: VehicleRoutingProblem):
         """
-        Implements the simple distance heuristic solution generation
+        Initializes direct parameters as well as lists for starting items (depots) and selectable items for each vehicle.
+        Provides a lambda function for applying the provided heuristic.
+
         :param number_of_ants:
         :param alpha:
         :param beta:
+        :param heuristic: the heuristic function to applied
+        :param problem: the problem definition to be optimized on
         """
         super().__init__(number_of_ants, problem)
         self.alpha = alpha
@@ -75,7 +84,8 @@ class VRPSolutionGenerator(AbstractSolutionGenerator):
 
     def construct_single_solution(self, pheromone_matrix: np.array) -> list:
         """
-        Creates a single solution for a permutation based on the pheromone matrix.
+        Creates a single solution for a permutation based on the pheromone matrix. It combines ordered selection
+        of the vehicles and construction of the item sequence (tour) for each vehicle.
 
         :param pheromone_matrix: the current pheromone matrix
         :return: solution: list with ordered items representing a solution for a permutation problem

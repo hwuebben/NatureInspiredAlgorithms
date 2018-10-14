@@ -3,7 +3,8 @@ import numpy as np
 
 def plot_evolution(results: list, nrBoxplots: int) -> None:
     """
-    Print the evolution of the model
+    Plot statistical characteristics of evolving populations
+
     :param results: the output of the ACO as list or
     :param nrBoxplots: the number of boxplots on the plot
     :return:

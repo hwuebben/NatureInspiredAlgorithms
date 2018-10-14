@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 import time
 
+
 class Terminator(ABC):
     """
     Astract terminator, the objects defines the termination condition of the learning process
@@ -12,6 +13,7 @@ class Terminator(ABC):
     def checkTermination(self, aco) -> bool:
         """
         Checks if the learning process reached it's goalstate
+
         :param aco: the optimizer
         :return: False: commence training, True: goalstate reached, end training
         """
@@ -19,19 +21,20 @@ class Terminator(ABC):
 
     def estimateProgress(self) -> float:
         """
-        return the progress (from 0-1) of the GA
-        this method CAN be overwritten to enable modules to change
-        behavior based on GAs progress
-        :return:
+        return the progress (from 0-1) of the optimization
+        this method CAN be overwritten to enable modules to change behavior based on optimization progress
+
+        :return: progress
         """
         return 0
 
 
-class maxItTerminator(Terminator):
+class MaxItTerminator(Terminator):
 
     def __init__(self, maxIt):
         """
         create terminator that terminates after maxIt iterations
+
         :param maxIt:
         """
         self.maxIt = maxIt
@@ -39,8 +42,9 @@ class maxItTerminator(Terminator):
     def checkTermination(self, aco) -> float:
         """
         checks if the maximum number if iterations are done, if so: True else False
+
         :param aco:
-        :return:
+        :return: true if iteration maximum has been surpassed, else false
         """
         if aco.nrIt >= self.maxIt:
             return True
@@ -49,15 +53,18 @@ class maxItTerminator(Terminator):
     def estimateProgress(self) -> bool:
         """
         percentage of iterations performed
-        :return:
+
+        :return: progress in terms of iterations
         """
         return self.nrIt/self.maxIt
 
-class maxRuntimeTerminator(Terminator):
+
+class MaxRuntimeTerminator(Terminator):
 
     def __init__(self, maxRuntime):
         """
         create terminator that terminates after maxRuntime seconds
+
         :param maxRuntime:
         """
         self.maxRuntime = maxRuntime
@@ -66,6 +73,7 @@ class maxRuntimeTerminator(Terminator):
     def checkTermination(self, aco) -> bool:
         """
         check if the maximum runtime was reached
+
         :param aco: ACO optimizer
         :return: true if runtime maximum has been surpassed, else false
         """
@@ -78,17 +86,19 @@ class maxRuntimeTerminator(Terminator):
     def estimateProgress(self) -> bool:
         """
         return the percentage of the time intervall that allready has passed
-        :return:
+
+        :return: progress in terms of time
         """
         return (time.time()-self.startTime) / self.maxRuntime
 
 
-class convergenceTerminator(Terminator):
+class ConvergenceTerminator(Terminator):
 
     def __init__(self, maxIter, rtol=1e-05):
         """
         if performance of best solution doesn't change more than
         rtol (relative change) for maxIter iteration, then terminate
+
         :param maxIter:
         :param rtol:
         """
@@ -99,7 +109,8 @@ class convergenceTerminator(Terminator):
 
     def checkTermination(self, aco) -> bool:
         """
-        checks if the model is converged or didn't exceeded the maximum number of iterations
+        checks if the optimization has converged or didn't exceeded the maximum number of iterations
+
         :param aco: ACO optimizer
         :return: True if converged (or maxIter iterations reached) else False
         """
