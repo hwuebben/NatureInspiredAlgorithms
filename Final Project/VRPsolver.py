@@ -41,11 +41,11 @@ class VRPsolver:
 
     def optimizeWithParamsMP(self,gaParams:dict, acoParams:dict,problemName = ""):
         #mp.freeze_support()
-        print("init GA Thread")
+        print("init GA Process")
         ga = self.__class__.__initGA(self.vrpProblem, gaParams)
         parent_conn, child_conn = mp.Pipe()
         gaPro = mp.Process(target=ga.runWithPipe,args=(child_conn,))
-        print("start running GA Thread")
+        print("start running GA Process")
         gaPro.start()
         self.bestSolution = None
         #keepGoing = True

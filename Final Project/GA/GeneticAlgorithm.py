@@ -28,6 +28,7 @@ class GeneticAlgorithm:
 
         self.includeUnmutated = includeUnmutated
         self.verbose = verbose
+        self.bestSeenFitness = -np.inf
 
     def runWithQueue(self,queue,n = 0):
         lastBest = -np.inf
@@ -42,16 +43,18 @@ class GeneticAlgorithm:
         def sendBest(self,sentInds):
             ithBest = 0
             alreadySent = True
-            ind = self.getNthbestInd(ithBest)
+            isLast,ind = self.getNthbestInd(ithBest)
             while alreadySent:
+                if isLast:
+                    break
                 hashVal = hash(ind.assign.tobytes())
                 if not hashVal in sentInds:
                     alreadySent = False
                 else:
-                    # TODO: theoretisch koennten alle inds schon mal gesendet worden sein, dann kaeme es hier zum Fehler
                     print("Ind: ", ithBest, " has already been optimized")
                     ithBest += 1
-                    ind = self.getNthbestInd(ithBest)
+                    isLast, ind = self.getNthbestInd(ithBest)
+
             sentInds.add(hashVal)
             pipe.send(ind)
 
@@ -79,8 +82,11 @@ class GeneticAlgorithm:
 
     def iteration(self):
         if self.verbose:
-            print("best fitness: ", np.max(self.pop).fitness)
-            print("terminator progress: ", self.terminators[-1].estimateProgress())
+            bestFitness = np.max(self.pop).fitness
+            if bestFitness > self.bestSeenFitness:
+                print("best fitness: ", bestFitness)
+                print("terminator progress: ", self.terminators[-1].estimateProgress())
+                self.bestSeenFitness = bestFitness
         newInds = self.__generateOffspring(max(1,int(self.offspringProp*self.pop.size)))
         #newInds = self.__generateOffspringSingleSelect(self.nrOffspring)
         self.pop = self.replacer.replace(newInds, self.pop)
@@ -90,7 +96,7 @@ class GeneticAlgorithm:
             mutator.dynamicAdaptation(self.terminators[-1].estimateProgress())
         self.selector.dynamicAdaptation(self.terminators[-1].estimateProgress())
         self.replacer.dynamicAdaptation(self.terminators[-1].estimateProgress())
-        self.recombiner.dynamicAdaptation(self.terminators[-1].estimateProgress())
+        self.recombiner.dynamicAdaptation(self.terminators[-1].estimateProgress(),self.bestSeenFitness)
 
     def __generateOffspringSingleSelect(self,nrOff):
         """
@@ -131,7 +137,7 @@ class GeneticAlgorithm:
 
             if self.includeUnmutated:
                 # #TODO: not generic, idea is to not add redundant individuals to pop
-                # if (indNew.assign != ind0.assign).any() and (indNew.assign != ind1.assign).any():
+                if (indNew.assign != ind0.assign).any() and (indNew.assign != ind1.assign).any():
                     newInds.append(copy.deepcopy(indNew))
                     # if self.isInPop(indNew):
                     #     print("redundant Ind after Recombination")
@@ -144,7 +150,9 @@ class GeneticAlgorithm:
             #     print("redundant Ind after Mutation")
             #assert ((indNew.assign != indNewCopy.assign).any())
             newInds.append(self.localSearcher.search(indNew,self.probDef))
-        return np.array(newInds)
+
+        #TODO: np unique ist suboptimal, da nur verglichen wird ob inds gleiche fitness haben, nicht gleiche assigns
+        return newInds
 
     def printNrEqualIndis(self,preText):
         print(preText)
@@ -170,10 +178,11 @@ class GeneticAlgorithm:
         pickle.dump(self,open(name,"wb"))
 
     def getNthbestInd(self,n):
+        isLast = (n+1) == self.pop.size
         if n == 0:
-            return np.max(self.pop)
+            return isLast,np.max(self.pop)
         else:
-            return np.partition(self.pop, -n)[-n]
+            return isLast,np.partition(self.pop, -n)[-n]
     def putNthbestIndQueue(self,n):
         if n == 0:
             self.queue.put(np.max(self.pop))

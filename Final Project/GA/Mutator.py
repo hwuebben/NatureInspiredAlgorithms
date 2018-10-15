@@ -70,10 +70,6 @@ class RearrangeRecombiner(Mutator):
 
 
 class RandomSwapMutator(Mutator):
-    def __init__(self,mutationProb=0.5,dynAdapt = True):
-        self.mutationProb = mutationProb
-        self.origMutationProb = mutationProb
-        self.dynAdapt = dynAdapt
 
     def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
         #toMutate.checkConsistency(probDef)
@@ -81,19 +77,22 @@ class RandomSwapMutator(Mutator):
         loads = np.sum(toMutate.assign, 0)
         freeCaps = probDef.capacity - loads
         # try node indices each entry one by one in random order
-        mask = np.random.rand(probDef.nrNodes)
-        nInds = np.nonzero(mask < self.mutationProb)[0]
-        if nInds.size == 0:
-            nInds = np.array([np.random.randint(0,probDef.nrNodes)])
-        #np.random.shuffle(nInds)
+        # mask = np.random.rand(probDef.nrNodes)
+        # nInds = np.nonzero(mask < self.mutationProb)[0]
+        # if nInds.size == 0:
+        #     nInds = np.array([np.random.randint(0,probDef.nrNodes)])
+        nInds = np.arange(probDef.nrNodes)
+        np.random.shuffle(nInds)
         # try vehicle indices each entry one by one in random order
         vInds = np.arange(probDef.nrVehicles)
         np.random.shuffle(vInds)
+        didMutation = False
         for nInd0 in nInds:
+            if didMutation:
+                break
             NodeAssign = toMutate.assign[nInd0]
-            nodeIndiceDone = False
             for i,vInd0 in enumerate(vInds):
-                if nodeIndiceDone:
+                if didMutation:
                     break
                 for vInd1 in vInds[i+1::]:
                     isSuited0 = (NodeAssign[vInd0] != NodeAssign[vInd1])
@@ -112,38 +111,37 @@ class RandomSwapMutator(Mutator):
                         diff = NodeAssign[vInd0] - NodeAssign[vInd1]
                         freeCaps[vInd0] -= diff
                         freeCaps[vInd1] += diff
-                        nodeIndiceDone = True
+                        didMutation = True
                         break
             #assert(nodeIndiceDone)
         toMutate.recalcFitness()
         #toMutate.checkConsistency(probDef)
 
-    def dynamicAdaptation(self, progress):
-        if not self.dynAdapt:
-            return
-        self.mutationProb = self.origMutationProb * (1-progress)
-
 
 @numba.jit(nopython=True, cache=True)
-def doRandomSwapMutation(assign,capacity,nrNodes,nrVehicles,mutationProb):
+def doRandomSwapMutation(assign,capacity,nrNodes,nrVehicles):
     # toMutate.checkConsistency(probDef)
     # calculate free capacities
     loads = np.sum(assign, 0)
     freeCaps = capacity - loads
     # try node indices each entry one by one in random order
-    mask = np.random.rand(nrNodes)
-    nInds = np.nonzero(mask < mutationProb)[0]
-    if nInds.size == 0:
-        nInds = np.array([np.random.randint(0, nrNodes)])
-    # np.random.shuffle(nInds)
+    #mask = np.random.rand(nrNodes)
+    #nInds = np.nonzero(mask < mutationProb)[0]
+    #if nInds.size == 0:
+        #nInds = [np.random.randint(0, nrNodes)]
+
+    nInds = np.arange(nrNodes)
+    np.random.shuffle(nInds)
     # try vehicle indices each entry one by one in random order
     vInds = np.arange(nrVehicles)
     np.random.shuffle(vInds)
+    didMutation = False
     for nInd0 in nInds:
+        if didMutation:
+            break
         NodeAssign = assign[nInd0]
-        nodeIndiceDone = False
         for i, vInd0 in enumerate(vInds):
-            if nodeIndiceDone:
+            if didMutation:
                 break
             for vInd1 in vInds[i + 1::]:
                 isSuited0 = (NodeAssign[vInd0] != NodeAssign[vInd1])
@@ -163,27 +161,18 @@ def doRandomSwapMutation(assign,capacity,nrNodes,nrVehicles,mutationProb):
                     diff = NodeAssign[vInd0] - NodeAssign[vInd1]
                     freeCaps[vInd0] -= diff
                     freeCaps[vInd1] += diff
-                    nodeIndiceDone = True
+                    didMutation = True
                     break
-    return nodeIndiceDone
+    return didMutation
 
 class RandomSwapMutatorJit(Mutator):
-    def __init__(self,mutationProb=0.5,dynAdapt = True):
-        self.mutationProb = mutationProb
-        self.origMutationProb = mutationProb
-        self.dynAdapt = dynAdapt
-
     def mutate(self,toMutate:Individual,probDef:ProblemDefinition):
-        somethingDone = doRandomSwapMutation(toMutate.assign,probDef.capacity,probDef.nrNodes,probDef.nrVehicles,self.mutationProb)
+        somethingDone = doRandomSwapMutation(toMutate.assign,probDef.capacity,probDef.nrNodes,probDef.nrVehicles)
 
         toMutate.recalcFitness()
 
         #toMutate.checkConsistency(probDef)
 
-    def dynamicAdaptation(self, progress):
-        if not self.dynAdapt:
-            return
-        self.mutationProb = self.origMutationProb * (1-progress)
 
 class RandomSwapMutator2(Mutator):
     def __init__(self,mutationProb=0.5,dynAdapt = True):

@@ -309,16 +309,23 @@ class SmartInspirationalRecombinerJit(Recombiner):
         self.originalrecombineRatio = recombineRatio
         self.recombineRatio = recombineRatio
         self.dynAdapt = dynAdapt
-
+        self.lastBestSeenFitness = None
     def recombine(self, probDef, ind0, ind1):
         recombRatio = self.recombineRatio
         newAssign = SmartInspirationalRecombineJit(recombRatio,ind0.assign,ind1.assign,probDef.capacity,
                                   probDef.nrVehicles,probDef.problemSize)
         newIndi = Individual(newAssign, probDef)
         return newIndi
-    def dynamicAdaptation(self,progress):
+    def dynamicAdaptation(self,progress,bestSeenFitness):
         if not self.dynAdapt:
             return
+        # if (bestSeenFitness != self.lastBestSeenFitness) or self.lastBestSeenFitness is None:
+        #     self.recombineRatio = 0.0
+        #     self.lastBestSeenFitness = bestSeenFitness
+        # else:
+        #     self.recombineRatio += 0.0001
+        #     self.recombineRatio = min(self.recombineRatio, self.originalrecombineRatio)
+
         self.recombineRatio = (1-progress)*self.originalrecombineRatio
 
 
